@@ -12,14 +12,13 @@ Source1: belfrage.service
 Source2: bake-scripts.tar.gz
 Source3: belfrage-status-cfn-signal.sh
 Source4: cloudformation-signal.service
-Source5: cloudwatch
-Source6: component-cron
-Source7: access
-Source8: access-cron
-Source9: ship-access-logs.sh
-Source10: delete-uploaded-files-cron
-Source11: delete-uploaded-files.sh
-Source12: ship-access-logs-cron
+Source5: component-cron
+Source6: access
+Source7: access-cron
+Source8: ship-access-logs.sh
+Source9: delete-uploaded-files-cron
+Source10: delete-uploaded-files.sh
+Source11: ship-access-logs-cron
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildArch: x86_64
@@ -55,18 +54,16 @@ cp %{SOURCE3} %{buildroot}/home/component/belfrage-status-cfn-signal.sh
 cp %{SOURCE4} %{buildroot}/usr/lib/systemd/system/cloudformation-signal.service
 mkdir -p %{buildroot}/var/log/component
 touch %{buildroot}/var/log/component/app.log
-touch %{buildroot}/var/log/component/cloudwatch.log
 touch %{buildroot}/var/log/component/access.log
 mkdir -p %{buildroot}/etc/logrotate.d
-cp -p %{SOURCE5} %{buildroot}/etc/logrotate.d/cloudwatch
-cp -p %{SOURCE7} %{buildroot}/etc/logrotate.d/access
+cp -p %{SOURCE6} %{buildroot}/etc/logrotate.d/access
 mkdir -p %{buildroot}/etc/cron.d
-cp -p %{SOURCE6} %{buildroot}/etc/cron.d/component-cron
-cp -p %{SOURCE8} %{buildroot}/etc/cron.d/access-cron
-cp -p %{SOURCE10} %{buildroot}/etc/cron.d/delete-uploaded-files-cron
-cp -p %{SOURCE12} %{buildroot}/etc/cron.d/ship-access-logs-cron
-cp %{SOURCE9} %{buildroot}/home/component/ship-access-logs.sh
-cp %{SOURCE11} %{buildroot}/home/component/delete-uploaded-files.sh
+cp -p %{SOURCE5} %{buildroot}/etc/cron.d/component-cron
+cp -p %{SOURCE7} %{buildroot}/etc/cron.d/access-cron
+cp -p %{SOURCE9} %{buildroot}/etc/cron.d/delete-uploaded-files-cron
+cp -p %{SOURCE11} %{buildroot}/etc/cron.d/ship-access-logs-cron
+cp %{SOURCE8} %{buildroot}/home/component/ship-access-logs.sh
+cp %{SOURCE10} %{buildroot}/home/component/delete-uploaded-files.sh
 
 %post
 systemctl enable belfrage
@@ -84,7 +81,6 @@ touch /etc/cron.d/ship-access-logs-cron
 %attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
 %attr(0755, component, component) /home/component/ship-access-logs.sh
 %attr(0755, component, component) /home/component/delete-uploaded-files.sh
-%attr(0644, root, root) /etc/logrotate.d/cloudwatch
 %attr(0644, root, root) /etc/logrotate.d/access
 %attr(0644, root, root) /etc/cron.d/component-cron
 %attr(0644, root, root) /etc/cron.d/access-cron
@@ -96,5 +92,4 @@ touch /etc/cron.d/ship-access-logs-cron
 /etc/bake-scripts/%{name}
 /etc/systemd/system/belfrage.service.d/env.conf
 /var/log/component/app.log
-/var/log/component/cloudwatch.log
 /var/log/component/access.log

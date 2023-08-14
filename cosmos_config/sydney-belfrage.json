@@ -99,6 +99,13 @@
     },
     {
         "values": {
+            "test": "https://bbcthree-web-server.int.api.bbc.co.uk",
+            "live": "https://bbcthree-web-server.api.bbc.co.uk"
+        },
+        "name": "THREE_ENDPOINT"
+    },
+    {
+        "values": {
             "test": "http://trevor-producer-internal.test.api.bbci.co.uk",
             "live": "http://trevor-producer-internal.api.bbci.co.uk"
         },

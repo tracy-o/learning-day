@@ -91,27 +91,31 @@ defroutefile "Main" do
 
   handle "/fd/p/mytopics-page", using: "MyTopicsPage"
   handle "/fd/p/mytopics-follows", using: "MyTopicsFollows"
+
   handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
+    return_404 if: name not in [
+      "mytopics-page",
+      "mytopics-follows"
     ]
   end
+
   handle "/fd/preview/abl", using: "AblDataPreview"
-  handle "/fd/preview/spike-abl-core", using: "AblDataPreview"
+
   handle "/fd/preview/:name", using: "FablData" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
-    ]
+    return_404 if:
+      name not in [
+        "app-article-api",
+        "curriculum-data",
+        "game",
+        "simorgh-bff",
+        "topic-mapping"
+      ]
+      and !String.match?(name, ~r/^sport-app-[a-z0-9-]+$/)
+      and !String.match?(name, ~r/^spike-app-[a-z0-9-]+$/)
   end
+
   handle "/fd/abl", using: "AblData"
-  handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
-    ]
-  end
+
   handle "/fd/sport-app-allsport", using: "SportData"
   handle "/fd/sport-app-followables", using: "SportData"
   handle "/fd/sport-app-images", using: "SportData"
@@ -121,9 +125,12 @@ defroutefile "Main" do
   handle "/fd/topic-mapping", using: "SportData"
 
   handle "/fd/:name", using: "FablData" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
+    return_404 if: name not in [
+      "app-article-api",
+      "curriculum-data",
+      "game",
+      "simorgh-bff",
+      "sport-app-remote-config"
     ]
   end
 
@@ -947,6 +954,33 @@ defroutefile "Main" do
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+
+  ## World Service - Homepage Redirects
+  redirect "/afrique/index.html", to: "/afrique", status: 301
+  redirect "/arabic/index.html", to: "/arabic", status: 301
+  redirect "/azeri/index.html", to: "/azeri", status: 301
+  redirect "/bengali/index.html", to: "/bengali", status: 301
+  redirect "/burmese/index.html", to: "/burmese", status: 301
+  redirect "/gahuza/index.html", to: "/gahuza", status: 301
+  redirect "/hausa/index.html", to: "/hausa", status: 301
+  redirect "/hindi/index.html", to: "/hindi", status: 301
+  redirect "/indonesia/index.html", to: "/indonesia", status: 301
+  redirect "/kyrgyz/index.html", to: "/kyrgyz", status: 301
+  redirect "/mundo/index.html", to: "/mundo", status: 301
+  redirect "/nepali/index.html", to: "/nepali", status: 301
+  redirect "/pashto/index.html", to: "/pashto", status: 301
+  redirect "/persian/index.html", to: "/persian", status: 301
+  redirect "/portuguese/index.html", to: "/portuguese", status: 301
+  redirect "/russian/index.html", to: "/russian", status: 301
+  redirect "/sinhala/index.html", to: "/sinhala", status: 301
+  redirect "/somali/index.html", to: "/somali", status: 301
+  redirect "/swahili/index.html", to: "/swahili", status: 301
+  redirect "/tamil/index.html", to: "/tamil", status: 301
+  redirect "/turkce/index.html", to: "/turkce", status: 301
+  redirect "/ukrainian/index.html", to: "/ukrainian", status: 301
+  redirect "/urdu/index.html", to: "/urdu", status: 301
+  redirect "/uzbek/index.html", to: "/uzbek", status: 301
+  redirect "/vietnamese/index.html", to: "/vietnamese", status: 301
 
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
@@ -2792,6 +2826,37 @@ defroutefile "Main" do
   handle "/ws/av-embeds/*any", using: "WsAvEmbeds"
   handle "/ws/includes/*any", using: "WsIncludes"
   handle "/worldservice/assets/images/*any", using: "WsImages"
+
+  # BBC Three
+
+  redirect "/bbcthree/tag/:id/:page", to: "/bbcthree/category/:id/:page", status: 301
+  redirect "/bbcthree/tag/:id", to: "/bbcthree/category/:id", status: 301
+  redirect "/bbcthree/article/b2a8c0be-5418-4f21-a0ef-992a059136e4", to: "/bbcthree/article/bed59408-8831-42db-b415-2c876017eb5b", status: 301
+  redirect "/bbcthree/item/b6402a4c-30af-4e2a-87a6-5c263279b20b", to: "/bbcthree/terms-and-conditions", status: 301
+  redirect "/bbcthree/item/9602352d-227e-43b9-a030-c0d577ce49d2", to: "/bbcthree/privacy", status: 301
+  handle "/bbcthree/item/:id", using: "ThreeRedirect"
+  
+  handle "/bbcthree/sitemap.xml", using: "ThreeSitemap"
+  handle "/bbcthree/privacy", using: "ThreeInfo"
+  handle "/bbcthree/terms-and-conditions", using: "ThreeInfo"
+  handle "/bbcthree/twitter-polls-terms-and-conditions", using: "ThreeInfo"
+  handle "/bbcthree/category/:id/:page", using: "ThreeCategory" do
+    return_404 if: [
+      !String.match?(id, ~r/^[a-z0-9-]+$/),
+      !integer_in_range?(page, 2..99)
+    ]
+  end
+  handle "/bbcthree/category/:id", using: "ThreeCategory" do
+    return_404 if: !String.match?(id, ~r/^[a-z0-9-]+$/)
+  end
+  handle "/bbcthree/clip/:id", using: "ThreeClip" do
+    return_404 if: !is_guid?(id)
+  end
+  handle "/bbcthree/article/:id", using: "ThreeArticle" do
+    return_404 if: !is_guid?(id)
+  end
+  handle "/bbcthree", using: "ThreeHomePage"
+  handle "/bbcthree/*any", using: "Three"
 
   # Newsletters
 
