@@ -71,7 +71,7 @@ defmodule Belfrage.Behaviours.PreflightService do
 
     metric([:preflight, :request, :timing], %{duration: timing}, %{
       preflight_service: service,
-      status_code: Map.get(response, :status_code, "500")
+      status_code: get_status_code(response) || "500"
     })
 
     {state, add_request_timing_checkpoint(envelope, timing), response}
