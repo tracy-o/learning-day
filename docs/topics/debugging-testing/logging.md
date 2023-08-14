@@ -1,6 +1,6 @@
 # Logging
 
-There are currently two logging solutions in place for Belfrage, each serving different purposes. We have the App logs that are surfaced in Sumologic and we also have more granular logs that are sent to CloudWatch.
+The App logs are surfaced in Sumologic.
 
 ## App logs
 
@@ -25,9 +25,3 @@ The Belfrage App logs can also be adjusted via the use of a Dial. This allows us
 The Dial can be used if there are issues with Monitor or you need to clarify events in order to gain more information. In the first instance use the debug logs in Cloudwatch.
 
 Increasing the log level in Belfrage using the dial will means much more noise in the logs and make it harder to spot actual errors. It would mean an increase in costs so we need to be mindful of how long they are increased for.
-
-## Cloudwatch logs
-
-Belfrage also stores logs that are then sent to Cloudwatch. These are logged at a higher level, currently set to the level of `warn`, so provide extra information when debugging an issue. They are always available for the specified retention period and not currently intended as a replacement to the app logs.
-
-The logs are stored in `/var/log/component/cloudwatch.log` and offloaded to the Cloudwatch group named after the stack `/aws/ec2/[stack-name]`. The best way to query the logs in CloudWatch is to use [Log Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html).

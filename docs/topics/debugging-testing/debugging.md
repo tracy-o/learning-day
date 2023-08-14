@@ -22,7 +22,7 @@ Belfrage system and process runtime data can also be gauged through Elixir's int
 
 There's a couple of ways we usually use to debug issues.
 
-We can perform high level debugging by [changing the logging level](docs/topics/debugging-testing/logging.md#logging-level-dial). Then remoting into the instance and observing the logs using `sudo tail -f /var/log/component/app.log` (should also see cloudwatch.log)
+We can perform high level debugging by [changing the logging level](docs/topics/debugging-testing/logging.md#logging-level-dial). Then remoting into the instance and observing the logs using `sudo tail -f /var/log/component/app.log`
 
 We can perform more fine tuned debugging through the erlang [`:dbg`](https://www.erlang.org/doc/man/dbg.html) module. **This is only suitable for debugging on test environments.**
 
