@@ -1168,8 +1168,6 @@ defroutefile "Main" do
   handle "/azeri/sw.js", using: "WorldServiceAzeriAssets"
   handle "/azeri/rss.xml", using: "WorldServiceAzeriHomePageRss"
 
-  handle "/azeri/tipohome.amp", using: "WorldServiceAzeriTipoHomePage", only_on: "test"
-
   handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
       !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
