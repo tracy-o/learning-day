@@ -91,27 +91,31 @@ defroutefile "Main" do
 
   handle "/fd/p/mytopics-page", using: "MyTopicsPage"
   handle "/fd/p/mytopics-follows", using: "MyTopicsFollows"
+
   handle "/fd/p/preview/:name", using: "PersonalisedFablData", only_on: "test" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
+    return_404 if: name not in [
+      "mytopics-page",
+      "mytopics-follows"
     ]
   end
+
   handle "/fd/preview/abl", using: "AblDataPreview"
-  handle "/fd/preview/spike-abl-core", using: "AblDataPreview"
+
   handle "/fd/preview/:name", using: "FablData" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
-    ]
+    return_404 if:
+      name not in [
+        "app-article-api",
+        "curriculum-data",
+        "game",
+        "simorgh-bff",
+        "topic-mapping"
+      ]
+      and !String.match?(name, ~r/^sport-app-[a-z0-9-]+$/)
+      and !String.match?(name, ~r/^spike-app-[a-z0-9-]+$/)
   end
+
   handle "/fd/abl", using: "AblData"
-  handle "/fd/p/:name", using: "PersonalisedFablData", only_on: "test" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
-    ]
-  end
+
   handle "/fd/sport-app-allsport", using: "SportData"
   handle "/fd/sport-app-followables", using: "SportData"
   handle "/fd/sport-app-images", using: "SportData"
@@ -121,9 +125,12 @@ defroutefile "Main" do
   handle "/fd/topic-mapping", using: "SportData"
 
   handle "/fd/:name", using: "FablData" do
-    return_404 if: [
-      !is_valid_length?(name, 3..40),
-      !matches?(name, ~r/^[a-z0-9-]+$/)
+    return_404 if: name not in [
+      "app-article-api",
+      "curriculum-data",
+      "game",
+      "simorgh-bff",
+      "sport-app-remote-config"
     ]
   end
 
