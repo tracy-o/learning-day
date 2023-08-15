@@ -119,11 +119,29 @@ defmodule BelfrageWeb.Validators do
     iex> is_cps_id?("world-europe-66026851")
     true
 
+    iex> is_cps_id?("entertainment+arts-10636043")
+    true
+
+    iex> is_cps_id?("science_and_environment")
+    true
+
+    iex> is_cps_id?("entertainment_and_arts")
+    true
+
+    iex> is_cps_id?("uk")
+    true
+
     iex> is_cps_id?("zx11pk6ve3kkb")
+    false
+
+    iex> is_cps_id?("uk-England-London")
+    false
+
+    iex> is_cps_id?("world-europe-66026851gb")
     false
   """
   def is_cps_id?(param) do
-    String.match?(param, ~r/^([0-9]{5,9}|[a-z0-9\-_]+-[0-9]{5,9})/)
+    String.match?(param, ~r/\A[a-z-_+]{2,}-[0-9]{5,9}\z|\A[a-z-_+]{2,}\z|\A[0-9]{5,9}\z/)
   end
 
   @doc """

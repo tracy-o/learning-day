@@ -8,10 +8,10 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   alias Belfrage.Behaviours.PreflightService
   alias Belfrage.PreflightTransformers.AssetTypePlatformSelector
 
-  @path "/news/some/valid+path"
+  @path "/news/valid+path"
   @service "AresData"
   @mocked_envelope %Envelope{
-    request: %Envelope.Request{path: @path},
+    request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}},
     private: %Envelope.Private{
       production_environment: "test",
       checkpoints: %{preflight_service_request_timing: 576_460_641_580}
@@ -19,7 +19,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   }
 
   @request_envelope %Envelope{
-    request: %Envelope.Request{path: @path},
+    request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}},
     private: %Envelope.Private{
       production_environment: "test"
     }
@@ -42,7 +42,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
   end
 
@@ -63,7 +63,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
   end
 
@@ -84,7 +84,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
   end
 
@@ -105,7 +105,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
 
     assert_called(PreflightService.call(@request_envelope, "AresData"))
@@ -118,7 +118,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   ) do
     stub_dial(:preflight_ares_data_fetch, "on")
 
-    request = %Envelope.Request{path: "/news/some/path/that_is/.invalid"}
+    request = %Envelope.Request{path: "/news/.invalid", path_params: %{"id" => ".invalid"}}
     private = %Envelope.Private{production_environment: "test"}
     envelope = %Envelope{request: request, private: private}
 
@@ -139,7 +139,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   ) do
     stub_dial(:preflight_ares_data_fetch, "on")
 
-    request = %Envelope.Request{path: "/news/a"}
+    request = %Envelope.Request{path: "/news/a", path_params: %{"id" => "a"}}
     private = %Envelope.Private{production_environment: "test"}
     envelope = %Envelope{request: request, private: private}
 
@@ -170,7 +170,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
   end
 
@@ -185,7 +185,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
              {:ok,
               %Envelope{
                 private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
 
     assert_not_called(PreflightService.call(@request_envelope, "AresData"))
@@ -208,7 +208,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
   end
 
@@ -230,8 +230,29 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
-                request: %Envelope.Request{path: @path}
+                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
               }}
+  end
+
+  test_with_mock(
+    "returns MozartNews platform if there is no id path parameter - route should never match but covers edge case, just in case",
+    PreflightService,
+    call: fn %Envelope{}, @service ->
+      {:ok, @mocked_envelope, "STY"}
+    end
+  ) do
+    set_stack_id("joan")
+
+    assert {:ok,
+            %Envelope{
+              private: %Envelope.Private{platform: "MozartNews"}
+            }} =
+             AssetTypePlatformSelector.call(%Envelope{
+               request: %Envelope.Request{path: @path, path_params: %{}},
+               private: %Envelope.Private{
+                 production_environment: "test"
+               }
+             })
   end
 
   test_with_mock(

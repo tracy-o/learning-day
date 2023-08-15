@@ -1,6 +1,7 @@
 defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   use Belfrage.Behaviours.Transformer
   alias Belfrage.Behaviours.PreflightService
+  alias BelfrageWeb.Validators
   require Logger
 
   @dial Application.compile_env(:belfrage, :dial)
@@ -10,7 +11,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   @impl Transformer
   def call(envelope = %Envelope{}) do
     asset_response =
-      case {valid_path?(envelope.request.path), @dial.state(:preflight_ares_data_fetch)} do
+      case {valid_asset_id?(envelope.request.path_params["id"]), @dial.state(:preflight_ares_data_fetch)} do
         {true, "on"} ->
           fetch_data(envelope)
 
@@ -53,7 +54,9 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
     Application.get_env(:belfrage, :stack_id)
   end
 
-  defp valid_path?(path) do
-    String.match?(path, ~r/\A\/news\/([a-zA-Z0-9-_\/+]{2,})\z/)
+  defp valid_asset_id?(asset_id) do
+    if asset_id do
+      Validators.is_cps_id?(asset_id)
+    end
   end
 end
