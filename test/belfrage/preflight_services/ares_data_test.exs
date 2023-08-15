@@ -1,12 +1,17 @@
 defmodule Belfrage.PreflightServices.AresDataTest do
   use ExUnit.Case
   use Plug.Test
-  alias Belfrage.Clients.{HTTP, HTTPMock}
-  alias Belfrage.Envelope
   use Test.Support.Helper, :mox
   import Belfrage.Test.CachingHelper, only: [clear_preflight_metadata_cache: 1]
   import ExUnit.CaptureLog
-  alias Belfrage.Behaviours.PreflightService
+
+  alias Belfrage.{
+    Behaviours.PreflightService,
+    Clients.HTTP,
+    Clients.HTTPMock,
+    Envelope,
+    Envelope.Private
+  }
 
   @fabl_endpoint Application.compile_env!(:belfrage, :fabl_endpoint)
   @service "AresData"
@@ -28,7 +33,8 @@ defmodule Belfrage.PreflightServices.AresDataTest do
          }}
       end)
 
-      assert {:ok, %Envelope{}, "MAP"} = PreflightService.call(@envelope, @service)
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(@envelope, @service)
     end
 
     test "returns preflight_data_not_found when data returns a 404" do
