@@ -3,7 +3,7 @@ defmodule Routes.Specs.WorldServiceAfaanoromooTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
         examples: ["/afaanoromoo", "/afaanoromoo.amp"]
       }
     }
