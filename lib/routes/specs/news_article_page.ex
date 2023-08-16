@@ -16,6 +16,7 @@ defmodule Routes.Specs.NewsArticlePage do
           platform: "Webcore",
           circuit_breaker_error_threshold: 1_000,
           request_pipeline: [
+            "NewsAvRedirect",
             "NewsArticleValidator",
             "ObitMode",
             "ElectionBannerCouncilStory",
