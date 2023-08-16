@@ -959,6 +959,7 @@ defroutefile "Main" do
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+  redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
 
   ## World Service - Homepage Redirects
   redirect "/afrique/index.html", to: "/afrique", status: 301
@@ -2404,13 +2405,10 @@ defroutefile "Main" do
   handle "/thai", using: "WorldServiceThaiTipoHomePage", only_on: "test"
   handle "/thai/*any", using: "WorldServiceThai"
 
-  handle "/tigrinya.amp", using: "WorldServiceTigrinya"
-  handle "/tigrinya.json", using: "WorldServiceTigrinya"
+  handle "/tigrinya.amp", using: "WorldServiceTigrinyaTipoHomePage"
   handle "/tigrinya/manifest.json", using: "WorldServiceTigrinyaAssets"
   handle "/tigrinya/sw.js", using: "WorldServiceTigrinyaAssets"
   handle "/tigrinya/rss.xml", using: "WorldServiceTigrinyaHomePageRss"
-
-  handle "/tigrinya/tipohome.amp", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test"
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2441,7 +2439,7 @@ defroutefile "Main" do
   end
 
   handle "/tigrinya/send/:id", using: "UploaderWorldService"
-  handle "/tigrinya", using: "WorldServiceTigrinyaTipoHomePage", only_on: "test"
+  handle "/tigrinya", using: "WorldServiceTigrinyaTipoHomePage"
   handle "/tigrinya/*any", using: "WorldServiceTigrinya"
 
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301

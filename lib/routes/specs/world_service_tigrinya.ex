@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceTigrinya do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/tigrinya/popular/read", "/tigrinya.json", "/tigrinya.amp"]
+        examples: ["/tigrinya/popular/read"]
       }
     }
   end
