@@ -950,6 +950,7 @@ defroutefile "Main" do
 
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
+  redirect "/afaanoromoo/topics/c44dyn08mejt", to: "/afaanoromoo", status: 301
   redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
@@ -994,13 +995,10 @@ defroutefile "Main" do
   ## World Service - Simorgh and ARES
   ##    Kaleidoscope Redirects: /<service>/mobile/image/*any
   ##    Mobile Redirects: /<service>/mobile/*any
-  handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromoo"
-  handle "/afaanoromoo.json", using: "WorldServiceAfaanoromoo"
+  handle "/afaanoromoo.amp", using: "WorldServiceAfaanoromooTipoHomePage"
   handle "/afaanoromoo/manifest.json", using: "WorldServiceAfaanoromooAssets"
   handle "/afaanoromoo/sw.js", using: "WorldServiceAfaanoromooAssets"
   handle "/afaanoromoo/rss.xml", using: "WorldServiceAfaanoromooHomePageRss"
-
-  handle "/afaanoromoo/tipohome.amp", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test"
 
   handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1031,7 +1029,7 @@ defroutefile "Main" do
   end
 
   handle "/afaanoromoo/send/:id", using: "UploaderWorldService"
-  handle "/afaanoromoo", using: "WorldServiceAfaanoromooTipoHomePage", only_on: "test"
+  handle "/afaanoromoo", using: "WorldServiceAfaanoromooTipoHomePage"
   handle "/afaanoromoo/*any", using: "WorldServiceAfaanoromoo"
 
   redirect "/afrique/mobile/*any", to: "/afrique", status: 301
