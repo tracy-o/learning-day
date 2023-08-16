@@ -951,6 +951,7 @@ defroutefile "Main" do
   ## World Service - Topic Redirects
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/afaanoromoo/topics/c44dyn08mejt", to: "/afaanoromoo", status: 301
+  redirect "/amharic/topics/cg58k91re1gt", to: "/amharic", status: 301
   redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
@@ -1074,13 +1075,10 @@ defroutefile "Main" do
   handle "/afrique", using: "WorldServiceAfriqueTipoHomePage", only_on: "test"
   handle "/afrique/*any", using: "WorldServiceAfrique"
 
-  handle "/amharic.amp", using: "WorldServiceAmharic"
-  handle "/amharic.json", using: "WorldServiceAmharic"
+  handle "/amharic.amp", using: "WorldServiceAmharicTipoHomePage"
   handle "/amharic/manifest.json", using: "WorldServiceAmharicAssets"
   handle "/amharic/sw.js", using: "WorldServiceAmharicAssets"
   handle "/amharic/rss.xml", using: "WorldServiceAmharicHomePageRss"
-
-  handle "/amharic/tipohome.amp", using: "WorldServiceAmharicTipoHomePage", only_on: "test"
 
   handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1111,7 +1109,7 @@ defroutefile "Main" do
   end
 
   handle "/amharic/send/:id", using: "UploaderWorldService"
-  handle "/amharic", using: "WorldServiceAmharicTipoHomePage", only_on: "test"
+  handle "/amharic", using: "WorldServiceAmharicTipoHomePage"
   handle "/amharic/*any", using: "WorldServiceAmharic"
 
   redirect "/arabic/mobile/*any", to: "/arabic", status: 301
