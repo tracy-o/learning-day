@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceIgboTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/igbo", "/igbo.amp"]
       }
     }
   end

@@ -955,6 +955,7 @@ defroutefile "Main" do
   redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
+  redirect "/igbo/topics/cp2dkn6rzj5t", to: "/igbo", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
@@ -1456,13 +1457,10 @@ defroutefile "Main" do
   handle "/hindi", using: "WorldServiceHindiTipoHomePage", only_on: "test"
   handle "/hindi/*any", using: "WorldServiceHindi"
 
-  handle "/igbo.amp", using: "WorldServiceIgbo"
-  handle "/igbo.json", using: "WorldServiceIgbo"
+  handle "/igbo.amp", using: "WorldServiceIgboTipoHomePage"
   handle "/igbo/manifest.json", using: "WorldServiceIgboAssets"
   handle "/igbo/sw.js", using: "WorldServiceIgboAssets"
   handle "/igbo/rss.xml", using: "WorldServiceIgboHomePageRss"
-
-  handle "/igbo/tipohome.amp", using: "WorldServiceIgboTipoHomePage", only_on: "test"
 
   handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1494,7 +1492,7 @@ defroutefile "Main" do
   end
 
   handle "/igbo/send/:id", using: "UploaderWorldService"
-  handle "/igbo", using: "WorldServiceIgboTipoHomePage", only_on: "test"
+  handle "/igbo", using: "WorldServiceIgboTipoHomePage"
   handle "/igbo/*any", using: "WorldServiceIgbo"
 
   redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
