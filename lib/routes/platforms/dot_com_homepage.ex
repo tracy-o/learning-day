@@ -11,8 +11,9 @@ defmodule Routes.Platforms.DotComHomepage do
     }
   end
 
-  defp query_params_allowlist("live"), do: []
-  defp query_params_allowlist(_production_env), do: "*"
+  defp query_params_allowlist(_production_env) do
+    ["mode", "wwhp-country-code", "wwhp-preview-mode"]
+  end
 
   defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
