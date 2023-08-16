@@ -1,5 +1,5 @@
 defmodule Belfrage.Behaviours.PreflightServiceTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   use Test.Support.Helper, :mox
 
   alias Belfrage.{
