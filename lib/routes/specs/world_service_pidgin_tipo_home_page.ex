@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServicePidginTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/pidgin", "/pidgin.amp"]
       }
     }
   end

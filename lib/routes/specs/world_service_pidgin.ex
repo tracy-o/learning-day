@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServicePidgin do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/pidgin/popular/read", "/pidgin.json", "/pidgin.amp"]
+        examples: ["/pidgin/popular/read"]
       }
     }
   end

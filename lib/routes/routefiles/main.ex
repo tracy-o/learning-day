@@ -957,6 +957,7 @@ defroutefile "Main" do
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
   redirect "/igbo/topics/cp2dkn6rzj5t", to: "/igbo", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
+  redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
   ## World Service - Homepage Redirects
@@ -1894,13 +1895,10 @@ defroutefile "Main" do
   handle "/persian", using: "WorldServicePersianTipoHomePage", only_on: "test"
   handle "/persian/*any", using: "WorldServicePersian"
 
-  handle "/pidgin.amp", using: "WorldServicePidgin"
-  handle "/pidgin.json", using: "WorldServicePidgin"
+  handle "/pidgin.amp", using: "WorldServicePidginTipoHomePage"
   handle "/pidgin/manifest.json", using: "WorldServicePidginAssets"
   handle "/pidgin/sw.js", using: "WorldServicePidginAssets"
   handle "/pidgin/rss.xml", using: "WorldServicePidginHomePageRss"
-
-  handle "/pidgin/tipohome.amp", using: "WorldServicePidginTipoHomePage", only_on: "test"
 
   handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1938,7 +1936,7 @@ defroutefile "Main" do
   end
 
   handle "/pidgin/send/:id", using: "UploaderWorldService"
-  handle "/pidgin", using: "WorldServicePidginTipoHomePage", only_on: "test"
+  handle "/pidgin", using: "WorldServicePidginTipoHomePage"
   handle "/pidgin/*any", using: "WorldServicePidgin"
 
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
