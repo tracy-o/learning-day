@@ -960,6 +960,7 @@ defroutefile "Main" do
   redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
   redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
+  redirect "/yoruba/topics/cvpk14mq48kt", to: "/yoruba", status: 301
 
   ## World Service - Homepage Redirects
   redirect "/afrique/index.html", to: "/afrique", status: 301
@@ -2699,13 +2700,10 @@ defroutefile "Main" do
   handle "/vietnamese", using: "WorldServiceVietnameseTipoHomePage", only_on: "test"
   handle "/vietnamese/*any", using: "WorldServiceVietnamese"
 
-  handle "/yoruba.amp", using: "WorldServiceYoruba"
-  handle "/yoruba.json", using: "WorldServiceYoruba"
+  handle "/yoruba.amp", using: "WorldServiceYorubaTipoHomePage"
   handle "/yoruba/manifest.json", using: "WorldServiceYorubaAssets"
   handle "/yoruba/sw.js", using: "WorldServiceYorubaAssets"
   handle "/yoruba/rss.xml", using: "WorldServiceYorubaHomePageRss"
-
-  handle "/yoruba/tipohome.amp", using: "WorldServiceYorubaTipoHomePage", only_on: "test"
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2736,7 +2734,7 @@ defroutefile "Main" do
   end
 
   handle "/yoruba/send/:id", using: "UploaderWorldService"
-  handle "/yoruba", using: "WorldServiceYorubaTipoHomePage", only_on: "test"
+  handle "/yoruba", using: "WorldServiceYorubaTipoHomePage"
   handle "/yoruba/*any", using: "WorldServiceYoruba"
 
   redirect "/zhongwen/simp/mobile/*any", to: "/zhongwen/simp", status: 301
