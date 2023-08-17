@@ -20,7 +20,6 @@ defmodule Routes.Specs.DotComTravel do
             "/travel",
             "/travel/destinations",
             "/travel/destinations/asia",
-            "/travel/destinations/japan",
             "/travel/tags/covid-19",
             "/travel/worlds-table"
           ]
