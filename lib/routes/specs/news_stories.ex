@@ -10,7 +10,8 @@ defmodule Routes.Specs.NewsStoriesIndex do
           examples: ["/news/stories"]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: ["/news/stories"]
         }
       ]
     }

@@ -13,7 +13,8 @@ defmodule Routes.Specs.NewsTopics do
           examples: ["/news/topics/cljev4jz3pjt", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9"}, "/news/topics/c207p54mljpt/aberdeenshire-council", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9/aberdeenshire-council"}]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: ["/news/topics/cljev4jz3pjt", "/news/topics/cp7r8vglnnwt"]
         }
       ]
     }

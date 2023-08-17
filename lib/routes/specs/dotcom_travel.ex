@@ -5,10 +5,25 @@ defmodule Routes.Specs.DotComTravel do
       specs: [
         %{
           platform: "DotComTravel",
-          examples: ["/travel", "/travel/tags/covid-19", "/travel/destinations/japan"]
+          examples: [
+            "/travel",
+            "/travel/destinations",
+            "/travel/destinations/asia",
+            "/travel/destinations/japan",
+            "/travel/tags/covid-19",
+            "/travel/worlds-table"
+          ]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: [
+            "/travel",
+            "/travel/destinations",
+            "/travel/destinations/asia",
+            "/travel/destinations/japan",
+            "/travel/tags/covid-19",
+            "/travel/worlds-table"
+          ]
         }
       ]
     }
