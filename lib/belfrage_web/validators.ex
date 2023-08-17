@@ -158,7 +158,7 @@ defmodule BelfrageWeb.Validators do
     false
   """
   def is_numeric_cps_id?(param) do
-    String.match?(param, ~r/^[0-9]{5,9}/)
+    String.match?(param, ~r/^[0-9]{5,9}$/)
   end
 
   @doc """
