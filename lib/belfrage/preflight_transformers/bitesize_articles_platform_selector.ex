@@ -8,13 +8,16 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
     "zgd682p"
   ]
 
+  @service "BitesizeArticlesData"
+
   @impl Transformer
   def call(envelope = %Envelope{request: request}) do
     if webcore_id?(request.path_params["id"]) do
       {:ok, Envelope.add(envelope, :private, %{platform: "Webcore"})}
     else
-      case PreflightService.call(envelope, "BitesizeArticlesData") do
-        {:ok, _envelope, articles_data} ->
+      case PreflightService.call(envelope, @service) do
+        {:ok, envelope = %Envelope{private: %Envelope.Private{preflight_metadata: metadata}}} ->
+          articles_data = Map.get(metadata, @service)
           {:ok, Envelope.add(envelope, :private, %{platform: get_platform_by_data(articles_data)})}
 
         {:error, _envelope, :preflight_data_not_found} ->
