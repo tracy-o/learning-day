@@ -6,7 +6,8 @@ defmodule Belfrage.Metrics.CachexTest do
   describe "expose" do
     setup do
       cache = String.to_atom("cache#{System.unique_integer()}")
-      {:ok, _pid} = Cachex.start_link(cache, stats: true)
+      limit_config = {:limit, 10, Cachex.Policy.LRW, 0.1, []}
+      {:ok, _pid} = Cachex.start_link(cache, limit: limit_config, stats: true)
       {socket, port} = given_udp_port_opened()
 
       start_reporter(
@@ -105,7 +106,8 @@ defmodule Belfrage.Metrics.CachexTest do
         Enum.join(
           [
             "cachex.cache_memory:6|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.average_cache_entry_size:6|g|#BBCEnvironment:live,cache_name:#{cache}"
+            "cachex.average_cache_entry_size:6|g|#BBCEnvironment:live,cache_name:#{cache}",
+            "cachex.limit:10|g|#BBCEnvironment:live,cache_name:#{cache}"
           ],
           "\n"
         )
@@ -119,7 +121,8 @@ defmodule Belfrage.Metrics.CachexTest do
         Enum.join(
           [
             "cachex.cache_memory:18|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.average_cache_entry_size:9|g|#BBCEnvironment:live,cache_name:#{cache}"
+            "cachex.average_cache_entry_size:9|g|#BBCEnvironment:live,cache_name:#{cache}",
+            "cachex.limit:10|g|#BBCEnvironment:live,cache_name:#{cache}"
           ],
           "\n"
         )

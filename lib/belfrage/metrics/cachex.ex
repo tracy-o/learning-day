@@ -4,6 +4,7 @@ defmodule Belfrage.Metrics.Cachex do
   metrics from the `:cachex` cache.
   """
 
+  import Cachex.Spec
   alias Belfrage.Metrics
 
   def track(cache) do
@@ -25,7 +26,8 @@ defmodule Belfrage.Metrics.Cachex do
         [:cachex, :stats],
         %{
           cache_memory: cache_memory,
-          average_cache_entry_size: round(cache_memory / size)
+          average_cache_entry_size: round(cache_memory / size),
+          limit: get_cache_limit(cache)
         },
         %{cache_name: cache}
       )
@@ -33,7 +35,7 @@ defmodule Belfrage.Metrics.Cachex do
   end
 
   def measurements() do
-    [:cache_memory, :average_cache_entry_size | stats_measurements()]
+    [:cache_memory, :average_cache_entry_size, :limit | stats_measurements()]
   end
 
   defp stats_measurements do
@@ -54,5 +56,10 @@ defmodule Belfrage.Metrics.Cachex do
     end
 
     :ets.foldl(fold_fn, 0, cache)
+  end
+
+  defp get_cache_limit(cache) do
+    {:ok, cache(limit: limit(size: size_limit))} = Cachex.inspect(cache, :cache)
+    size_limit
   end
 end
