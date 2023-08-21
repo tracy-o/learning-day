@@ -77,7 +77,7 @@ defmodule EndToEnd.MergedAllowlistsTest do
     end
 
     test "for DotComCulture.DotComCulture spec" do
-      qs = "custom_qs=1"
+      qs = "itemsPerPage=1"
       path = "/culture"
       url = "#{@dotcom_culture_endpoint}/#{path}?#{qs}"
 
@@ -101,7 +101,7 @@ defmodule EndToEnd.MergedAllowlistsTest do
 
     test "for DotComCulture.BBCX spec" do
       stub_dials(bbcx_enabled: "true")
-      qs = "custom_qs=1"
+      qs = "itemsPerPage=1"
       path = "/culture"
       url = "#{@bbcx_endpoint}/#{path}?#{qs}"
 

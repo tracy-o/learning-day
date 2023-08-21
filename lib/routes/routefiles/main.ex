@@ -591,7 +591,6 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "NewsWebcoreIndex"
   handle "/news/health", using: "NewsIndex"
   handle "/news/in_pictures", using: "NewsInPicturesIndex"
-  handle "/news/long_reads", using: "BBCXIndex"
   handle "/news/newsbeat", using: "NewsIndex"
   handle "/news/northern_ireland", using: "NewsIndex"
   handle "/news/paradisepapers", using: "NewsIndex"
@@ -599,7 +598,7 @@ defroutefile "Main" do
   handle "/news/reality_check", using: "NewsRealityCheckIndex"
   handle "/news/science_and_environment", using: "NewsIndex"
   handle "/news/scotland", using: "NewsIndex"
-  handle "/news/stories", using: "NewsStoriesIndex"
+  handle "/news/stories", using: "NewsWebcoreIndex"
   handle "/news/technology", using: "NewsIndex"
   handle "/news/the_reporters", using: "NewsWebcoreIndex"
   handle "/news/uk", using: "NewsUkIndex"
@@ -1019,6 +1018,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)$/)
   end
 
+  handle "/afaanoromoo/:topic/rss.xml", using: "WorldServiceAfaanoromooRss"
+
   handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1100,6 +1101,8 @@ defroutefile "Main" do
   handle "/amharic/topics/:id/rss.xml", using: "WorldServiceAmharicTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/amharic/:topic/rss.xml", using: "WorldServiceAmharicRss"
 
   handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1365,6 +1368,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/gujarati/:topic/rss.xml", using: "WorldServiceGujaratiRss"
+
   handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1490,6 +1495,8 @@ defroutefile "Main" do
   handle "/igbo/topics/:id/rss.xml", using: "WorldServiceIgboTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/igbo/:topic/rss.xml", using: "WorldServiceIgboRss"
 
   handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1929,6 +1936,8 @@ defroutefile "Main" do
   handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/pidgin/:topic/rss.xml", using: "WorldServicePidginRss"
 
   handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2442,6 +2451,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/tigrinya/:topic/rss.xml", using: "WorldServiceTigrinyaRss"
+
   handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2739,6 +2750,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/yoruba/:topic/rss.xml", using: "WorldServiceYorubaRss"
+
   handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2835,7 +2848,7 @@ defroutefile "Main" do
   redirect "/bbcthree/item/b6402a4c-30af-4e2a-87a6-5c263279b20b", to: "/bbcthree/terms-and-conditions", status: 301
   redirect "/bbcthree/item/9602352d-227e-43b9-a030-c0d577ce49d2", to: "/bbcthree/privacy", status: 301
   handle "/bbcthree/item/:id", using: "ThreeRedirect"
-  
+
   handle "/bbcthree/sitemap.xml", using: "ThreeSitemap"
   handle "/bbcthree/privacy", using: "ThreeInfo"
   handle "/bbcthree/terms-and-conditions", using: "ThreeInfo"

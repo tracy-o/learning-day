@@ -99,7 +99,8 @@ defmodule Belfrage.Envelope.Private do
             etag: false,
             metadata: %{},
             xray_enabled: false,
-            bbcx_enabled: false
+            bbcx_enabled: false,
+            preflight_metadata: %{}
 
   @type t :: %__MODULE__{}
 end

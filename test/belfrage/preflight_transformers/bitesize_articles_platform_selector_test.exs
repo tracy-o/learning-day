@@ -1,76 +1,114 @@
 defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
   use ExUnit.Case
+  import Mock
+
   alias Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector
-  alias Belfrage.{Envelope, Envelope.Request, Envelope.Private}
+  alias Belfrage.{Envelope, Envelope.Private}
+  alias Belfrage.Behaviours.PreflightService
 
-  import Test.Support.Helper, only: [set_environment: 1]
+  @path "/bitesize/articles/zgd682p"
+  @service "BitesizeArticlesData"
 
-  describe "requests with an id paramater key" do
-    test "if the id is a test webcore id and the production environment is test Webcore is returned" do
-      path_params = %{"id" => "zm8fhbk"}
+  @mocked_envelope %Envelope{
+    private: %Envelope.Private{production_environment: "test"},
+    request: %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
+  }
 
-      assert BitesizeArticlesPlatformSelector.call(%Envelope{
-               request: %Request{path_params: path_params}
-             }) ==
+  describe "request with an article id" do
+    test_with_mock(
+      "returns error tuple if env=test and preflight data service returns data error",
+      PreflightService,
+      call: fn %Envelope{}, @service -> {:error, @mocked_envelope, :preflight_data_error} end
+    ) do
+      request = %Envelope.Request{path: @path}
+      private = %Envelope.Private{production_environment: "test"}
+      envelope = %Envelope{request: request, private: private}
+
+      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, envelope, 500}
+    end
+
+    test_with_mock(
+      "returns error tuple if env=test and preflight data service returns data not found error",
+      PreflightService,
+      call: fn %Envelope{}, @service -> {:error, @mocked_envelope, :preflight_data_not_found} end
+    ) do
+      request = %Envelope.Request{path: @path}
+      private = %Envelope.Private{production_environment: "test"}
+      envelope = %Envelope{request: request, private: private}
+
+      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, envelope, 404}
+    end
+
+    test "selects WebCore if env=test and article id is in webcore_ids" do
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "zgd682p"}}
+      private = %Envelope.Private{production_environment: "test"}
+      envelope = %Envelope{request: request, private: private}
+
+      assert BitesizeArticlesPlatformSelector.call(envelope) ==
                {:ok,
                 %Envelope{
-                  request: %Request{path_params: path_params},
-                  private: %Private{platform: "Webcore"}
+                  request: request,
+                  private: %Private{platform: "Webcore", production_environment: "test", preflight_metadata: %{}}
                 }}
     end
 
-    test "if the id is a live webcore id and the production environment is live Webcore is returned" do
-      set_environment("live")
-      path_params = %{"id" => "zj8yydm"}
+    test_with_mock(
+      "selects WebCore if env=test and preflight data article returns no phase",
+      PreflightService,
+      call: fn %Envelope{}, @service ->
+        {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{phase: %{}}}})}
+      end
+    ) do
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
+      private = %Envelope.Private{production_environment: "test"}
+      envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeArticlesPlatformSelector.call(%Envelope{
-               request: %Request{path_params: path_params}
-             }) ==
+      assert BitesizeArticlesPlatformSelector.call(envelope) ==
                {:ok,
                 %Envelope{
-                  request: %Request{path_params: path_params},
-                  private: %Private{platform: "Webcore"}
+                  request: request,
+                  private: %Private{
+                    platform: "Webcore",
+                    production_environment: "test",
+                    preflight_metadata: %{@service => %{phase: %{}}}
+                  }
                 }}
     end
 
-    test "if the id is a not a test webcore id and the production environment is test MorphRouter is returned" do
-      path_params = %{"id" => "some_id"}
+    test_with_mock(
+      "selects MorphRouter if env=test and preflight data article returns a phase label",
+      PreflightService,
+      call: fn %Envelope{}, @service ->
+        {:ok,
+         Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{phase: %{label: "Primary"}}}})}
+      end
+    ) do
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
+      private = %Envelope.Private{production_environment: "test"}
+      envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeArticlesPlatformSelector.call(%Envelope{
-               request: %Request{path_params: path_params}
-             }) ==
+      assert BitesizeArticlesPlatformSelector.call(envelope) ==
                {:ok,
                 %Envelope{
-                  request: %Request{path_params: path_params},
-                  private: %Private{platform: "MorphRouter"}
+                  request: request,
+                  private: %Private{
+                    platform: "MorphRouter",
+                    production_environment: "test",
+                    preflight_metadata: %{@service => %{phase: %{label: "Primary"}}}
+                  }
                 }}
     end
 
-    test "if the id is a test webcore id and the production environment is live MorphRouter is returned" do
-      set_environment("live")
-      path_params = %{"id" => "zjykkmn"}
+    test "selects Webcore if env=live and the article id is a live webcore id" do
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "zj8yydm"}}
+      private = %Envelope.Private{production_environment: "live"}
+      envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeArticlesPlatformSelector.call(%Envelope{
-               request: %Request{path_params: path_params}
-             }) ==
+      assert BitesizeArticlesPlatformSelector.call(envelope) ==
                {:ok,
                 %Envelope{
-                  request: %Request{path_params: path_params},
-                  private: %Private{platform: "MorphRouter"}
-                }}
-    end
-
-    test "if the id is not a live webcore id and the production environment is live MorphRouter is returned" do
-      set_environment("live")
-      path_params = %{"id" => "some_id"}
-
-      assert BitesizeArticlesPlatformSelector.call(%Envelope{
-               request: %Request{path_params: path_params}
-             }) ==
-               {:ok,
-                %Envelope{
-                  request: %Request{path_params: path_params},
-                  private: %Private{platform: "MorphRouter"}
+                  request: request,
+                  private: %Private{platform: "Webcore", production_environment: "live", preflight_metadata: %{}}
                 }}
     end
   end

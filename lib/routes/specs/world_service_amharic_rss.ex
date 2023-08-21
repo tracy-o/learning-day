@@ -1,12 +1,12 @@
-defmodule Routes.Specs.WorldServiceBurmeseHomePageRss do
+defmodule Routes.Specs.WorldServiceAmharicRss do
   def specification do
     %{
       specs: %{
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
-        platform: "Fabl",
-        request_pipeline: ["RssFeedDomainValidator", "WorldServiceTopicRssFeedsMapper"],
-        examples: ["/burmese/rss.xml"]
+        platform: "Karanga",
+        request_pipeline: ["RssFeedDomainValidator"],
+        examples: ["/amharic/front_page/rss.xml"]
       }
     }
   end

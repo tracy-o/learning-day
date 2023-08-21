@@ -8,7 +8,8 @@ defmodule Routes.Specs.DotComCulture do
           examples: ["/culture", "/culture/tags/jazz-music"]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: ["/culture", "/culture/style", "/culture/music", "/culture/tags/jazz-music"]
         },
       ]
     }
