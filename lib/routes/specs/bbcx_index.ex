@@ -25,7 +25,6 @@ defmodule Routes.Specs.BBCXIndex do
           "/innovation/artificial-intelligence",
           "/innovation/future-now",
           "/live",
-          "/news/long_reads",
           "/news/us-canada",
           "/news/war-in-ukraine",
           "/travel/adventures",
