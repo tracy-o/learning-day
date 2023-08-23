@@ -3526,6 +3526,8 @@ defroutefile "Main" do
   redirect "/bitesize/articles/zhc2jhv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
   redirect "/bitesize/articles/z2rccmn", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
 
+  redirect "/bitesize/articles/zv6yhbk", to: "/usingthebbc/privacy/privacy-notice-for-bbc-quizzes-and-polls", status: 301      # privacy-notice-for-bbc-quizzes-and-polls
+
   handle "/bitesize", using: "BitesizeHomePage"
 
   handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
