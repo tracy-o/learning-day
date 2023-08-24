@@ -92,7 +92,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "tamil",
       "telugu",
       "thai",
-      "tigrinya",
       "turkce",
       "ukchina/simp",
       "ukchina/trad",
