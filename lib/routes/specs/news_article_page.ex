@@ -17,7 +17,6 @@ defmodule Routes.Specs.NewsArticlePage do
           circuit_breaker_error_threshold: 1_000,
           request_pipeline: [
             "NewsAvRedirect",
-            "NewsArticleValidator",
             "ObitMode",
             "ElectionBannerCouncilStory",
             "ElectionBannerNiStory"
