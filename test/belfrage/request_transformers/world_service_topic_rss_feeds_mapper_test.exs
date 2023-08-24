@@ -67,7 +67,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "bengali",
       "cymrufyw",
       "gahuza",
-      "gujarati",
       "hausa",
       "hindi",
       "igbo",
