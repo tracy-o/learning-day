@@ -2874,7 +2874,7 @@ defroutefile "Main" do
 
   # Newsletters
 
-  handle "/newsletterstest/:id", using: "Newsletter" do
+  handle "/newsletters/:id", using: "Newsletter", only_on: "test" do
     return_404 if: !is_zid?(id)
   end
 
