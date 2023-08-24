@@ -9,6 +9,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapper do
     "/azeri/rss.xml" => "c1295dq496yt",
     "/burmese/rss.xml" => "cn6rql5k0z5t",
     "/gujarati/rss.xml" => "cx0edn859g0t",
+    "/igbo/rss.xml" => "cp2dkn6rzj5t",
     "/kyrgyz/rss.xml" => "crg7kj2e52nt"
   }
 
