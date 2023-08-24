@@ -101,7 +101,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "urdu",
       "uzbek",
       "vietnamese",
-      "yoruba",
       "zhongwen/simp",
       "zhongwen/trad"
     ]
