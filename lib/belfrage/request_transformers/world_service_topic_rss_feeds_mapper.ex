@@ -11,7 +11,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapper do
     "/gujarati/rss.xml" => "cx0edn859g0t",
     "/igbo/rss.xml" => "cp2dkn6rzj5t",
     "/kyrgyz/rss.xml" => "crg7kj2e52nt",
-    "/pidgin/rss.xml" => "ck3yk9nz25qt"
+    "/pidgin/rss.xml" => "ck3yk9nz25qt",
+    "/yoruba/rss.xml" => "cvpk14mq48kt"
   }
 
   defp migrated_rss_feed?(path) do
