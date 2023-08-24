@@ -59,7 +59,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
     end
 
     legacy_rss_services = [
-      "afaanoromoo",
       "afrique",
       "amharic",
       "arabic",
