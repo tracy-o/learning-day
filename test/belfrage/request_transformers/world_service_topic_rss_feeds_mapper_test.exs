@@ -69,7 +69,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "gahuza",
       "hausa",
       "hindi",
-      "igbo",
       "indonesia",
       "japanese",
       "korean",
