@@ -80,7 +80,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "newsround",
       "pashto",
       "persian",
-      "pidgin",
       "portuguese",
       "punjabi",
       "russian",
