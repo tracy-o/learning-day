@@ -3253,7 +3253,7 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage", only_on: "test" do
+   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
