@@ -19,7 +19,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       :ok
     end
 
-    test "when asset type is a Web Core asset and Ares dial on" do
+    test "when asset type is a Web Core asset" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -54,7 +54,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Mozart asset and Ares dial on" do
+    test "when asset type is a Mozart asset" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -99,7 +99,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
     end
 
     # At some point this will raise for a fallback when there is a data error
-    test "when asset type is unknown due to a data error and Ares dial on" do
+    test "when asset type is unknown due to a data error" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -142,128 +142,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Web Core asset and Ares dial set to logging mode" do
-      stub_dial(:preflight_ares_data_fetch, "learning")
-
-      fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^fabl_url
-           },
-           :Preflight ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"type\": \"STY\"}}"
-           }}
-        end
-      )
-
-      mozart_url = "#{@mozart_news_endpoint}#{@path}"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^mozart_url
-           },
-           :MozartNews ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "<h1>Hello from MozartNews!</h1>"
-           }}
-        end
-      )
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
-    end
-
-    test "when asset type is a Mozart asset and Ares dial set to logging mode" do
-      stub_dial(:preflight_ares_data_fetch, "learning")
-
-      fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^fabl_url
-           },
-           :Preflight ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"type\": \"FIX\"}}"
-           }}
-        end
-      )
-
-      mozart_url = "#{@mozart_news_endpoint}#{@path}"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^mozart_url
-           },
-           :MozartNews ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "<h1>Hello from MozartNews!</h1>"
-           }}
-        end
-      )
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
-    end
-
-    # At some point this will raise for a fallback when unable to fetch data
-    test "when Ares dial disabled" do
-      stub_dial(:preflight_ares_data_fetch, "off")
-
-      mozart_url = "#{@mozart_news_endpoint}#{@path}"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^mozart_url
-           },
-           :MozartNews ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "<h1>Hello from MozartNews!</h1>"
-           }}
-        end
-      )
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from MozartNews!</h1>"} = sent_resp(conn)
-    end
-
-    test "when asset type is a Web Core asset and Ares dial on and request is BBCX" do
+    test "when asset type is a Web Core asset and request is BBCX" do
       stub_dials(bbcx_enabled: "true")
 
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
@@ -308,7 +187,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from BBCX!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Mozart asset and Ares dial on and request is BBCX" do
+    test "when asset type is a Mozart asset and request is BBCX" do
       stub_dials(bbcx_enabled: "true")
 
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
@@ -360,7 +239,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       :ok
     end
 
-    test "when asset type is a Web Core asset and Ares dial on" do
+    test "when asset type is a Web Core asset" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -395,7 +274,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Mozart asset and Ares dial on" do
+    test "when asset type is a Mozart asset" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -440,7 +319,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
     end
 
     # At some point this will raise for a fallback when there is a data error
-    test "when asset type is unknown due to a data error and Ares dial on" do
+    test "when asset type is unknown due to a data error" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -474,101 +353,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Web Core asset and Ares dial set to logging mode" do
-      stub_dial(:preflight_ares_data_fetch, "learning")
-
-      fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^fabl_url
-           },
-           :Preflight ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"type\": \"STY\"}}"
-           }}
-        end
-      )
-
-      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
-        {:ok,
-         %{
-           "headers" => %{},
-           "statusCode" => 200,
-           "body" => "<h1>Hello from the Lambda!</h1>"
-         }}
-      end)
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    end
-
-    test "when asset type is a Mozart asset and Ares dial set to logging mode" do
-      stub_dial(:preflight_ares_data_fetch, "learning")
-
-      fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^fabl_url
-           },
-           :Preflight ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"type\": \"FIX\"}}"
-           }}
-        end
-      )
-
-      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
-        {:ok,
-         %{
-           "headers" => %{},
-           "statusCode" => 200,
-           "body" => "<h1>Hello from the Lambda!</h1>"
-         }}
-      end)
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    end
-
-    # At some point this will raise for a fallback when unable to fetch data
-    test "when Ares dial disabled" do
-      stub_dial(:preflight_ares_data_fetch, "off")
-
-      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
-        {:ok,
-         %{
-           "headers" => %{},
-           "statusCode" => 200,
-           "body" => "<h1>Hello from the Lambda!</h1>"
-         }}
-      end)
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    end
-
-    test "when asset type is a Web Core asset and Ares dial on and request is BBCX" do
+    test "when asset type is a Web Core asset and request is BBCX" do
       stub_dials(bbcx_enabled: "true")
 
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
@@ -613,7 +398,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from BBCX!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Mozart asset and Ares dial on and request is BBCX" do
+    test "when asset type is a Mozart asset and request is BBCX" do
       stub_dials(bbcx_enabled: "true")
 
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
@@ -665,7 +450,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       :ok
     end
 
-    test "when asset type is a Web Core asset and Ares dial on" do
+    test "when asset type is a Web Core asset" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -700,7 +485,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
 
-    test "when asset type is a Mozart asset and Ares dial on" do
+    test "when asset type is a Mozart asset" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -745,7 +530,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
     end
 
     # At some point this will raise for a fallback when there is a data error
-    test "when asset type is unknown due to a data error and Ares dial on" do
+    test "when asset type is unknown due to a data error" do
       fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
 
       HTTPMock
@@ -778,103 +563,9 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
 
       assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
     end
-
-    test "when asset type is a Web Core asset and Ares dial set to logging mode" do
-      stub_dial(:preflight_ares_data_fetch, "learning")
-
-      fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^fabl_url
-           },
-           :Preflight ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"type\": \"STY\"}}"
-           }}
-        end
-      )
-
-      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
-        {:ok,
-         %{
-           "headers" => %{},
-           "statusCode" => 200,
-           "body" => "<h1>Hello from the Lambda!</h1>"
-         }}
-      end)
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    end
-
-    test "when asset type is a Mozart asset and Ares dial set to logging mode" do
-      stub_dial(:preflight_ares_data_fetch, "learning")
-
-      fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
-
-      HTTPMock
-      |> expect(
-        :execute,
-        fn %HTTP.Request{
-             method: :get,
-             url: ^fabl_url
-           },
-           :Preflight ->
-          {:ok,
-           %HTTP.Response{
-             status_code: 200,
-             body: "{\"data\": {\"type\": \"FIX\"}}"
-           }}
-        end
-      )
-
-      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
-        {:ok,
-         %{
-           "headers" => %{},
-           "statusCode" => 200,
-           "body" => "<h1>Hello from the Lambda!</h1>"
-         }}
-      end)
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    end
-
-    # At some point this will raise for a fallback when unable to fetch data
-    test "when Ares dial disabled" do
-      stub_dial(:preflight_ares_data_fetch, "off")
-
-      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
-        {:ok,
-         %{
-           "headers" => %{},
-           "statusCode" => 200,
-           "body" => "<h1>Hello from the Lambda!</h1>"
-         }}
-      end)
-
-      conn =
-        conn(:get, "/news/uk-87654321")
-        |> Router.call(routefile: Routes.Routefiles.Main.Live)
-
-      assert {200, _headers, "<h1>Hello from the Lambda!</h1>"} = sent_resp(conn)
-    end
   end
 
-  test "when asset type is a Web Core asset and Ares dial on and request is BBCX" do
+  test "when asset type is a Web Core asset and request is BBCX" do
     stub_dials(bbcx_enabled: "true")
 
     fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"
@@ -919,7 +610,7 @@ defmodule EndToEnd.MultiplePreflightNewsArticleTest do
     assert {200, _headers, "<h1>Hello from BBCX!</h1>"} = sent_resp(conn)
   end
 
-  test "when asset type is a Mozart asset and Ares dial on and request is BBCX" do
+  test "when asset type is a Mozart asset and request is BBCX" do
     stub_dials(bbcx_enabled: "true")
 
     fabl_url = "#{@fabl_endpoint}/module/ares-asset-identifier?path=%2Fnews%2Fuk-87654321"

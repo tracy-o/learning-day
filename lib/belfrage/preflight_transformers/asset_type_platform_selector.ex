@@ -4,27 +4,16 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
   alias Belfrage.{Behaviours.PreflightService, Envelope, Envelope.Private}
   require Logger
 
-  @dial Application.compile_env(:belfrage, :dial)
-
   @webcore_asset_types ["MAP", "CSP", "PGL", "STY"]
   @service "AresData"
 
   @impl Transformer
   def call(envelope = %Envelope{}) do
     asset_response =
-      case {valid_asset_id?(envelope.request.path_params["id"]), @dial.state(:preflight_ares_data_fetch)} do
-        {true, "on"} ->
-          fetch_data(envelope)
-
-        {true, "learning"} ->
-          {_state, envelope} = fetch_data(envelope)
-          {:error, envelope, :ares_data_dial_learning_mode}
-
-        {false, _} ->
-          {:error, envelope, :invalid_path}
-
-        _ ->
-          {:error, envelope, :ares_data_dial_off}
+      if valid_asset_id?(envelope.request.path_params["id"]) do
+        PreflightService.call(envelope, @service)
+      else
+        {:error, envelope, :invalid_path}
       end
 
     envelope =
@@ -47,10 +36,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelector do
       end
 
     {:ok, envelope}
-  end
-
-  defp fetch_data(envelope) do
-    PreflightService.call(envelope, @service)
   end
 
   defp stack_id() do
