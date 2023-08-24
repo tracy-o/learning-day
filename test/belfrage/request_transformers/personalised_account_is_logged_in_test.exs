@@ -23,9 +23,35 @@ defmodule Belfrage.RequestTransformers.PersonalisedAccountIsLoggedInTest do
                  http_status: 302,
                  body: "",
                  headers: %{
-                   "location" => "https://www.bbc.co.uk/signin",
+                   "location" => "https://www.bbc.co.uk/signin?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou",
                    "x-bbc-no-scheme-rewrite" => "1",
-                   "cache-control" => "private, max-age=0"
+                   "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
+                 }
+               }
+             }
+           } = PersonalisedAccountIsLoggedIn.call(envelope)
+  end
+
+  test "redirect to /signin if there is no user_session" do
+    envelope = %Envelope{
+      request: %Envelope.Request{
+        scheme: :https,
+        host: "www.bbc.co.uk",
+        path: "/foryou",
+        is_uk: true
+      }
+    }
+
+    assert {
+             :stop,
+             %{
+               response: %{
+                 http_status: 302,
+                 body: "",
+                 headers: %{
+                   "location" => "https://www.bbc.co.uk/signin?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou",
+                   "x-bbc-no-scheme-rewrite" => "1",
+                   "cache-control" => "public, stale-if-error=90, stale-while-revalidate=30, max-age=60"
                  }
                }
              }

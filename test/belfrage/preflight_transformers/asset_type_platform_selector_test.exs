@@ -32,8 +32,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:error, @mocked_envelope, :preflight_data_error}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     assert AssetTypePlatformSelector.call(@request_envelope) ==
              {:ok,
               %Envelope{
@@ -53,8 +51,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     assert AssetTypePlatformSelector.call(@request_envelope) ==
              {:ok,
               %Envelope{
@@ -75,8 +71,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "IDX"}})}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     assert AssetTypePlatformSelector.call(@request_envelope) ==
              {:ok,
               %Envelope{
@@ -97,8 +91,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     assert AssetTypePlatformSelector.call(@request_envelope) ==
              {:ok,
               %Envelope{
@@ -121,8 +113,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     request = %Envelope.Request{path: "/news/.invalid", path_params: %{"id" => ".invalid"}}
     private = %Envelope.Private{production_environment: "test"}
     envelope = %Envelope{request: request, private: private}
@@ -144,8 +134,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     request = %Envelope.Request{path: "/news/a", path_params: %{"id" => "a"}}
     private = %Envelope.Private{production_environment: "test"}
     envelope = %Envelope{request: request, private: private}
@@ -167,76 +155,12 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:error, @mocked_envelope, :preflight_data_not_found}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     assert AssetTypePlatformSelector.call(@request_envelope) ==
              {:ok,
               %Envelope{
                 private: %Envelope.Private{
                   platform: "Webcore",
                   production_environment: "test",
-                  checkpoints: %{preflight_service_request_timing: 576_460_641_580}
-                },
-                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
-              }}
-  end
-
-  test_with_mock(
-    "returns Webcore platform and does not make data request if dial is off - all stacks apart from Joan",
-    PreflightService,
-    call: fn %Envelope{}, @service -> {:error, @mocked_envelope, :preflight_data_not_found} end
-  ) do
-    stub_dial(:preflight_ares_data_fetch, "off")
-
-    assert AssetTypePlatformSelector.call(@request_envelope) ==
-             {:ok,
-              %Envelope{
-                private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
-                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
-              }}
-
-    assert_not_called(PreflightService.call(@request_envelope, "AresData"))
-  end
-
-  test_with_mock(
-    "returns Webcore platform if origin response contains a MozartNews asset type and dial is set to learning mode on all stacks apart from Joan",
-    PreflightService,
-    call: fn %Envelope{}, @service ->
-      {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "FIX"}})}
-    end
-  ) do
-    stub_dial(:preflight_ares_data_fetch, "learning")
-
-    assert AssetTypePlatformSelector.call(@request_envelope) ==
-             {:ok,
-              %Envelope{
-                private: %Envelope.Private{
-                  platform: "Webcore",
-                  production_environment: "test",
-                  preflight_metadata: %{@service => "FIX"},
-                  checkpoints: %{preflight_service_request_timing: 576_460_641_580}
-                },
-                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
-              }}
-  end
-
-  test_with_mock(
-    "returns MozartNews platform if origin response contains a Webcore asset type and dial is set to learning mode on Joan",
-    PreflightService,
-    call: fn %Envelope{}, @service ->
-      {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
-    end
-  ) do
-    stub_dial(:preflight_ares_data_fetch, "learning")
-    set_stack_id("joan")
-
-    assert AssetTypePlatformSelector.call(@request_envelope) ==
-             {:ok,
-              %Envelope{
-                private: %Envelope.Private{
-                  platform: "MozartNews",
-                  production_environment: "test",
-                  preflight_metadata: %{@service => "STY"},
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
                 request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
@@ -271,8 +195,6 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
     end
   ) do
-    stub_dial(:preflight_ares_data_fetch, "on")
-
     {:ok, envelope} = AssetTypePlatformSelector.call(@request_envelope)
 
     checkpoints = envelope.private.checkpoints

@@ -969,6 +969,7 @@ defroutefile "Main" do
   redirect "/nepali/index.html", to: "/nepali", status: 301
   redirect "/pashto/index.html", to: "/pashto", status: 301
   redirect "/persian/index.html", to: "/persian", status: 301
+  redirect "/persian/afghanistan/index.html", to: "/persian/afghanistan", status: 301
   redirect "/portuguese/index.html", to: "/portuguese", status: 301
   redirect "/russian/index.html", to: "/russian", status: 301
   redirect "/sinhala/index.html", to: "/sinhala", status: 301
@@ -2873,7 +2874,7 @@ defroutefile "Main" do
 
   # Newsletters
 
-  handle "/newsletterstest/:id", using: "Newsletter" do
+  handle "/newsletters/:id", using: "Newsletter", only_on: "test" do
     return_404 if: !is_zid?(id)
   end
 
@@ -3252,7 +3253,7 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage", only_on: "test" do
+   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
@@ -3524,6 +3525,8 @@ defroutefile "Main" do
   redirect "/bitesize/articles/zn8jwnb", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
   redirect "/bitesize/articles/zhc2jhv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
   redirect "/bitesize/articles/z2rccmn", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
+
+  redirect "/bitesize/articles/zv6yhbk", to: "/usingthebbc/privacy/privacy-notice-for-bbc-quizzes-and-polls", status: 301      # privacy-notice-for-bbc-quizzes-and-polls
 
   handle "/bitesize", using: "BitesizeHomePage"
 

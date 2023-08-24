@@ -308,24 +308,5 @@
         "description": "Disables BBCX content"
       }
     ]
-  },
-  {
-    "name": "preflight_ares_data_fetch",
-    "description": "Allows fetching Ares metadata from FABL",
-    "default-value": "on",
-    "values": [
-      {
-        "value": "on",
-        "description": "Allows fetching metadata from FABL for routing decision"
-      },
-      {
-        "value": "learning",
-        "description": "Allows fetching metadata from FABL but only for logging"
-      },
-      {
-        "value": "off",
-        "description": "Disable fetching metadata from FABL"
-      }
-    ]
   }
 ]
