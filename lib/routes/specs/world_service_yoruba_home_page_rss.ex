@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceYorubaHomePageRss do
       specs: %{
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
-        platform: "Karanga",
+        platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator"],
         examples: ["/yoruba/rss.xml"]
       }
