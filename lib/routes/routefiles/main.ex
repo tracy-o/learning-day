@@ -991,6 +991,7 @@ defroutefile "Main" do
 
   ## World Service - RSS Redirects
   redirect "/afaanoromoo/front_page/rss.xml", to: "/afaanoromoo/rss.xml", status: 301
+  redirect "/amharic/front_page/rss.xml", to: "/amharic/rss.xml", status: 301
   redirect "/azeri/front_page/rss.xml", to: "/azeri/rss.xml", status: 301
   redirect "/burmese/front_page/rss.xml", to: "/burmese/rss.xml", status: 301
   redirect "/kyrgyz/front_page/rss.xml", to: "/kyrgyz/rss.xml", status: 301
