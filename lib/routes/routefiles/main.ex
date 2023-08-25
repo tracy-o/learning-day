@@ -993,6 +993,7 @@ defroutefile "Main" do
   redirect "/azeri/front_page/rss.xml", to: "/azeri/rss.xml", status: 301
   redirect "/burmese/front_page/rss.xml", to: "/burmese/rss.xml", status: 301
   redirect "/kyrgyz/front_page/rss.xml", to: "/kyrgyz/rss.xml", status: 301
+  redirect "/gujarati/front_page/rss.xml", to: "/gujarati/rss.xml", status: 301
 
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
