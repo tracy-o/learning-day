@@ -989,6 +989,9 @@ defroutefile "Main" do
   redirect "/uzbek/index.html", to: "/uzbek", status: 301
   redirect "/vietnamese/index.html", to: "/vietnamese", status: 301
 
+  ## World Service - RSS Redirects
+  redirect "/azeri/front_page/rss.xml", to: "/azeri/rss.xml", status: 301
+
   # World Service - Indian Sports Woman of The Year
   redirect "/gujarati/iswoty", to: "/gujarati/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
   redirect "/hindi/iswoty", to: "/hindi/resources/idt-c01e87cf-898c-4ec6-86ea-5ef77f9e58a0", status: 302
