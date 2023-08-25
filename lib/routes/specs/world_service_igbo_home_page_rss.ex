@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceIgboHomePageRss do
       specs: %{
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
-        platform: "Karanga",
+        platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator"],
         examples: ["/igbo/rss.xml"]
       }
