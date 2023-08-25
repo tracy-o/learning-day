@@ -999,6 +999,7 @@ defroutefile "Main" do
   redirect "/igbo/front_page/rss.xml", to: "/igbo/rss.xml", status: 301
   redirect "/pidgin/front_page/rss.xml", to: "/pidgin/rss.xml", status: 301
   redirect "/tigrinya/front_page/rss.xml", to: "/tigrinya/rss.xml", status: 301
+  redirect "/yoruba/front_page/rss.xml", to: "/yoruba/rss.xml", status: 301
 
 
   # World Service - Indian Sports Woman of The Year
