@@ -11,6 +11,16 @@ defmodule Belfrage.Authentication.TokenTest do
       assert Token.parse(T.valid_access_token()) == {true, %{age_bracket: "o18", allow_personalisation: true}}
     end
 
+    test "with ckns_atkn token with profile_admin_id" do
+      assert Token.parse(T.valid_access_token_profile_admin_id()) ==
+               {true,
+                %{
+                  age_bracket: "u13",
+                  allow_personalisation: true,
+                  profile_admin_id: "7d125f68-e4e0-462b-9bd3-473fd821db99"
+                }}
+    end
+
     test "with non existant user_attributes access token" do
       assert Token.parse(T.valid_access_token_without_user_attributes()) == {true, %{}}
     end

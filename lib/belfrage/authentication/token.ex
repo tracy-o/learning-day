@@ -20,8 +20,27 @@ defmodule Belfrage.Authentication.Token do
   end
 
   defp extract_user_attributes(decoded_token) do
-    case decoded_token["userAttributes"] do
-      %{"ageBracket" => age_bracket, "allowPersonalisation" => allow_personalisation} ->
+    case decoded_token do
+      %{
+        "profileAdminId" => profile_admin_id,
+        "userAttributes" => %{
+          "ageBracket" => age_bracket,
+          "allowPersonalisation" => allow_personalisation
+        }
+      } ->
+        {true,
+         %{
+           age_bracket: age_bracket,
+           allow_personalisation: allow_personalisation,
+           profile_admin_id: profile_admin_id
+         }}
+
+      %{
+        "userAttributes" => %{
+          "ageBracket" => age_bracket,
+          "allowPersonalisation" => allow_personalisation
+        }
+      } ->
         {true, %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
 
       _ ->
