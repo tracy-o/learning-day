@@ -31,7 +31,8 @@ defmodule Routes.Specs.BBCXIndex do
           "/travel/cultural-experiences",
           "/travel/history-heritage",
           "/travel/specialist",
-          "/video"
+          "/video",
+          "/watch-live-news"
         ]
       }
     }

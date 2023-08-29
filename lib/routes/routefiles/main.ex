@@ -3642,6 +3642,7 @@ defroutefile "Main" do
   handle "/innovation/*any", using: "BBCXIndex"
   handle "/live", using: "BBCXIndex"
   handle "/video/*any", using: "BBCXIndex"
+  handle "/watch-live-news", using: "BBCXIndex"
 
   # DotCom routes
   handle "/future/article/:id", using: "DotComFuture"

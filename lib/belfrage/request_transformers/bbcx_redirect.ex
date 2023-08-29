@@ -33,7 +33,8 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/travel/cultural-experiences" => "/travel/columns/culture-identity",
     "/travel/history-heritage" => "/travel/tags/history",
     "/travel/specialist" => "/travel/columns/the-specialist",
-    "/video" => "/reel"
+    "/video" => "/reel",
+    "/watch-live-news" => "/news/world-radio-and-tv-14563857"
   }
 
   @default_route "/"
