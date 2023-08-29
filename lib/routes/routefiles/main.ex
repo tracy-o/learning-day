@@ -946,6 +946,8 @@ defroutefile "Main" do
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
   ## World Service - Article Redirects
+  redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
+  redirect "/mundo/noticias/2016/03/160317_semana_santa_causas_sangre_heces_cancer_ac", to: "/mundo/articles/c2qd71z6y3wo", status: 301
   redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
   redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
   redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
@@ -962,9 +964,10 @@ defroutefile "Main" do
   redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
 
   ## World Service - Topic Redirects
-  redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
+  redirect "/hindi/india-66590093", to: "/hindi/topics/cqe17zz2k1nt", status: 301
+  redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
 
