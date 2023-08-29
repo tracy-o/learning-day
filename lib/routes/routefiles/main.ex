@@ -784,6 +784,8 @@ defroutefile "Main" do
                ]
   end
 
+  handle "/cymrufyw/etholiad/2019/cymru/etholaethau", using: "CymrufywEtholiadCanlyniadau", only_on: "test"
+
   handle "/cymrufyw/etholiad/2019/du/etholaethau/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test" do
     return_404 if: [
       !String.match?(division_id, ~r/^W[0-9]{8}$/)
