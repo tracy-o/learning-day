@@ -712,6 +712,18 @@ defroutefile "Main" do
     return_404()
   end
 
+  handle "/news/av", using: "News" do
+    return_404()
+  end
+
+  handle "/news/live", using: "News" do
+    return_404()
+  end
+
+  handle "/news/topics", using: "News" do
+    return_404()
+  end
+
   handle "/news/newsbeat-entertainment", using: "News" do
     return_404()
   end
