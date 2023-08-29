@@ -1,7 +1,6 @@
 defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
-  import Test.Support.Helper, only: [set_stack_id: 1]
   import Mock
 
   alias Belfrage.Envelope
@@ -26,22 +25,13 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   }
 
   test_with_mock(
-    "returns Webcore platform if origin returns preflight_data_error - all stacks apart from Joan",
+    "returns 500 if origin returns preflight_data_error",
     PreflightService,
     call: fn %Envelope{}, @service ->
       {:error, @mocked_envelope, :preflight_data_error}
     end
   ) do
-    assert AssetTypePlatformSelector.call(@request_envelope) ==
-             {:ok,
-              %Envelope{
-                private: %Envelope.Private{
-                  platform: "Webcore",
-                  production_environment: "test",
-                  checkpoints: %{preflight_service_request_timing: 576_460_641_580}
-                },
-                request: %Envelope.Request{path: @path, path_params: %{"id" => "valid+path"}}
-              }}
+    assert AssetTypePlatformSelector.call(@request_envelope) == {:error, @mocked_envelope, 500}
   end
 
   test_with_mock(
@@ -107,7 +97,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns Webcore and does not make an AresData request when the path is invalid and the stack is not Joan",
+    "returns MozartNews and does not make an AresData request when the path is invalid",
     PreflightService,
     call: fn %Envelope{}, @service ->
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
@@ -120,7 +110,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
     assert AssetTypePlatformSelector.call(envelope) ==
              {:ok,
               %Envelope{
-                private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
+                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
                 request: request
               }}
 
@@ -128,7 +118,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns Webcore and does not make an AresData request when the invalid path has not enough characters and the stack is not Joan",
+    "returns MozartNews and does not make an AresData request when the invalid path has not enough characters",
     PreflightService,
     call: fn %Envelope{}, @service ->
       {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => "STY"}})}
@@ -141,7 +131,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
     assert AssetTypePlatformSelector.call(envelope) ==
              {:ok,
               %Envelope{
-                private: %Envelope.Private{platform: "Webcore", production_environment: "test"},
+                private: %Envelope.Private{platform: "MozartNews", production_environment: "test"},
                 request: request
               }}
 
@@ -149,7 +139,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns Webcore platform if origin response contains a 404 status code - all stacks apart from Joan",
+    "returns Mozartnews if origin response contains a 404 status code",
     PreflightService,
     call: fn %Envelope{}, @service ->
       {:error, @mocked_envelope, :preflight_data_not_found}
@@ -159,7 +149,7 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
              {:ok,
               %Envelope{
                 private: %Envelope.Private{
-                  platform: "Webcore",
+                  platform: "MozartNews",
                   production_environment: "test",
                   checkpoints: %{preflight_service_request_timing: 576_460_641_580}
                 },
@@ -168,24 +158,27 @@ defmodule Belfrage.PreflightTransformers.AssetTypePlatformSelectorTest do
   end
 
   test_with_mock(
-    "returns MozartNews platform if there is no id path parameter - route should never match but covers edge case, just in case",
+    "returns MozartNews if there is no id path parameter - route should never match but covers edge case, just in case",
     PreflightService,
     call: fn %Envelope{}, @service ->
       {:ok, @mocked_envelope, "STY"}
     end
   ) do
-    set_stack_id("joan")
+    request = %Envelope.Request{path: @path, path_params: %{}}
+    private = %Envelope.Private{production_environment: "test"}
+    envelope = %Envelope{request: request, private: private}
 
-    assert {:ok,
-            %Envelope{
-              private: %Envelope.Private{platform: "MozartNews"}
-            }} =
-             AssetTypePlatformSelector.call(%Envelope{
-               request: %Envelope.Request{path: @path, path_params: %{}},
-               private: %Envelope.Private{
-                 production_environment: "test"
-               }
-             })
+    assert AssetTypePlatformSelector.call(envelope) ==
+             {:ok,
+              %Envelope{
+                private: %Envelope.Private{
+                  platform: "MozartNews",
+                  production_environment: "test"
+                },
+                request: request
+              }}
+
+    assert_not_called(PreflightService.call(envelope, "AresData"))
   end
 
   test_with_mock(
