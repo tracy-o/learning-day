@@ -40,3 +40,7 @@ config :belfrage, :benchmark,
   namespace: Benchmark
 
 config :logger, truncate: :infinity
+
+config :aws_ex_ray,
+  store_monitor_pool_size: 0,
+  client_pool_size: 0
