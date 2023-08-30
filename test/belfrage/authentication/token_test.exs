@@ -2,6 +2,7 @@ defmodule Belfrage.Authentication.TokenTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   import ExUnit.CaptureLog
+  import Mock
   import Belfrage.Test.MetricsHelper
   alias Belfrage.Authentication.Token
   alias Fixtures.AuthToken, as: T
@@ -19,6 +20,18 @@ defmodule Belfrage.Authentication.TokenTest do
                   allow_personalisation: true,
                   profile_admin_id: "0a33f5df-e3aa-4ef5-950e-5d1c56ee5798"
                 }}
+    end
+
+    test_with_mock "unexpected user_attributes", Belfrage.Authentication.Validator, [],
+      verify_and_validate: fn _jws ->
+        {:ok,
+         %{
+           "userAttributes" => %{
+             "foo" => "bar"
+           }
+         }}
+      end do
+      assert Token.parse(T.valid_access_token_without_user_attributes()) == {true, %{}}
     end
 
     test "with non existant user_attributes access token" do
