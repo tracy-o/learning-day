@@ -22,23 +22,19 @@ defmodule Belfrage.Authentication.Token do
   defp extract_user_attributes(decoded_token)
        when is_map_key(decoded_token, "profileAdminId") and
               is_map_key(decoded_token, "userAttributes") do
-    user_attributes = decoded_token["userAttributes"]
-
     {true,
      %{
-       age_bracket: user_attributes["ageBracket"],
-       allow_personalisation: user_attributes["allowPersonalisation"],
+       age_bracket: get_in(decoded_token, ["userAttributes", "ageBracket"]),
+       allow_personalisation: get_in(decoded_token, ["userAttributes", "allowPersonalisation"]),
        profile_admin_id: decoded_token["profileAdminId"]
      }}
   end
 
   defp extract_user_attributes(decoded_token) when is_map_key(decoded_token, "userAttributes") do
-    user_attributes = decoded_token["userAttributes"]
-
     {true,
      %{
-       age_bracket: user_attributes["ageBracket"],
-       allow_personalisation: user_attributes["allowPersonalisation"]
+       age_bracket: get_in(decoded_token, ["userAttributes", "ageBracket"]),
+       allow_personalisation: get_in(decoded_token, ["userAttributes", "allowPersonalisation"])
      }}
   end
 
