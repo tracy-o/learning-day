@@ -6,6 +6,7 @@ defmodule Routes.Specs.AblData do
         owner: "#data-systems",
         runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
         platform: "Fabl",
+        circuit_breaker_error_threshold: 2_000,
         request_pipeline: ["NewsAppsHardcodedResponse"],
         response_pipeline: [
           "CacheDirective",

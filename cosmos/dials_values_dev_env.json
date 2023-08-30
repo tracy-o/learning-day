@@ -15,7 +15,6 @@
   "non_webcore_ttl_multiplier": "default",
   "obit_mode": "off",
   "personalisation": "on",
-  "preflight_ares_data_fetch": "on",
   "webcore_kill_switch": "inactive",
   "webcore_ttl_multiplier": "default"
 }

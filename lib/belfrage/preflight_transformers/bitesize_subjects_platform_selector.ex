@@ -1,11 +1,14 @@
 defmodule Belfrage.PreflightTransformers.BitesizeSubjectsPlatformSelector do
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.Behaviours.PreflightService
+  alias Belfrage.{Behaviours.PreflightService, Envelope, Envelope.Private}
+
+  @service "BitesizeSubjectsData"
 
   @impl Transformer
   def call(envelope = %Envelope{}) do
-    case PreflightService.call(envelope, "BitesizeSubjectsData") do
-      {:ok, envelope, subject_level} ->
+    case PreflightService.call(envelope, @service) do
+      {:ok, envelope = %Envelope{private: %Private{preflight_metadata: metadata}}} ->
+        subject_level = Map.get(metadata, @service)
         {:ok, Envelope.add(envelope, :private, %{platform: get_platform(subject_level)})}
 
       {:error, envelope, :preflight_data_not_found} ->

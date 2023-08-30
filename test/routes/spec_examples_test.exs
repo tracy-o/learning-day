@@ -101,8 +101,10 @@ defmodule Routes.SpecExamplesTest do
   end
 
   defp make_call(example) do
-    if example.spec in ["BitesizeSubjects", "NewsArticlePage"] do
+    if example.spec in ["BitesizeGuides", "BitesizeSubjects", "NewsArticlePage"] do
       with_mocks([
+        {PreflightTransformers.BitesizeGuidesPlatformSelector, [],
+         [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]},
         {PreflightTransformers.BitesizeSubjectsPlatformSelector, [],
          [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]},
         {PreflightTransformers.AssetTypePlatformSelector, [],

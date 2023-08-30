@@ -104,7 +104,7 @@ defroutefile "Mock", "test" do
 
   handle("/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs")
 
-  handle("/news/platform-selection-with-selector", using: "AssetTypeWithMultipleSpecs")
+  handle("/news/:id", using: "AssetTypeWithMultipleSpecs")
 
   handle("/platform-selection-with-webcore-platform", using: "SomeRouteStateWithMultipleSpecs")
 

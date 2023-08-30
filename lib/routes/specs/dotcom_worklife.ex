@@ -5,10 +5,17 @@ defmodule Routes.Specs.DotComWorklife do
       specs: [
         %{
           platform: "DotComWorklife",
-          examples: ["/worklife/tags/business"]
+          examples: [
+            "/worklife/article/20230731-why-twitters-rebrand-to-x-feels-shocking-to-users",
+            "/worklife/tags/business"
+          ]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: [
+            "/worklife/article/20230731-why-twitters-rebrand-to-x-feels-shocking-to-users",
+            "/worklife/tags/business"
+          ]
         }
       ]
     }
