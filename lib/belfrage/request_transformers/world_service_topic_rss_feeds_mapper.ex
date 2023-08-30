@@ -6,9 +6,16 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapper do
   use Belfrage.Behaviours.Transformer
 
   @world_service_rss_feed_mapping %{
+    "/afaanoromoo/rss.xml" => "c44dyn08mejt",
+    "/amharic/rss.xml" => "cg58k91re1gt",
     "/azeri/rss.xml" => "c1295dq496yt",
     "/burmese/rss.xml" => "cn6rql5k0z5t",
-    "/kyrgyz/rss.xml" => "crg7kj2e52nt"
+    "/gujarati/rss.xml" => "cx0edn859g0t",
+    "/igbo/rss.xml" => "cp2dkn6rzj5t",
+    "/kyrgyz/rss.xml" => "crg7kj2e52nt",
+    "/pidgin/rss.xml" => "ck3yk9nz25qt",
+    "/tigrinya/rss.xml" => "cq01ke649v0t",
+    "/yoruba/rss.xml" => "cvpk14mq48kt"
   }
 
   defp migrated_rss_feed?(path) do

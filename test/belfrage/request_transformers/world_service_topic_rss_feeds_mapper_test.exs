@@ -59,18 +59,14 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
     end
 
     legacy_rss_services = [
-      "afaanoromoo",
       "afrique",
-      "amharic",
       "arabic",
       "archive",
       "bengali",
       "cymrufyw",
       "gahuza",
-      "gujarati",
       "hausa",
       "hindi",
-      "igbo",
       "indonesia",
       "japanese",
       "korean",
@@ -82,7 +78,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "newsround",
       "pashto",
       "persian",
-      "pidgin",
       "portuguese",
       "punjabi",
       "russian",
@@ -96,7 +91,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "tamil",
       "telugu",
       "thai",
-      "tigrinya",
       "turkce",
       "ukchina/simp",
       "ukchina/trad",
@@ -104,7 +98,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "urdu",
       "uzbek",
       "vietnamese",
-      "yoruba",
       "zhongwen/simp",
       "zhongwen/trad"
     ]
