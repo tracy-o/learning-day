@@ -10,16 +10,16 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelector do
   @service "BitesizeGuidesData"
 
   @impl Transformer
-  def call(envelope = %Envelope{request: request}) do
+  def call(envelope) do
     case PreflightService.call(envelope, @service) do
       {:ok, envelope = %Envelope{private: %Envelope.Private{preflight_metadata: metadata}}} ->
         guides_data = Map.get(metadata, @service)
         {:ok, Envelope.add(envelope, :private, %{platform: get_platform_by_data(guides_data)})}
 
-      {:error, _envelope, :preflight_data_not_found} ->
+      {:error, envelope, :preflight_data_not_found} ->
         {:error, envelope, 404}
 
-      {:error, _envelope, :preflight_data_error} ->
+      {:error, envelope, :preflight_data_error} ->
         {:error, envelope, 500}
     end
   end
@@ -30,9 +30,5 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelector do
     else
       "MorphRouter"
     end
-  end
-
-  defp get_platform(_request) do
-    "MorphRouter"
   end
 end

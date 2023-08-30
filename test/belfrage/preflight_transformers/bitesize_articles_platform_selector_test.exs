@@ -24,7 +24,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
       private = %Envelope.Private{production_environment: "test"}
       envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, envelope, 500}
+      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, @mocked_envelope, 500}
     end
 
     test_with_mock(
@@ -36,7 +36,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
       private = %Envelope.Private{production_environment: "test"}
       envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, envelope, 404}
+      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, @mocked_envelope, 404}
     end
 
     test "selects WebCore if env=test and article id is in webcore_ids" do

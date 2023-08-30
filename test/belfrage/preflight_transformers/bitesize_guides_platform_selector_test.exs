@@ -73,7 +73,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelectorTest do
       private = %Envelope.Private{production_environment: "test"}
       envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeGuidesPlatformSelector.call(envelope) == {:error, envelope, 404}
+      assert BitesizeGuidesPlatformSelector.call(envelope) == {:error, @mocked_envelope, 404}
     end
 
     test_with_mock(
@@ -85,7 +85,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelectorTest do
       private = %Envelope.Private{production_environment: "test"}
       envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeGuidesPlatformSelector.call(envelope) == {:error, envelope, 500}
+      assert BitesizeGuidesPlatformSelector.call(envelope) == {:error, @mocked_envelope, 500}
     end
   end
 end

@@ -20,10 +20,10 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
           articles_data = Map.get(metadata, @service)
           {:ok, Envelope.add(envelope, :private, %{platform: get_platform_by_data(articles_data)})}
 
-        {:error, _envelope, :preflight_data_not_found} ->
+        {:error, envelope, :preflight_data_not_found} ->
           {:error, envelope, 404}
 
-        {:error, _envelope, :preflight_data_error} ->
+        {:error, envelope, :preflight_data_error} ->
           {:error, envelope, 500}
       end
     end
