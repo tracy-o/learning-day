@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceTigrinyaTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/tigrinya", "/tigrinya.amp"]
       }
     }
   end

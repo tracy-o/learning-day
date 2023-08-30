@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceAfaanoromoo do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/afaanoromoo/popular/read", "/afaanoromoo.json", "/afaanoromoo.amp"]
+        examples: ["/afaanoromoo/popular/read"]
       }
     }
   end

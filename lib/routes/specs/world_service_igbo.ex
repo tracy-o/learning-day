@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceIgbo do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/igbo/popular/read", "/igbo.json", "/igbo.amp"]
+        examples: ["/igbo/popular/read"]
       }
     }
   end

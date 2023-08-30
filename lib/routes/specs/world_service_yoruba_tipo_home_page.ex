@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceYorubaTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/yoruba", "/yoruba.amp"]
       }
     }
   end

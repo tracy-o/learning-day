@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceYoruba do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/yoruba/popular/read", "/yoruba.json", "/yoruba.amp"]
+        examples: ["/yoruba/popular/read"]
       }
     }
   end
