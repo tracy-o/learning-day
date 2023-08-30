@@ -17,7 +17,7 @@ defmodule Belfrage.Authentication.TokenTest do
                 %{
                   age_bracket: "u13",
                   allow_personalisation: true,
-                  profile_admin_id: "7d125f68-e4e0-462b-9bd3-473fd821db99"
+                  profile_admin_id: "0a33f5df-e3aa-4ef5-950e-5d1c56ee5798"
                 }}
     end
 
