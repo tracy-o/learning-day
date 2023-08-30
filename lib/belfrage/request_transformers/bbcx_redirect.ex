@@ -27,14 +27,14 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/innovation/artificial-intelligence" => "/news/technology",
     "/innovation/future-now" => "/news/technology",
     "/live" => "/news",
-    "/news/long_reads" => "/news/the_reporters",
     "/news/us-canada" => "/news/world/us_and_canada",
     "/news/war-in-ukraine" => "/news/world-60525350",
     "/travel/adventures" => "/travel/columns/adventure-experience",
     "/travel/cultural-experiences" => "/travel/columns/culture-identity",
     "/travel/history-heritage" => "/travel/tags/history",
     "/travel/specialist" => "/travel/columns/the-specialist",
-    "/video" => "/reel"
+    "/video" => "/reel",
+    "/watch-live-news" => "/news/world-radio-and-tv-14563857"
   }
 
   @default_route "/"

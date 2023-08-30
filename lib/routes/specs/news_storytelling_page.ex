@@ -12,7 +12,7 @@ defmodule Routes.Specs.NewsStorytellingPage do
         },
         %{
           platform: "BBCX",
-          examples: []
+          examples: ["/news/articles/c5ll353v7y9o", "/news/articles/c8xxl4l3dzeo"]
         }
       ]
     }

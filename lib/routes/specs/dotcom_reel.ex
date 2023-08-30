@@ -8,7 +8,8 @@ defmodule Routes.Specs.DotComReel do
           examples: ["/reel/video/p0frkb7n/what-did-stonehenge-sound-like-", "/reel/topic/travel"]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: ["/reel/video/p0frkb7n/what-did-stonehenge-sound-like-", "/reel/topic/travel"]
         }
       ]
     }

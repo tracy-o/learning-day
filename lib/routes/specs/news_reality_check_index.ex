@@ -10,7 +10,8 @@ defmodule Routes.Specs.NewsRealityCheckIndex do
           examples: ["/news/reality_check"]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: ["/news/reality_check"]
         }
       ]
     }

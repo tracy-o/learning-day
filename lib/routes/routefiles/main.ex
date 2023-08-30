@@ -591,7 +591,6 @@ defroutefile "Main" do
   handle "/news/have_your_say", using: "NewsWebcoreIndex"
   handle "/news/health", using: "NewsIndex"
   handle "/news/in_pictures", using: "NewsInPicturesIndex"
-  handle "/news/long_reads", using: "BBCXIndex"
   handle "/news/newsbeat", using: "NewsIndex"
   handle "/news/northern_ireland", using: "NewsIndex"
   handle "/news/paradisepapers", using: "NewsIndex"
@@ -599,7 +598,7 @@ defroutefile "Main" do
   handle "/news/reality_check", using: "NewsRealityCheckIndex"
   handle "/news/science_and_environment", using: "NewsIndex"
   handle "/news/scotland", using: "NewsIndex"
-  handle "/news/stories", using: "NewsStoriesIndex"
+  handle "/news/stories", using: "NewsWebcoreIndex"
   handle "/news/technology", using: "NewsIndex"
   handle "/news/the_reporters", using: "NewsWebcoreIndex"
   handle "/news/uk", using: "NewsUkIndex"
@@ -713,6 +712,18 @@ defroutefile "Main" do
     return_404()
   end
 
+  handle "/news/av", using: "News" do
+    return_404()
+  end
+
+  handle "/news/live", using: "News" do
+    return_404()
+  end
+
+  handle "/news/topics", using: "News" do
+    return_404()
+  end
+
   handle "/news/newsbeat-entertainment", using: "News" do
     return_404()
   end
@@ -784,6 +795,8 @@ defroutefile "Main" do
                  !String.match?(division_id, ~r/^[W][0-9]{8}$/)
                ]
   end
+
+  handle "/cymrufyw/etholiad/2019/cymru/etholaethau", using: "CymrufywEtholiadCanlyniadau", only_on: "test"
 
   handle "/cymrufyw/etholiad/2019/du/etholaethau/:division_id", using: "CymrufywEtholiadCanlyniadau", only_on: "test" do
     return_404 if: [
@@ -933,6 +946,8 @@ defroutefile "Main" do
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
   ## World Service - Article Redirects
+  redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
+  redirect "/mundo/noticias/2016/03/160317_semana_santa_causas_sangre_heces_cancer_ac", to: "/mundo/articles/c2qd71z6y3wo", status: 301
   redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
   redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
   redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
@@ -949,13 +964,14 @@ defroutefile "Main" do
   redirect "/persian/institutional/2011/04/000001_feeds", to: "/persian/articles/c849y3lk2yko", status: 301
 
   ## World Service - Topic Redirects
-  redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/afaanoromoo/topics/c44dyn08mejt", to: "/afaanoromoo", status: 301
   redirect "/amharic/topics/cg58k91re1gt", to: "/amharic", status: 301
   redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
   redirect "/igbo/topics/cp2dkn6rzj5t", to: "/igbo", status: 301
+  redirect "/hindi/india-66590093", to: "/hindi/topics/cqe17zz2k1nt", status: 301
+  redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
@@ -977,6 +993,7 @@ defroutefile "Main" do
   redirect "/nepali/index.html", to: "/nepali", status: 301
   redirect "/pashto/index.html", to: "/pashto", status: 301
   redirect "/persian/index.html", to: "/persian", status: 301
+  redirect "/persian/afghanistan/index.html", to: "/persian/afghanistan", status: 301
   redirect "/portuguese/index.html", to: "/portuguese", status: 301
   redirect "/russian/index.html", to: "/russian", status: 301
   redirect "/sinhala/index.html", to: "/sinhala", status: 301
@@ -1035,6 +1052,8 @@ defroutefile "Main" do
   handle "/afaanoromoo/topics/:id/rss.xml", using: "WorldServiceAfaanoromooTopicRss" do
     return_404 if: !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)$/)
   end
+
+  handle "/afaanoromoo/:topic/rss.xml", using: "WorldServiceAfaanoromooRss"
 
   handle "/afaanoromoo/articles/:id", using: "WorldServiceAfaanoromooArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1114,6 +1133,8 @@ defroutefile "Main" do
   handle "/amharic/topics/:id/rss.xml", using: "WorldServiceAmharicTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/amharic/:topic/rss.xml", using: "WorldServiceAmharicRss"
 
   handle "/amharic/articles/:id", using: "WorldServiceAmharicArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1374,6 +1395,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/gujarati/:topic/rss.xml", using: "WorldServiceGujaratiRss"
+
   handle "/gujarati/articles/:id", using: "WorldServiceGujaratiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1496,6 +1519,8 @@ defroutefile "Main" do
   handle "/igbo/topics/:id/rss.xml", using: "WorldServiceIgboTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/igbo/:topic/rss.xml", using: "WorldServiceIgboRss"
 
   handle "/igbo/articles/:id", using: "WorldServiceIgboArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1932,6 +1957,8 @@ defroutefile "Main" do
   handle "/pidgin/topics/:id/rss.xml", using: "WorldServicePidginTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/pidgin/:topic/rss.xml", using: "WorldServicePidginRss"
 
   handle "/pidgin/articles/:id", using: "WorldServicePidginArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2442,6 +2469,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/tigrinya/:topic/rss.xml", using: "WorldServiceTigrinyaRss"
+
   handle "/tigrinya/articles/:id", using: "WorldServiceTigrinyaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2736,6 +2765,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/yoruba/:topic/rss.xml", using: "WorldServiceYorubaRss"
+
   handle "/yoruba/articles/:id", using: "WorldServiceYorubaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2857,7 +2888,7 @@ defroutefile "Main" do
 
   # Newsletters
 
-  handle "/newsletterstest/:id", using: "Newsletter" do
+  handle "/newsletters/:id", using: "Newsletter", only_on: "test" do
     return_404 if: !is_zid?(id)
   end
 
@@ -3236,7 +3267,7 @@ defroutefile "Main" do
   handle "/weather/feeds/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
-   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage", only_on: "test" do
+   handle "/weather/weather-watcher/:cps_id", using: "WeatherArticlePage" do
     return_404 if: !integer_in_range?(cps_id, 1..999_999_999_999)
   end
   handle "/weather/articles/:optimo_id", using: "WeatherStorytellingPage" do
@@ -3509,6 +3540,8 @@ defroutefile "Main" do
   redirect "/bitesize/articles/zhc2jhv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
   redirect "/bitesize/articles/z2rccmn", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
 
+  redirect "/bitesize/articles/zv6yhbk", to: "/usingthebbc/privacy/privacy-notice-for-bbc-quizzes-and-polls", status: 301      # privacy-notice-for-bbc-quizzes-and-polls
+
   handle "/bitesize", using: "BitesizeHomePage"
 
   handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
@@ -3623,6 +3656,7 @@ defroutefile "Main" do
   handle "/innovation/*any", using: "BBCXIndex"
   handle "/live", using: "BBCXIndex"
   handle "/video/*any", using: "BBCXIndex"
+  handle "/watch-live-news", using: "BBCXIndex"
 
   # DotCom routes
   handle "/future/article/:id", using: "DotComFuture"

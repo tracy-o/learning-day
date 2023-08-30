@@ -10,7 +10,18 @@ defmodule Routes.Specs.NewsWorld do
           examples: ["/news/world", "/news/world/europe", "/news/world/asia/china"]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: [
+            "/news/world",
+            "/news/world/africa",
+            "/news/world/asia",
+            "/news/world/asia/china",
+            "/news/world/asia/india",
+            "/news/world/australia",
+            "/news/world/europe",
+            "/news/world/latin_america",
+            "/news/world/middle_east"
+          ]
         }
       ]
     }

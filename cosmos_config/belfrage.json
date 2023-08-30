@@ -99,7 +99,7 @@
   },
   {
     "values": {
-      "test": "https://bbcthree-web-server.int.api.bbc.co.uk",
+      "test": "https://bbcthree-web-server.test.api.bbc.co.uk",
       "live": "https://bbcthree-web-server.api.bbc.co.uk"
     },
     "name": "THREE_ENDPOINT"

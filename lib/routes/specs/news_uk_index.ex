@@ -10,7 +10,8 @@ defmodule Routes.Specs.NewsUkIndex do
           examples: ["/news/uk"]
         },
         %{
-          platform: "BBCX"
+          platform: "BBCX",
+          examples: ["/news/uk"]
         }
       ]
     }

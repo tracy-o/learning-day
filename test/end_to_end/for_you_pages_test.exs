@@ -22,8 +22,11 @@ defmodule EndToEnd.PersonalisedAccountTest do
   }
   @valid_token AuthToken.valid_access_token()
   @valid_token_without_user_attributes AuthToken.valid_access_token_without_user_attributes()
-  @valid_vary [
+  @valid_vary_co_uk [
     "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta,x-id-oidc-signedin"
+  ]
+  @valid_vary_com [
+    "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
   ]
 
   setup do
@@ -44,7 +47,22 @@ defmodule EndToEnd.PersonalisedAccountTest do
       assert conn.status == 302
       assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
 
-      assert get_resp_header(conn, "vary") == @valid_vary
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "to .co.uk/foryou path if request to .com/foryou, and user is in uk" do
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.com")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "0")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/foryou"]
+
+      assert get_resp_header(conn, "vary") == @valid_vary_com
     end
 
     test "to sign in path if is_uk true, but user not authenticated" do
@@ -57,8 +75,12 @@ defmodule EndToEnd.PersonalisedAccountTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 302
-      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/signin"]
-      assert get_resp_header(conn, "vary") == @valid_vary
+
+      assert get_resp_header(conn, "location") == [
+               "https://www.bbc.co.uk/signin?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou"
+             ]
+
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
 
     test "to account path if request is_uk true, user is authenticated, but no age_bracket in user attributes" do
@@ -73,7 +95,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
 
       assert conn.status == 302
       assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
-      assert get_resp_header(conn, "vary") == @valid_vary
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
   end
 
@@ -93,7 +115,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 200
-      assert get_resp_header(conn, "vary") == @valid_vary
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
   end
 end
