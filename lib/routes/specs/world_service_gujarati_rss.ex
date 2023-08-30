@@ -6,7 +6,7 @@ defmodule Routes.Specs.WorldServiceGujaratiRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/gujarati/international-43405729/rss.xml", "/gujarati/front_page/rss.xml"]
+        examples: ["/gujarati/international-43405729/rss.xml"]
       }
     }
   end
