@@ -6,7 +6,7 @@ defmodule Belfrage.Authentication.Token do
     Metrics.latency_span(:parse_session_token, fn ->
       case decode(cookie) do
         {:ok, token} ->
-          extract_user_attributes(token)
+          {true, extract_user_attributes(token)}
 
         {:error, error} ->
           handle_decoding_error(error)
@@ -19,15 +19,33 @@ defmodule Belfrage.Authentication.Token do
     Belfrage.Authentication.Validator.verify_and_validate(cookie)
   end
 
-  defp extract_user_attributes(decoded_token) do
-    case decoded_token["userAttributes"] do
-      %{"ageBracket" => age_bracket, "allowPersonalisation" => allow_personalisation} ->
-        {true, %{age_bracket: age_bracket, allow_personalisation: allow_personalisation}}
-
-      _ ->
-        {true, %{}}
-    end
+  defp extract_user_attributes(%{
+         "profileAdminId" => profile_admin_id,
+         "userAttributes" => %{
+           "ageBracket" => age_bracket,
+           "allowPersonalisation" => allow_personalisation
+         }
+       }) do
+    %{
+      age_bracket: age_bracket,
+      allow_personalisation: allow_personalisation,
+      profile_admin_id: profile_admin_id
+    }
   end
+
+  defp extract_user_attributes(%{
+         "userAttributes" => %{
+           "ageBracket" => age_bracket,
+           "allowPersonalisation" => allow_personalisation
+         }
+       }) do
+    %{
+      age_bracket: age_bracket,
+      allow_personalisation: allow_personalisation
+    }
+  end
+
+  defp extract_user_attributes(_decoded_token), do: %{}
 
   defp handle_decoding_error(message: message, claim: claim, claim_val: claim_val) do
     Logger.log(:warn, message, %{
