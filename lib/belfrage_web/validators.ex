@@ -139,9 +139,15 @@ defmodule BelfrageWeb.Validators do
 
     iex> is_cps_id?("world-europe-66026851gb")
     false
+
+    iex> is_cps_id?("election-2019-50319040")
+    true
   """
   def is_cps_id?(param) do
-    String.match?(param, ~r/\A[a-z-_+]{2,}-[0-9]{5,9}\z|\A[a-z-_+]{2,}\z|\A[0-9]{5,9}\z/)
+    String.match?(
+      param,
+      ~r/\A[a-z-_+]{2,}-[0-9]+-[0-9]{5,9}\z|\A[a-z-_+]{2,}-[0-9]{5,9}\z|\A[a-z-_+]{2,}\z|\A[0-9]{5,9}\z/
+    )
   end
 
   @doc """
