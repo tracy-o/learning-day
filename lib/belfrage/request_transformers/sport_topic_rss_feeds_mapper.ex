@@ -8,7 +8,9 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
   @sport_feed_mapping %{
     "/sport/rss.xml" => "c22ymglr3x3t",
     "/sport/scotland/rss.xml" => "cxlx5km2kz4t",
+    "/sport/scotland/shinty/rss.xml" => "c2q9x749znwt",
     "/sport/football/scottish/rss.xml" => "cn35kp0e8e9t",
+    "/sport/football/womens/scottish/rss.xml" => "cky16k1901zt",
     "/sport/rugby-union/scottish/rss.xml" => "c5l3508wwz5t",
     "/sport/wales/rss.xml" => "ckedk23p1qvt",
     "/sport/football/welsh/rss.xml" => "c50nyjx1r5rt",
