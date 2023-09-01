@@ -77,7 +77,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
       assert conn.status == 302
 
       assert get_resp_header(conn, "location") == [
-               "https://www.bbc.co.uk/signin?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou"
+               "https://session.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou"
              ]
 
       assert get_resp_header(conn, "vary") == @valid_vary_co_uk

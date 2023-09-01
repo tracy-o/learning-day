@@ -24,13 +24,28 @@ defmodule Belfrage.RequestTransformers.PersonalisedAccountIsLoggedIn do
   end
 
   defp redirect_url(request) do
-    query_params = %{ptrt: "https://www.bbc.co.uk/foryou"}
+    ptrt =
+      IO.iodata_to_binary([
+        "https://",
+        request.host,
+        "/foryou"
+      ])
+
+    query_params = %{ptrt: ptrt}
+
+    env =
+      case request.host do
+        "www.test.bbc.co.uk" -> "test."
+        _ -> ""
+      end
 
     IO.iodata_to_binary([
       to_string(request.scheme),
       "://",
-      request.host,
-      "/signin",
+      "session.",
+      env,
+      "bbc.co.uk",
+      "/session",
       QueryParams.encode(query_params)
     ])
   end
