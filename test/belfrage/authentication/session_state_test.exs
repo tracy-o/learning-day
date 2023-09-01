@@ -6,6 +6,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
   alias Belfrage.Envelope.Request
 
   @token Fixtures.AuthToken.valid_access_token()
+  @pseudonym Fixtures.AuthToken.valid_pseudonym_key()
 
   describe "authenticated?/1" do
     test "returns false for default request" do
@@ -40,7 +41,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
         raw_headers: %{"x-id-oidc-signedin" => "1"}
       }
 
-      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true, pseudonym: @pseudonym}
 
       assert SessionState.build(request) == %{
                authentication_env: "int",
@@ -57,7 +58,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
         cookies: %{"ckns_atkn" => @token, "ckns_id" => "1234"}
       }
 
-      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true, pseudonym: @pseudonym}
 
       assert SessionState.build(request) == %{
                authentication_env: "int",
@@ -175,7 +176,7 @@ defmodule Belfrage.Authentication.SessionStateTest do
         raw_headers: %{"authorization" => "Bearer #{@token}"}
       }
 
-      user_attributes = %{age_bracket: "o18", allow_personalisation: true}
+      user_attributes = %{age_bracket: "o18", allow_personalisation: true, pseudonym: @pseudonym}
 
       assert SessionState.build(request) == %{
                authentication_env: "int",

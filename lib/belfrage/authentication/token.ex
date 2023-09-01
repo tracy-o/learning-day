@@ -23,12 +23,14 @@ defmodule Belfrage.Authentication.Token do
          "profileAdminId" => profile_admin_id,
          "userAttributes" => %{
            "ageBracket" => age_bracket,
-           "allowPersonalisation" => allow_personalisation
+           "allowPersonalisation" => allow_personalisation,
+           "pseudonym" => pseudonym
          }
        }) do
     %{
       age_bracket: age_bracket,
       allow_personalisation: allow_personalisation,
+      pseudonym: pseudonym,
       profile_admin_id: profile_admin_id
     }
   end
@@ -36,12 +38,14 @@ defmodule Belfrage.Authentication.Token do
   defp extract_user_attributes(%{
          "userAttributes" => %{
            "ageBracket" => age_bracket,
-           "allowPersonalisation" => allow_personalisation
+           "allowPersonalisation" => allow_personalisation,
+           "pseudonym" => pseudonym
          }
        }) do
     %{
       age_bracket: age_bracket,
-      allow_personalisation: allow_personalisation
+      allow_personalisation: allow_personalisation,
+      pseudonym: pseudonym
     }
   end
 

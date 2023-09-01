@@ -6,19 +6,22 @@ defmodule Belfrage.Authentication.TokenTest do
   import Belfrage.Test.MetricsHelper
   alias Belfrage.Authentication.Token
   alias Fixtures.AuthToken, as: T
+  @pseudonym Fixtures.AuthToken.valid_pseudonym_key()
 
   describe "parse/1" do
     test "with valid user_attributes access token" do
-      assert Token.parse(T.valid_access_token()) == {true, %{age_bracket: "o18", allow_personalisation: true}}
+      assert Token.parse(T.valid_access_token()) ==
+               {true, %{age_bracket: "o18", allow_personalisation: true, pseudonym: @pseudonym}}
     end
 
-    test "with ckns_atkn token with profile_admin_id" do
+    test "with ckns_atkn token with profile_admin_id and valid user attributes" do
       assert Token.parse(T.valid_access_token_profile_admin_id()) ==
                {true,
                 %{
                   age_bracket: "u13",
                   allow_personalisation: true,
-                  profile_admin_id: "0a33f5df-e3aa-4ef5-950e-5d1c56ee5798"
+                  profile_admin_id: "0a33f5df-e3aa-4ef5-950e-5d1c56ee5798",
+                  pseudonym: "kTiGoqA-SGMKnOJQq93Fdn23N_uvJ9alFgadCEx4kuo"
                 }}
     end
 
