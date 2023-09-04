@@ -1098,6 +1098,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/afrique/:topic/rss.xml", using: "WorldServiceAfriqueRss"
+  handle "/afrique/:topic/:subtopic/rss.xml", using: "WorldServiceAfriqueRss"
+
   handle "/afrique/articles/:id", using: "WorldServiceAfriqueArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1359,6 +1362,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/gahuza/:topic/rss.xml", using: "WorldServiceGahuzaRss"
+  handle "/gahuza/:topic/:subtopic/rss.xml", using: "WorldServiceGahuzaRss"
+
   handle "/gahuza/articles/:id", using: "WorldServiceGahuzaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1439,6 +1445,9 @@ defroutefile "Main" do
   handle "/hausa/topics/:id/rss.xml", using: "WorldServiceHausaTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/hausa/:topic/rss.xml", using: "WorldServiceHausaRss"
+  handle "/hausa/:topic/:subtopic/rss.xml", using: "WorldServiceHausaRss"
 
   handle "/hausa/articles/:id", using: "WorldServiceHausaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1836,6 +1845,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/nepali/:topic/rss.xml", using: "WorldServiceNepaliRss"
+  handle "/nepali/:topic/:subtopic/rss.xml", using: "WorldServiceNepaliRss"
+
   handle "/nepali/articles/:id", using: "WorldServiceNepaliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2224,6 +2236,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/sinhala/:topic/rss.xml", using: "WorldServiceSinhalaRss"
+  handle "/sinhala/:topic/:subtopic/rss.xml", using: "WorldServiceSinhalaRss"
+
   handle "/sinhala/articles/:id", using: "WorldServiceSinhalaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2266,6 +2281,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/somali/:topic/rss.xml", using: "WorldServiceSomaliRss"
+  handle "/somali/:topic/:subtopic/rss.xml", using: "WorldServiceSomaliRss"
+
   handle "/somali/articles/:id", using: "WorldServiceSomaliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2307,6 +2325,9 @@ defroutefile "Main" do
   handle "/swahili/topics/:id/rss.xml", using: "WorldServiceSwahiliTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/swahili/:topic/rss.xml", using: "WorldServiceSwahiliRss"
+  handle "/swahili/:topic/:subtopic/rss.xml", using: "WorldServiceSwahiliRss"
 
   handle "/swahili/articles/:id", using: "WorldServiceSwahiliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2432,6 +2453,8 @@ defroutefile "Main" do
   handle "/thai/topics/:id/rss.xml", using: "WorldServiceThaiTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/thai/:topic/rss.xml", using: "WorldServiceThaiRss"
 
   handle "/thai/articles/:id", using: "WorldServiceThaiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2728,6 +2751,9 @@ defroutefile "Main" do
   handle "/vietnamese/topics/:id/rss.xml", using: "WorldServiceVietnameseTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/vietnamese/:topic/rss.xml", using: "WorldServiceVietnameseRss"
+  handle "/vietnamese/:topic/:subtopic/rss.xml", using: "WorldServiceVietnameseRss"
 
   handle "/vietnamese/articles/:id", using: "WorldServiceVietnameseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
