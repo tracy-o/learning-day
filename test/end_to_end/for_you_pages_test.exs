@@ -22,6 +22,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
   }
   @valid_token AuthToken.valid_access_token()
   @valid_token_without_user_attributes AuthToken.valid_access_token_without_user_attributes()
+  @valid_token_profile_user AuthToken.valid_access_token_profile_admin_id()
   @valid_vary_co_uk [
     "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta,x-id-oidc-signedin"
   ]
@@ -91,6 +92,21 @@ defmodule EndToEnd.PersonalisedAccountTest do
         |> put_req_header("x-bbc-edge-isuk", "yes")
         |> put_req_header("x-id-oidc-signedin", "1")
         |> put_req_header("cookie", "ckns_atkn=#{@valid_token_without_user_attributes}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "to account path if request is_uk true, user is authenticated, but user is u13 or profile account" do
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token_profile_user}")
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 302
