@@ -948,9 +948,10 @@ defroutefile "Main" do
   ## World Service - Article Redirects
   redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
   redirect "/mundo/noticias/2016/03/160317_semana_santa_causas_sangre_heces_cancer_ac", to: "/mundo/articles/c2qd71z6y3wo", status: 301
+  redirect "/portuguese/articles/ckdzj02w2g1o", to: "/portuguese/articles/c4nqkqx7lgko", status: 301
+  redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
   redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
   redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
-  redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
   redirect "/portuguese/institutional-36202452", to: "/portuguese/articles/ce5rvednerpo", status: 301
   redirect "/portuguese/institutional-36202454", to: "/portuguese/articles/cw0w9z6p491o", status: 301
   redirect "/portuguese/institutional-36202448", to: "/portuguese/articles/cjrldj8285do", status: 301
