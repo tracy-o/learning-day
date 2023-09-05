@@ -8,18 +8,26 @@ defmodule Belfrage.Authentication.BBCID do
   use Agent
 
   def start_link(opts \\ []) do
-    Agent.start_link(fn -> Keyword.get(opts, :available, true) end, name: Keyword.get(opts, :name, __MODULE__))
+    state = %{
+      id_availability: Keyword.get(opts, :available, true),
+      foryou_flagpole: false,
+      foryou_access_chance: 0,
+      foryou_allowlist: []
+    }
+
+    Agent.start_link(fn -> state end, name: Keyword.get(opts, :name, __MODULE__))
   end
 
-  @doc """
-  Returns `true` of `false` depending on whether the BBC ID services are
-  available.
-  """
-  def available?(agent \\ __MODULE__) do
+  @spec available?() :: boolean()
+  def available?(agent \\ __MODULE__), do: get_opts(agent)[:id_availability]
+
+  @spec get_opts() :: map()
+  def get_opts(agent \\ __MODULE__) do
     Agent.get(agent, & &1)
   end
 
-  def set_availability(agent \\ __MODULE__, available) when is_boolean(available) do
-    Agent.update(agent, fn _state -> available end)
+  @spec set_opts(map()) :: :ok
+  def set_opts(agent \\ __MODULE__, opts) when is_map(opts) do
+    Agent.update(agent, fn _state -> opts end)
   end
 end
