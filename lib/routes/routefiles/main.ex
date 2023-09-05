@@ -395,7 +395,7 @@ defroutefile "Main" do
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
   redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/topics/cvp28kxz49xt", status: 301
   redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
-  redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/business-38507481", status: 302
+  redirect "/news/topics/cg5rv39y9mmt/*any", to: "/news/topics/ckrkrw3yjx1t", status: 301
   redirect "/news/topics/c8nq32jw8mwt/*any", to: "/news/topics/czpqp1pq5q5t", status: 301
   redirect "/news/topics/cd39m6424jwt/*any", to: "/news/world/asia/china", status: 302
   redirect "/news/topics/cny6mpy4mj9t/*any", to: "/news/world/asia/india", status: 302
@@ -631,12 +631,13 @@ defroutefile "Main" do
   redirect "/news/world-middle-east-48433977", to: "/news/topics/cp7r8vgl24lt", status: 301
   redirect "/news/world-48623037", to: "/news/topics/c779dqxlxv2t", status: 301
   redirect "/news/world-24371433", to: "/news/topics/c779dqxlxv2t", status: 301
+  redirect "/news/business-44813754", to: "/news/topics/clenme2345qt", status: 301 
+  redirect "/news/business-45489065", to: "/news/topics/c3y3yv3g7e4t", status: 301 
+  redirect "/news/business-15521824", to: "/news/topics/cgmlnmr3yjzt", status: 301 
+  redirect "/news/business-38507481", to: "/news/topics/ckrkrw3yjx1t", status: 301
+  redirect "/news/business-33712313", to: "/news/topics/cj8k8ngevpgt", status: 301 
+  redirect "/news/business-11428889", to: "/news/topics/cw9l5jelpl1t", status: 301 
 
-  handle "/news/business-11428889", using: "NewsBusiness"
-  handle "/news/business-15521824", using: "NewsBusiness"
-  handle "/news/business-33712313", using: "NewsBusiness"
-  handle "/news/business-38507481", using: "NewsBusiness"
-  handle "/news/business-45489065", using: "NewsBusiness"
   handle "/news/uk-england-47486169", using: "NewsUk"
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology"
   handle "/news/world-us-canada-15949569", using: "News"
