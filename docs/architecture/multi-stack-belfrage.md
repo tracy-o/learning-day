@@ -29,7 +29,7 @@ At the time of writing, stacks designed to serve live requests are:
     - [Test endpoint](https://sydney.belfrage.test.api.bbc.co.uk/)
 
 - joan-belfrage
-    - Joan is a proxy for news traffic between GTM and Mozart 
+    - Joan serves Mozart and Webcore traffic
     - [Cosmos](https://cosmos.tools.bbc.co.uk/services/joan-belfrage)
     - [Live endpoint](https://joan.belfrage.api.bbc.co.uk/)
     - [Test endpoint](https://joan.belfrage.test.api.bbc.co.uk/)
