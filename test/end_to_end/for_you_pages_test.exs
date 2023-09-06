@@ -113,6 +113,43 @@ defmodule EndToEnd.PersonalisedAccountTest do
       assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
       assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
+
+    test "if request is_uk, user is authenticated and ckns_atkn is absent" do
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+
+      assert get_resp_header(conn, "location") == [
+               "https://session.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou"
+             ]
+
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "if request is_uk, user is authenticated and ckns_atkn is invalid" do
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{AuthToken.invalid_access_token()}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+
+      assert get_resp_header(conn, "location") == [
+               "https://session.bbc.co.uk/session?ptrt=https%3A%2F%2Fwww.bbc.co.uk%2Fforyou"
+             ]
+
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
   end
 
   describe "does not redirect" do

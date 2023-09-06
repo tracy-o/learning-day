@@ -4,7 +4,7 @@ defmodule Belfrage.RequestTransformers.PersonalisedAccountIsLoggedIn do
 
   @impl Transformer
   def call(envelope) do
-    if envelope.user_session.authenticated do
+    if envelope.user_session.authenticated and envelope.user_session.valid_session do
       {:ok, envelope}
     else
       {:stop, Envelope.add(envelope, :response, make_redirect_resp(envelope))}
