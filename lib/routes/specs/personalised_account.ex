@@ -6,7 +6,7 @@ defmodule Routes.Specs.PersonalisedAccount do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Personalised+Account+-+For+You",
         platform: "Webcore",
         personalisation: "on",
-        request_pipeline: ["PersonalisedAccountNonUkRedirect", "ComToUKRedirect", "PersonalisedAccountIsLoggedIn", "PersonalisedAccountU13Redirect", "PersonalisedAccountOffRedirect", "PersonalisedAccountProfilesRedirect"]
+        request_pipeline: ["PersonalisedAccountNonUkRedirect", "ComToUKRedirect", "PersonalisedAccountIsLoggedIn", "PersonalisedAccountU13Redirect", "PersonalisedAccountOffRedirect", "PersonalisedAccountProfilesRedirect", "PersonalisedAccountAccessGroup"]
       }
     }
   end

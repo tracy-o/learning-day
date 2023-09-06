@@ -6,6 +6,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
   alias BelfrageWeb.Router
   alias Belfrage.Clients.LambdaMock
   alias Fixtures.AuthToken
+  alias Belfrage.Authentication.BBCID
 
   @moduledoc """
   Integration tests for the /foryou route.
@@ -22,13 +23,18 @@ defmodule EndToEnd.PersonalisedAccountTest do
   }
   @valid_token AuthToken.valid_access_token()
   @valid_token_without_user_attributes AuthToken.valid_access_token_without_user_attributes()
-  @valid_token_profile_user AuthToken.valid_access_token_profile_admin_id()
   @valid_vary_co_uk [
     "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta,x-id-oidc-signedin"
   ]
   @valid_vary_com [
     "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
   ]
+  @default_bbcid_state %{
+    id_availability: true,
+    foryou_flagpole: false,
+    foryou_access_chance: 0,
+    foryou_allowlist: []
+  }
 
   setup do
     stub_dial(:personalisation, "on")
@@ -99,14 +105,33 @@ defmodule EndToEnd.PersonalisedAccountTest do
       assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
 
-    test "to account path if request is_uk true, user is authenticated, but user is u13 or profile account" do
+    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent and foryou flagpole is false" do
+      Agent.update(BBCID, fn _state -> @default_bbcid_state end)
+
       conn =
         conn(:get, "/foryou")
         |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
         |> put_req_header("x-bbc-edge-cache", "1")
         |> put_req_header("x-bbc-edge-isuk", "yes")
         |> put_req_header("x-id-oidc-signedin", "1")
-        |> put_req_header("cookie", "ckns_atkn=#{@valid_token_profile_user}")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent and foryou access chance is 0" do
+      Agent.update(BBCID, fn _state -> %{@default_bbcid_state | foryou_flagpole: true} end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 302
@@ -153,7 +178,31 @@ defmodule EndToEnd.PersonalisedAccountTest do
   end
 
   describe "does not redirect" do
-    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, and profile cookie is absent" do
+    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent, foryou flagpole is true and acess chance is 100" do
+      Agent.update(BBCID, fn _state -> %{@default_bbcid_state | foryou_access_chance: 100, foryou_flagpole: true} end)
+
+      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
+        {:ok, @lambda_response}
+      end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 200
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent, foryou flagpole is true, acess chance is 0, and user pseudonym is in allowlist" do
+      Agent.update(BBCID, fn _state ->
+        %{@default_bbcid_state | foryou_flagpole: true, foryou_allowlist: [Fixtures.AuthToken.valid_pseudonym_key()]}
+      end)
+
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
         {:ok, @lambda_response}
       end)
