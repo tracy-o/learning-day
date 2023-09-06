@@ -4,39 +4,76 @@ defmodule Belfrage.Authentication.BBCID.AvailabilityPollerTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
   import Test.Support.Helper, only: [wait_for: 1]
-  import ExUnit.CaptureLog
 
   alias Belfrage.Authentication.BBCID
   alias Belfrage.Authentication.BBCID.AvailabilityPoller
   alias Belfrage.Clients.{HTTP, HTTPMock}
 
-  test "fetches and updates the availability of BBC ID" do
-    assert BBCID.available?()
-
-    expect(HTTPMock, :execute, fn _, _origin ->
-      payload = "{\"id-availability\": \"RED\"}"
-      {:ok, %HTTP.Response{status_code: 200, body: payload}}
-    end)
-
+  test "fetches and updates IDCTA config options" do
     start_supervised!({AvailabilityPoller, interval: 0, name: :test_bbc_id_availability_poller})
-    wait_for(fn -> not BBCID.available?() end)
 
-    expect(HTTPMock, :execute, fn _, _origin ->
-      payload = "{\"id-availability\": \"GREEN\"}"
-      {:ok, %HTTP.Response{status_code: 200, body: payload}}
+    # Ensure that fetching IDCTA config updates config opts
+    mock_idcta_config_resp(200, %{
+      "id-availability" => "RED",
+      "foryou-flagpole" => "GREEN",
+      "foryou-access-chance" => "1",
+      "forYouAllowlist" => ["some-id"]
+    })
+
+    wait_for(fn ->
+      BBCID.get_opts() == %{
+        id_availability: false,
+        foryou_flagpole: true,
+        foryou_access_chance: 1,
+        foryou_allowlist: ["some-id"]
+      }
     end)
 
-    wait_for(fn -> BBCID.available?() end)
+    # Ensure that not fetching IDCTA config will reset config opts to default values
+    mock_idcta_config_resp(500, "Internal Server Error")
+
+    wait_for(fn ->
+      BBCID.get_opts() == %{
+        id_availability: true,
+        foryou_flagpole: false,
+        foryou_access_chance: 0,
+        foryou_allowlist: []
+      }
+    end)
+
+    # Ensure that invalid IDCTA config opts will update config opts
+    mock_idcta_config_resp(200, %{
+      "id-availability" => "INVALID_STATE",
+      "foryou-flagpole" => "INVALID_STATE",
+      "foryou-access-chance" => "invalid-int-value",
+      "forYouAllowlist" => "invalid-list_value"
+    })
+
+    wait_for(fn ->
+      BBCID.get_opts() == %{
+        id_availability: false,
+        foryou_flagpole: false,
+        foryou_access_chance: 0,
+        foryou_allowlist: []
+      }
+    end)
+
+    # Ensure that missing IDCTA config opts will reset config opts to default values
+    mock_idcta_config_resp(200, %{})
+
+    wait_for(fn ->
+      BBCID.get_opts() == %{
+        id_availability: true,
+        foryou_flagpole: false,
+        foryou_access_chance: 0,
+        foryou_allowlist: []
+      }
+    end)
   end
 
-  test "logs error on unsuccessful fetch of BBC ID availability" do
+  defp mock_idcta_config_resp(status, payload) do
     expect(HTTPMock, :execute, fn _, _origin ->
-      payload = "{\"id\": \"GREEN\"}"
-      {:ok, %HTTP.Response{status_code: 200, body: payload}}
+      {:ok, %HTTP.Response{status_code: status, body: Json.encode!(payload)}}
     end)
-
-    assert capture_log(fn ->
-             start_supervised!({AvailabilityPoller, interval: 0, name: :test_bbc_id_availability_poller})
-           end) =~ "Couldn't determine BBC ID availability from IDCTA config"
   end
 end

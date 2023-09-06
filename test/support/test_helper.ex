@@ -203,9 +203,9 @@ defmodule Test.Support.Helper do
   end
 
   def set_bbc_id_availability(availability) do
-    orig_availibility = Belfrage.Authentication.BBCID.available?()
-    Belfrage.Authentication.BBCID.set_availability(availability)
-    on_exit(fn -> Belfrage.Authentication.BBCID.set_availability(orig_availibility) end)
+    orig_availability = Belfrage.Authentication.BBCID.available?()
+    Belfrage.Authentication.BBCID.set_opts(%{id_availability: availability})
+    on_exit(fn -> Belfrage.Authentication.BBCID.set_opts(%{id_availability: orig_availability}) end)
     :ok
   end
 

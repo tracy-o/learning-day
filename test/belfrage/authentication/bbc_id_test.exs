@@ -3,38 +3,45 @@ defmodule Belfrage.Authentication.BBCIDTest do
 
   alias Belfrage.Authentication.BBCID
 
-  describe "available?/0" do
-    test "returns true on startup" do
-      pid = start_supervised!({BBCID, name: :bbc_id_test})
-      assert BBCID.available?(pid)
-    end
+  test "Set default opts on startup" do
+    pid = start_supervised!({BBCID, name: :bbc_id_test})
 
-    test "returns false when the state is false" do
-      pid = start_supervised!({BBCID, name: :bbc_id_test, available: false})
-      refute BBCID.available?(pid)
-    end
+    assert BBCID.available?(pid)
+
+    assert BBCID.get_opts(pid) == %{
+             id_availability: true,
+             foryou_flagpole: false,
+             foryou_access_chance: 0,
+             foryou_allowlist: []
+           }
   end
 
-  describe "set_availability/1" do
-    test "updates availability to false" do
-      pid = start_supervised!({BBCID, name: :bbc_id_test})
-      assert BBCID.available?(pid)
+  test "Update default opts if options keyword list is provided on statrup" do
+    pid = start_supervised!({BBCID, name: :bbc_id_test, available: false})
 
-      BBCID.set_availability(pid, false)
-      refute BBCID.available?(pid)
-    end
+    refute BBCID.available?(pid)
 
-    test "updates availability to true" do
-      pid = start_supervised!({BBCID, name: :bbc_id_test, available: false})
-      refute BBCID.available?(pid)
+    assert BBCID.get_opts(pid) == %{
+             id_availability: false,
+             foryou_flagpole: false,
+             foryou_access_chance: 0,
+             foryou_allowlist: []
+           }
+  end
 
-      BBCID.set_availability(pid, true)
-      assert BBCID.available?(pid)
-    end
+  test "Set and get options" do
+    pid = start_supervised!({BBCID, name: :bbc_id_test})
 
-    test "does not accept non-boolean values" do
-      pid = start_supervised!({BBCID, name: :bbc_id_test})
-      assert_raise(FunctionClauseError, fn -> BBCID.set_availability(pid, :foo) end)
-    end
+    opts = %{
+      id_availability: false,
+      foryou_flagpole: true,
+      foryou_access_chance: 1,
+      foryou_allowlist: ["some-id"]
+    }
+
+    BBCID.set_opts(pid, opts)
+
+    refute BBCID.available?(pid)
+    assert BBCID.get_opts(pid) == opts
   end
 end
