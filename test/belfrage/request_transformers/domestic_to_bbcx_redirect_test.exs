@@ -5,10 +5,6 @@ defmodule Belfrage.RequestTransformers.DomesticToBBCXRedirectTest do
   alias Belfrage.RequestTransformers.DomesticToBBCXRedirect
   alias Belfrage.{Envelope, Envelope.Request}
 
-  setup do
-    stub_dials(bbcx_enabled: "true")
-  end
-
   test "when the envelope request path is not in the BBCX redirect map then we pass through the envelope unchanged" do
     {:ok, envelope} =
       DomesticToBBCXRedirect.call(%Envelope{

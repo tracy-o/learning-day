@@ -4,7 +4,7 @@ defmodule Belfrage.RequestTransformers.DomesticToBBCXRedirect do
   """
   use Belfrage.Behaviours.Transformer
 
-  alias Belfrage.{Envelope}
+  alias Belfrage.Envelope
 
   @bbcx_redirect_mapping %{
     "/news/topics/cw9l5jelpl1t" => "/business/technology-of-business"
