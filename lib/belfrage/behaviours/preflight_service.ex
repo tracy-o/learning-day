@@ -32,11 +32,11 @@ defmodule Belfrage.Behaviours.PreflightService do
             response_metric(service, status)
             handle_error(:preflight_unacceptable_status_code, response, nil, service, envelope)
 
-          {:error, envelope, :timeout} ->
+          {:error, envelope, %HTTP.Error{reason: :timeout}} ->
             response_metric(service, 408)
             handle_error(:preflight_unacceptable_status_code, nil, :timeout, service, envelope)
 
-          {:error, envelope, reason} ->
+          {:error, envelope, %HTTP.Error{reason: reason}} ->
             response_metric(service, "error")
             handle_error(:preflight_unacceptable_status_code, nil, reason, service, envelope)
         end

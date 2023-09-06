@@ -39,22 +39,29 @@ defmodule Belfrage.Behaviours.PreflightServiceTest do
                preflight_service_call()
     end
 
-    test "returns 404 error" do
+    test "returns 404 error code" do
       mock_http({:ok, %HTTP.Response{status_code: 404}})
 
       assert {:error, %Envelope{private: %Private{preflight_metadata: %{}}}, :preflight_data_not_found} =
                preflight_service_call()
     end
 
-    test "returns timeout" do
-      mock_http({:error, :timeout})
+    test "returns other error code" do
+      mock_http({:ok, %HTTP.Response{status_code: 500}})
 
       assert {:error, %Envelope{private: %Private{preflight_metadata: %{}}}, :preflight_data_error} =
                preflight_service_call()
     end
 
-    test "returns other error" do
-      mock_http({:ok, %HTTP.Response{status_code: 500}})
+    test "returns timeout" do
+      mock_http({:error, %HTTP.Error{reason: :timeout}})
+
+      assert {:error, %Envelope{private: %Private{preflight_metadata: %{}}}, :preflight_data_error} =
+               preflight_service_call()
+    end
+
+    test "returns other http error" do
+      mock_http({:error, %HTTP.Error{reason: :pool_timeout}})
 
       assert {:error, %Envelope{private: %Private{preflight_metadata: %{}}}, :preflight_data_error} =
                preflight_service_call()
