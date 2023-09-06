@@ -33,7 +33,7 @@ defmodule Belfrage.Pipeline do
   end
 
   defp log_error(envelope, type, msg) do
-    Logger.log(:error, "", %{
+    Logger.log(:warn, "", %{
       msg: msg,
       type: type,
       envelope: Envelope.loggable(envelope)
