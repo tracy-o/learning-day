@@ -14,7 +14,8 @@ defmodule Routes.Specs.NewsTopics do
         },
         %{
           platform: "BBCX",
-          examples: ["/news/topics/cljev4jz3pjt", "/news/topics/cp7r8vglnnwt"]
+          request_pipeline: ["DomesticToBBCXRedirect"],
+          examples: ["/news/topics/cljev4jz3pjt", "/news/topics/cp7r8vglnnwt", %{expected_status: 302, path: "/news/topics/cw9l5jelpl1t"}]
         }
       ]
     }

@@ -11,7 +11,7 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/business/c-suite" => "/news/business",
     "/business/future-of-business" => "/news/business",
     "/business/global-business" => "/news/business",
-    "/business/technology-of-business" => "/news/business-11428889",
+    "/business/technology-of-business" => "/news/topics/cw9l5jelpl1t",
     "/business/us-canada-business" => "/news/business",
     "/culture/art" => "/culture/columns/art",
     "/culture/books" => "/culture/tags/books",
