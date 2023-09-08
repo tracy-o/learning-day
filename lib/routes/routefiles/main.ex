@@ -631,12 +631,12 @@ defroutefile "Main" do
   redirect "/news/world-middle-east-48433977", to: "/news/topics/cp7r8vgl24lt", status: 301
   redirect "/news/world-48623037", to: "/news/topics/c779dqxlxv2t", status: 301
   redirect "/news/world-24371433", to: "/news/topics/c779dqxlxv2t", status: 301
-  redirect "/news/business-44813754", to: "/news/topics/clenme2345qt", status: 301 
-  redirect "/news/business-45489065", to: "/news/topics/c3y3yv3g7e4t", status: 301 
-  redirect "/news/business-15521824", to: "/news/topics/cgmlnmr3yjzt", status: 301 
+  redirect "/news/business-44813754", to: "/news/topics/clenme2345qt", status: 301
+  redirect "/news/business-45489065", to: "/news/topics/c3y3yv3g7e4t", status: 301
+  redirect "/news/business-15521824", to: "/news/topics/cgmlnmr3yjzt", status: 301
   redirect "/news/business-38507481", to: "/news/topics/ckrkrw3yjx1t", status: 301
-  redirect "/news/business-33712313", to: "/news/topics/cj8k8ngevpgt", status: 301 
-  redirect "/news/business-11428889", to: "/news/topics/cw9l5jelpl1t", status: 301 
+  redirect "/news/business-33712313", to: "/news/topics/cj8k8ngevpgt", status: 301
+  redirect "/news/business-11428889", to: "/news/topics/cw9l5jelpl1t", status: 301
 
   handle "/news/uk-england-47486169", using: "NewsUk"
   handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology"
@@ -1186,6 +1186,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/arabic/:topic/rss.xml", using: "WorldServiceArabicRss"
+  handle "/arabic/:topic/:subtopic/rss.xml", using: "WorldServiceArabicRss"
+
   handle "/arabic/articles/:id", using: "WorldServiceArabicArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1270,6 +1273,9 @@ defroutefile "Main" do
   handle "/bengali/topics/:id/rss.xml", using: "WorldServiceBengaliTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/bengali/:topic/rss.xml", using: "WorldServiceBengaliRss"
+  handle "/bengali/:topic/:subtopic/rss.xml", using: "WorldServiceBengaliRss"
 
   handle "/bengali/articles/:id", using: "WorldServiceBengaliArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1493,6 +1499,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/hindi/:topic/rss.xml", using: "WorldServiceHindiRss"
+  handle "/hindi/:topic/:subtopic/rss.xml", using: "WorldServiceHindiRss"
+
   handle "/hindi/articles/:id", using: "WorldServiceHindiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1575,6 +1584,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/indonesia/:topic/rss.xml", using: "WorldServiceIndonesiaRss"
+  handle "/indonesia/:topic/:subtopic/rss.xml", using: "WorldServiceIndonesiaRss"
+
   handle "/indonesia/articles/:id", using: "WorldServiceIndonesiaArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1615,6 +1627,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/japanese/:topic/rss.xml", using: "WorldServiceJapaneseRss"
+
   handle "/japanese/articles/:id", using: "WorldServiceJapaneseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1654,6 +1668,8 @@ defroutefile "Main" do
   handle "/korean/topics/:id/rss.xml", using: "WorldServiceKoreanTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/korean/:topic/rss.xml", using: "WorldServiceKoreanRss"
 
   handle "/korean/articles/:id", using: "WorldServiceKoreanArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1744,6 +1760,8 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/marathi/:topic/rss.xml", using: "WorldServiceMarathiRss"
+
   handle "/marathi/articles/:id", using: "WorldServiceMarathiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1795,6 +1813,9 @@ defroutefile "Main" do
   handle "/mundo/topics/:id/rss.xml", using: "WorldServiceMundoTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/mundo/:topic/rss.xml", using: "WorldServiceMundoRss"
+  handle "/mundo/:topic/:subtopic/rss.xml", using: "WorldServiceMundoRss"
 
   handle "/mundo/articles/:id", using: "WorldServiceMundoArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -1892,6 +1913,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/pashto/:topic/rss.xml", using: "WorldServicePashtoRss"
+  handle "/pashto/:topic/:subtopic/rss.xml", using: "WorldServicePashtoRss"
+
   handle "/pashto/articles/:id", using: "WorldServicePashtoArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -1934,6 +1958,9 @@ defroutefile "Main" do
   handle "/persian/topics/:id/rss.xml", using: "WorldServicePersianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/persian/:topic/rss.xml", using: "WorldServicePersianRss"
+  handle "/persian/:topic/:subtopic/rss.xml", using: "WorldServicePersianRss"
 
   handle "/persian/articles/:id", using: "WorldServicePersianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2024,6 +2051,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/portuguese/:topic/rss.xml", using: "WorldServicePortugueseRss"
+  handle "/portuguese/:topic/:subtopic/rss.xml", using: "WorldServicePortugueseRss"
+
   handle "/portuguese/articles/:id", using: "WorldServicePortugueseArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2063,6 +2093,8 @@ defroutefile "Main" do
   handle "/punjabi/topics/:id/rss.xml", using: "WorldServicePunjabiTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/punjabi/:topic/rss.xml", using: "WorldServicePunjabiRss"
 
   handle "/punjabi/articles/:id", using: "WorldServicePunjabiArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2113,6 +2145,9 @@ defroutefile "Main" do
   handle "/russian/topics/:id/rss.xml", using: "WorldServiceRussianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/russian/:topic/rss.xml", using: "WorldServiceRussianRss"
+  handle "/russian/:topic/:subtopic/rss.xml", using: "WorldServiceRussianRss"
 
   handle "/russian/articles/:id", using: "WorldServiceRussianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2171,6 +2206,10 @@ defroutefile "Main" do
   handle "/serbian/lat/topics/:id/rss.xml", using: "WorldServiceSerbianTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/serbian/lat/:topic/rss.xml", using: "WorldServiceSerbianRss"
+  handle "/serbian/cyr/:topic/rss.xml", using: "WorldServiceSerbianRss"
+
 
   handle "/serbian/articles/:id/cyr", using: "WorldServiceSerbianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2375,6 +2414,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/tamil/:topic/rss.xml", using: "WorldServiceTamilRss"
+  handle "/tamil/:topic/:subtopic/rss.xml", using: "WorldServiceTamilRss"
+
   handle "/tamil/articles/:id", using: "WorldServiceTamilArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2414,6 +2456,8 @@ defroutefile "Main" do
   handle "/telugu/topics/:id/rss.xml", using: "WorldServiceTeluguTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/telugu/:topic/rss.xml", using: "WorldServiceTeluguRss"
 
   handle "/telugu/articles/:id", using: "WorldServiceTeluguArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2539,6 +2583,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/turkce/:topic/rss.xml", using: "WorldServiceTurkceRss"
+  handle "/turkce/:topic/:subtopic/rss.xml", using: "WorldServiceTurkceRss"
+
   handle "/turkce/articles/:id", using: "WorldServiceTurkceArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2616,6 +2663,9 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
 
+  handle "/ukrainian/:topic/rss.xml", using: "WorldServiceUkrainianRss"
+  handle "/ukrainian/:topic/:subtopic/rss.xml", using: "WorldServiceUkrainianRss"
+
   handle "/ukrainian/articles/:id", using: "WorldServiceUkrainianArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
@@ -2658,6 +2708,9 @@ defroutefile "Main" do
   handle "/urdu/topics/:id/rss.xml", using: "WorldServiceUrduTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/urdu/:topic/rss.xml", using: "WorldServiceUrduRss"
+  handle "/urdu/:topic/:subtopic/rss.xml", using: "WorldServiceUrduRss"
 
   handle "/urdu/articles/:id", using: "WorldServiceUrduArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2711,6 +2764,9 @@ defroutefile "Main" do
   handle "/uzbek/topics/:id/rss.xml", using: "WorldServiceUzbekTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/uzbek/:topic/rss.xml", using: "WorldServiceUzbekRss"
+  handle "/uzbek/:topic/:subtopic/rss.xml", using: "WorldServiceUzbekRss"
 
   handle "/uzbek/articles/:id", using: "WorldServiceUzbekArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
@@ -2855,6 +2911,12 @@ defroutefile "Main" do
   handle "/zhongwen/trad/topics/:id/rss.xml", using: "WorldServiceZhongwenTopicRss" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}t$/)
   end
+
+  handle "/zhongwen/simp/:topic/rss.xml", using: "WorldServiceZhongwenRss"
+  handle "/zhongwen/simp/:topic/:subtopic/rss.xml", using: "WorldServiceZhongwenRss"
+
+  handle "/zhongwen/trad/:topic/rss.xml", using: "WorldServiceZhongwenRss"
+  handle "/zhongwen/trad/:topic/:subtopic/rss.xml", using: "WorldServiceZhongwenRss"
 
   handle "/zhongwen/articles/:id/simp", using: "WorldServiceZhongwenArticlePage" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
