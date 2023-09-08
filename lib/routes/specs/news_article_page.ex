@@ -26,7 +26,8 @@ defmodule Routes.Specs.NewsArticlePage do
             "/news/world-asia-china-51787936",
             "/news/technology-51960865",
             "/news/uk-england-derbyshire-18291916",
-            "/news/entertainment+arts-10636043"
+            "/news/entertainment+arts-10636043",
+            "/news/election-2019-50319040"
           ]
         },
         %{
