@@ -30,15 +30,15 @@ defmodule Belfrage.Behaviours.PreflightService do
 
           {:ok, envelope, response = %HTTP.Response{status_code: status}} ->
             response_metric(service, status)
-            handle_error(:preflight_unacceptable_status_code, response, nil, service, envelope)
+            handle_error(:info, :preflight_unacceptable_status_code, response, nil, service, envelope)
 
-          {:error, envelope, :timeout} ->
+          {:error, envelope, %HTTP.Error{reason: :timeout}} ->
             response_metric(service, 408)
-            handle_error(:preflight_unacceptable_status_code, nil, :timeout, service, envelope)
+            handle_error(:info, :preflight_unacceptable_status_code, nil, :timeout, service, envelope)
 
-          {:error, envelope, reason} ->
+          {:error, envelope, %HTTP.Error{reason: reason}} ->
             response_metric(service, "error")
-            handle_error(:preflight_unacceptable_status_code, nil, reason, service, envelope)
+            handle_error(:warn, :preflight_unacceptable_status_code, nil, reason, service, envelope)
         end
     end
   end
@@ -54,12 +54,12 @@ defmodule Belfrage.Behaviours.PreflightService do
 
         {:error, reason} ->
           error_metric(service, "invalid_response")
-          handle_error(:preflight_data_mismatch, response, reason, service, envelope)
+          handle_error(:warn, :preflight_data_mismatch, response, reason, service, envelope)
       end
     rescue
       reason ->
         error_metric(service, "json_parse")
-        handle_error(:preflight_data_parse_error, response, reason, service, envelope)
+        handle_error(:warn, :preflight_data_parse_error, response, reason, service, envelope)
     end
   end
 
@@ -94,6 +94,7 @@ defmodule Belfrage.Behaviours.PreflightService do
   end
 
   defp handle_error(
+         level,
          error_description,
          response,
          reason,
@@ -102,7 +103,7 @@ defmodule Belfrage.Behaviours.PreflightService do
            request: %Envelope.Request{path: path}
          }
        ) do
-    Logger.log(:error, "", %{
+    Logger.log(level, "", %{
       preflight_error: error_description,
       response_status: get_status_code(response),
       reason: reason,
@@ -120,7 +121,7 @@ defmodule Belfrage.Behaviours.PreflightService do
            request: %Envelope.Request{path: path}
          }
        ) do
-    Logger.log(:error, "", %{
+    Logger.log(:info, "", %{
       preflight_error: :data_not_found,
       response_status: status_code,
       service: service,
