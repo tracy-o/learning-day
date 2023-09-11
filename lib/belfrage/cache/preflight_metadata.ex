@@ -1,5 +1,6 @@
 defmodule Belfrage.Cache.PreflightMetadata do
   require Cachex.Spec
+  alias Belfrage.Cache.Supervisor, as: CacheSup
 
   @table_name :preflight_metadata_cache
 
@@ -28,24 +29,18 @@ defmodule Belfrage.Cache.PreflightMetadata do
   end
 
   def options() do
+    config = Application.get_env(:belfrage, :preflight_metadata_cache)
+
     [
       name: @table_name,
-      limit: limit(config()[:limit]),
+      limit: CacheSup.get_limit_config(config),
       stats: true,
       expiration:
         Cachex.Spec.expiration(
-          default: config()[:default_ttl_ms],
-          interval: config()[:expiration_interval_ms],
+          default: config[:default_ttl_ms],
+          interval: config[:expiration_interval_ms],
           lazy: true
         )
     ]
-  end
-
-  defp config() do
-    Application.get_env(:belfrage, :preflight_metadata_cache)
-  end
-
-  defp limit(size: size, policy: policy, reclaim: reclaim, options: options) do
-    {:limit, size, policy, reclaim, options}
   end
 end

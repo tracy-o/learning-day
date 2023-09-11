@@ -72,14 +72,17 @@ config :belfrage,
       reclaim: 0.3,
       options: []
     ]
+  ],
+  cache: [
+    limit: [
+      average_entry_size_kb: 170,
+      ram_allocated: 0.4,
+      # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
+      policy: Cachex.Policy.LRW,
+      reclaim: 0.3,
+      options: []
+    ]
   ]
-
-config :cachex, :limit,
-  size: 36_000,
-  # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
-  policy: Cachex.Policy.LRW,
-  reclaim: 0.3,
-  options: []
 
 config :logger,
   backends: [{LoggerFileBackend, :file}, {LoggerFileBackend, :access}]
@@ -103,6 +106,12 @@ config :aws_ex_ray,
 
 config :plug_cowboy,
   conn_in_exception_metadata: false
+
+config :os_mon,
+  start_cpu_sup: false,
+  start_disksup: false,
+  start_memsup: true,
+  start_os_sup: false
 
 import_config "dials.exs"
 import_config "#{Mix.env()}.exs"

@@ -64,13 +64,16 @@ config :belfrage,
       reclaim: 0.5,
       options: []
     ]
+  ],
+  cache: [
+    limit: [
+      size: 6,
+      # [RESFRAME-3994] Actually LRU, see lib/belfrage/cache/local.ex
+      policy: Cachex.Policy.LRW,
+      reclaim: 0.5,
+      options: []
+    ]
   ]
-
-config :cachex, :limit,
-  size: 6,
-  policy: Cachex.Policy.LRW,
-  reclaim: 0.5,
-  options: []
 
 config :logger, :console,
   format: {Belfrage.Logger.Formatter, :app},
@@ -80,3 +83,9 @@ config :logger, :console,
 config :aws_ex_ray,
   store_monitor_pool_size: 1,
   client_pool_size: 1
+
+config :os_mon,
+  start_cpu_sup: false,
+  start_disksup: false,
+  start_memsup: false,
+  start_os_sup: false

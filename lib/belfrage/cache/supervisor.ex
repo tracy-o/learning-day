@@ -11,14 +11,30 @@ defmodule Belfrage.Cache.Supervisor do
 
   defp children(_opts) do
     [
-      {Cachex, name: :cache, limit: cachex_limit(), stats: true},
+      {Cachex, name: :cache, limit: get_limit_config(config()), stats: true},
       {Belfrage.Cache.PreflightMetadata, Belfrage.Cache.PreflightMetadata.options()}
     ]
   end
 
-  defp cachex_limit(conf \\ Application.get_env(:cachex, :limit))
+  defp config(), do: Application.get_env(:belfrage, :cache)
 
-  defp cachex_limit(size: size, policy: policy, reclaim: reclaim, options: options) do
-    {:limit, size, policy, reclaim, options}
+  def get_limit_config(config) do
+    opts = config[:limit]
+
+    size =
+      calc_cache_size(
+        opts[:size],
+        opts[:average_entry_size_kb],
+        opts[:ram_allocated]
+      )
+
+    {:limit, size, opts[:policy], opts[:reclaim], opts[:options]}
   end
+
+  defp calc_cache_size(nil, entry_size_kb, ram_allocated) do
+    ram_kb = :memsup.get_system_memory_data()[:total_memory] / 1024
+    round(ram_kb * ram_allocated / entry_size_kb)
+  end
+
+  defp calc_cache_size(size, _entry_size_kb, _ram_allocated), do: size
 end
