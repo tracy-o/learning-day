@@ -91,10 +91,6 @@ defmodule Test.Support.Helper do
     request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
   end
 
-  def get_route(endpoint, path, headers, "ClassicApp" <> _spec) do
-    request_route(endpoint, path, [{"host", "news-app-classic.api.bbci.co.uk"} | headers])
-  end
-
   def get_route(endpoint, path, headers, "Bitesize" <> _spec) do
     request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"} | headers])
   end

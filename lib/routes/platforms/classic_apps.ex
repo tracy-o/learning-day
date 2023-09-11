@@ -14,7 +14,10 @@ defmodule Routes.Platforms.ClassicApps do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
       circuit_breaker_error_threshold: 1000,
-      fallback_write_sample: 0.0
+      fallback_write_sample: 0.0,
+      examples: %{
+        headers: %{"host" => "news-app-classic.api.bbci.co.uk"}
+      }
     }
   end
 
