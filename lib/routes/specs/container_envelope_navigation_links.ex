@@ -7,7 +7,12 @@ defmodule Routes.Specs.ContainerEnvelopeNavigationLinks do
         request_pipeline: ["UserAgentValidator"],
         runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=140399154",
         query_params_allowlist: ["static"],
-        examples: ["/container/envelope/navigation-links/brandPalette/weatherLight/corePalette/light/country/gb/fontPalette/sansSimple/hasFetcher/true/language/en/service/weather?static=true"]
+        examples: [
+          %{
+            path: "/container/envelope/navigation-links/brandPalette/weatherLight/corePalette/light/country/gb/fontPalette/sansSimple/hasFetcher/true/language/en/service/weather?static=true",
+            headers: %{"user-agent" => "MozartFetcher"}
+          }
+        ]
       }
     }
   end

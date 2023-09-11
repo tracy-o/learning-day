@@ -7,7 +7,12 @@ defmodule Routes.Specs.ContainerEnvelopePageLink do
         request_pipeline: ["UserAgentValidator"],
         runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Run+book+-+UK+2021",
         query_params_allowlist: ["static"],
-        examples: ["/container/envelope/page-link/linkHref/%23belfrage/linkLabel/Belfrage%20Test"]
+        examples: [
+          %{
+            path: "/container/envelope/page-link/linkHref/%23belfrage/linkLabel/Belfrage%20Test",
+            headers: %{"user-agent" => "MozartFetcher"}
+          }
+        ]
       }
     }
   end

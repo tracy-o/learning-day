@@ -7,7 +7,16 @@ defmodule Routes.Specs.ContainerEnvelopeScoreboard do
         request_pipeline: ["UserAgentValidator"],
         runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Run+book+-+UK+2021",
         query_params_allowlist: query_params_allowlist(production_env),
-        examples: ["/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true", "/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData"]
+        examples: [
+          %{
+            path: "/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true",
+            headers: %{"user-agent" => "MozartFetcher"}
+          },
+          %{
+            path:  "/container/envelope/scoreboard/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData",
+            headers: %{"user-agent" => "MozartFetcher"}
+          },
+        ]
       }
     }
   end

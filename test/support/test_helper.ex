@@ -91,13 +91,6 @@ defmodule Test.Support.Helper do
     request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
   end
 
-  # ContainerEnvelope* route specs use `UserAgentValidator` that checks that a
-  # certain user-agent header is present, otherwise a 400 response is returned
-  def get_route(endpoint, path, headers, "ContainerEnvelope" <> _spec) do
-    headers = [{"x-forwarded-host", endpoint}, {"user-agent", "MozartFetcher"} | headers]
-    request_route(endpoint, path, headers)
-  end
-
   def get_route(endpoint, path, headers, "ClassicApp" <> _spec) do
     request_route(endpoint, path, [{"host", "news-app-classic.api.bbci.co.uk"} | headers])
   end

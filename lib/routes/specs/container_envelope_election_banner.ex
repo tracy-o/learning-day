@@ -7,7 +7,16 @@ defmodule Routes.Specs.ContainerEnvelopeElectionBanner do
         request_pipeline: ["UserAgentValidator"],
         runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Run+book+-+UK+2021",
         query_params_allowlist: query_params_allowlist(production_env),
-        examples: ["/container/envelope/election-banner/logoOnly/true", "/container/envelope/election-banner/assetUri/%2Fnews/hasFetcher/true?static=true&mode=testData"]
+        examples: [
+          %{
+            path: "/container/envelope/election-banner/logoOnly/true",
+            headers: %{"user-agent" => "MozartFetcher"}
+          },
+          %{
+            path: "/container/envelope/election-banner/assetUri/%2Fnews/hasFetcher/true?static=true&mode=testData",
+            headers: %{"user-agent" => "MozartFetcher"}
+          }
+        ]
       }
     }
   end
