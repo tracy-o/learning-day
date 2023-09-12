@@ -12,7 +12,7 @@ defmodule Routes.Platforms.DotComHomepage do
   end
 
   defp query_params_allowlist(_production_env) do
-    ["mode", "wwhp-country-code", "wwhp-preview-mode"]
+    ["ads-debug", "ads-test", "content_rec", "force-client-flagpoles", "googfc", "google_preview", "ias_publisher", "itemsPerPage", "measure-performance", "mode", "page", "permutive", "piano-debug", "ptrt", "sequenced-loading", "site", "uid", "userOrigin", "vpid"]
   end
 
   defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
