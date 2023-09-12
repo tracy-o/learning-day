@@ -27,8 +27,11 @@ defmodule Routes.Specs.NewsArticlePage do
             "/news/technology-51960865",
             "/news/uk-england-derbyshire-18291916",
             "/news/entertainment+arts-10636043",
+            "/news/world-middle+east-10642960",
             "/news/election-2019-50319040",
-            "/news/election-2015-northern-ireland-32488247"
+            "/news/election-2015-northern-ireland-32488247",
+            "/news/election-2016-wales-36207410",
+            "/news/64265510"
           ]
         },
         %{
