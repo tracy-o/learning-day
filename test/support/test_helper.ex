@@ -57,59 +57,35 @@ defmodule Test.Support.Helper do
     apply(__MODULE__, which, [])
   end
 
-  def get_route(endpoint, path, headers, "WorldService" <> _language) do
-    if String.ends_with?(path, "/rss.xml") do
-      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"} | headers])
-    else
-      host_header =
-        case String.contains?(endpoint, ".test.") do
-          true -> "www.test.bbc.com"
-          false -> "www.bbc.com"
-        end
+  def get_route(endpoint, path), do: get_route(endpoint, path, [], nil)
 
-      request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
-    end
-  end
-
-  def get_route(endpoint, path, headers, "UploaderWorldService") do
+  def get_route(endpoint, path, headers, spec) do
     host_header =
-      case String.contains?(endpoint, ".test.") do
-        true -> "www.test.bbc.com"
-        false -> "www.bbc.com"
+      if String.ends_with?(path, "/rss.xml") do
+        {"host", "feeds.bbci.co.uk"}
+      else
+        {"x-forwarded-host", get_forwarded_host(endpoint, spec)}
       end
 
-    request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
+    request_route(endpoint, path, [host_header | headers])
   end
-
-  def get_route(endpoint, path, headers, "NewsletterLegacy") do
-    host_header =
-      case String.contains?(endpoint, ".test.") do
-        true -> "www.test.bbc.co.uk"
-        false -> "www.bbc.co.uk"
-      end
-
-    request_route(endpoint, path, [{"x-forwarded-host", host_header} | headers])
-  end
-
-  def get_route(endpoint, path, headers, "Bitesize" <> _spec) do
-    request_route(endpoint, path, [{"x-forwarded-host", "www.bbc.co.uk"} | headers])
-  end
-
-  def get_route(endpoint, path, headers, _spec), do: get_route(endpoint, path, headers)
-
-  def get_route(endpoint, path, headers) do
-    if String.ends_with?(path, "/rss.xml") do
-      request_route(endpoint, path, [{"host", "feeds.bbci.co.uk"} | headers])
-    else
-      request_route(endpoint, path, [{"x-forwarded-host", endpoint} | headers])
-    end
-  end
-
-  def get_route(endpoint, path), do: get_route(endpoint, path, [])
 
   defp request_route(endpoint, path, headers) do
     Finch.build(:get, "https://#{endpoint}#{path}", headers)
     |> Finch.request(Finch, receive_timeout: 10_000)
+  end
+
+  defp get_forwarded_host(endpoint, "WorldService" <> _), do: do_get_host(endpoint, "com")
+  defp get_forwarded_host(endpoint, "UploaderWorldService"), do: do_get_host(endpoint, "com")
+  defp get_forwarded_host(endpoint, "NewsletterLegacy"), do: do_get_host(endpoint, "co.uk")
+  defp get_forwarded_host(endpoint, _spec), do: endpoint
+
+  defp do_get_host(endpoint, domain) do
+    if String.contains?(endpoint, ".test.") do
+      "www.test.bbc." <> domain
+    else
+      "www.bbc." <> domain
+    end
   end
 
   def header_item_exists(headers, header_id) do
