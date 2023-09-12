@@ -950,7 +950,10 @@ defroutefile "Main" do
   redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
   redirect "/mundo/noticias/2016/03/160317_semana_santa_causas_sangre_heces_cancer_ac", to: "/mundo/articles/c2qd71z6y3wo", status: 301
   redirect "/portuguese/articles/ckdzj02w2g1o", to: "/portuguese/articles/c4nqkqx7lgko", status: 301
+  redirect "/portuguese/brasil-45229400", to: "/portuguese/articles/c3gjpmvkv5eo", status: 301
+  redirect "/portuguese/brasil-45428722", to: "/portuguese/articles/cw56kkzgnq6o", status: 301
   redirect "/portuguese/brasil-57447342", to: "/portuguese/articles/ckml56krrd1o", status: 301
+  redirect "/portuguese/brasil-58468215", to: "/portuguese/articles/c0j3ppkk054o", status: 301
   redirect "/portuguese/curiosidades-44304506", to: "/portuguese/articles/c51q2391gq9o", status: 301
   redirect "/portuguese/curiosidades-44444417", to: "/portuguese/articles/c9x9pz7zk82o", status: 301
   redirect "/portuguese/institutional-36202452", to: "/portuguese/articles/ce5rvednerpo", status: 301
@@ -977,6 +980,7 @@ defroutefile "Main" do
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
   redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+  redirect "/somali/media-54071665", to: "/somali/topics/cn6rqlrkm0pt", status: 301
   redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
   redirect "/yoruba/topics/cvpk14mq48kt", to: "/yoruba", status: 301
 
