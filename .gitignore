@@ -26,6 +26,9 @@ belfrage-*.tar
 
 .DS_Store
 
+# JetBrains IDE files
+.idea
+
 priv/cert/*
 
 #log when running tests
