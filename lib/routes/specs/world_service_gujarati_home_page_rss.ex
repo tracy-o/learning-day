@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceGujaratiHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "WorldServiceTopicRssFeedsMapper"],
-        examples: ["/gujarati/rss.xml"]
+        examples: [
+          %{
+            path: "/gujarati/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

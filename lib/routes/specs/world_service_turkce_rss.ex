@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceTurkceRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/turkce/haberler-dunya-51801130/rss.xml", "/turkce/konular/turkey/rss.xml"]
+        examples: [
+          %{
+            path: "/turkce/haberler-dunya-51801130/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/turkce/konular/turkey/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

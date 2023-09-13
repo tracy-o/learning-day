@@ -60,13 +60,7 @@ defmodule Test.Support.Helper do
   def get_route(endpoint, path), do: get_route(endpoint, path, [], nil)
 
   def get_route(endpoint, path, headers, spec) do
-    host_header =
-      if String.ends_with?(path, "/rss.xml") do
-        {"host", "feeds.bbci.co.uk"}
-      else
-        {"x-forwarded-host", get_forwarded_host(endpoint, spec)}
-      end
-
+    host_header = {"x-forwarded-host", get_forwarded_host(endpoint, spec)}
     request_route(endpoint, path, [host_header | headers])
   end
 

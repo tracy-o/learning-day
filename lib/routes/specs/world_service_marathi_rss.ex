@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceMarathiRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/marathi/india-49140039/rss.xml"]
+        examples: [
+          %{
+            path: "/marathi/india-49140039/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

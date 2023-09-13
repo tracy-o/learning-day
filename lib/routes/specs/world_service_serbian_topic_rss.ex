@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceSerbianTopicRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
-        examples: ["/serbian/lat/topics/c5wzvzzz5vrt/rss.xml", "/serbian/cyr/topics/cqwvxvvw9qrt/rss.xml"]
+        examples: [
+          %{
+            path: "/serbian/lat/topics/c5wzvzzz5vrt/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/serbian/cyr/topics/cqwvxvvw9qrt/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

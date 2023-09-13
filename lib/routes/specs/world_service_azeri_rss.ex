@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceAzeriRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/azeri/international/rio_2016/rss.xml"]
+        examples: [
+          %{
+            path: "/azeri/international/rio_2016/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

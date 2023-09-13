@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServicePashtoHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/pashto/rss.xml"]
+        examples: [
+          %{
+            path: "/pashto/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

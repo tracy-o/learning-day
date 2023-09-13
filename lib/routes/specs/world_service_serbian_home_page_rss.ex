@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceSerbianHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/serbian/cyr/rss.xml", "/serbian/lat/rss.xml"]
+        examples: [
+          %{
+            path: "/serbian/cyr/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/serbian/lat/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

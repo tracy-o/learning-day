@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceJapaneseHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/japanese/rss.xml"]
+        examples: [
+          %{
+            path: "/japanese/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceZhongwenHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/zhongwen/trad/rss.xml", "/zhongwen/simp/rss.xml"]
+        examples: [
+          %{
+            path: "/zhongwen/trad/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/zhongwen/simp/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

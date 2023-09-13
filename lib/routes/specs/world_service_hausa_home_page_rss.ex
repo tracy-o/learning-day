@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceHausaHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/hausa/rss.xml"]
+        examples: [
+          %{
+            path: "/hausa/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

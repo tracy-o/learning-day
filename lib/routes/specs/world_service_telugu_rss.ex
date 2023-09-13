@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceTeluguRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/telugu/india-51401870/rss.xml"]
+        examples: [
+          %{
+            path: "/telugu/india-51401870/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

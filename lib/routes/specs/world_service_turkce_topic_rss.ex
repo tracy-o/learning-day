@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceTurkceTopicRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
-        examples: ["/turkce/topics/c2dwqnwkvnqt/rss.xml"]
+        examples: [
+          %{
+            path: "/turkce/topics/c2dwqnwkvnqt/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

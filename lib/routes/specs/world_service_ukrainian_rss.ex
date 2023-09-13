@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceUkrainianRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/ukrainian/ukraine_in_russian/rss.xml", "/ukrainian/in_depth/cluster_rio_olympics/rss.xml"]
+        examples: [
+          %{
+            path: "/ukrainian/ukraine_in_russian/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/ukrainian/in_depth/cluster_rio_olympics/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceIndonesiaRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/indonesia/majalah/rss.xml", "/indonesia/laporan_khusus/lapsus_fobia_komunis/rss.xml"]
+        examples: [
+          %{
+            path: "/indonesia/majalah/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/indonesia/laporan_khusus/lapsus_fobia_komunis/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

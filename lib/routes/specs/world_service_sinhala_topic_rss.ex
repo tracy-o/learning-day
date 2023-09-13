@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceSinhalaTopicRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
-        examples: ["/sinhala/topics/c2dwqd311xyt/rss.xml"]
+        examples: [
+          %{
+            path: "/sinhala/topics/c2dwqd311xyt/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

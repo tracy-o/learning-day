@@ -6,7 +6,16 @@ defmodule Routes.Specs.NewsRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedRedirect"],
-        examples: ["/news/uk/rss.xml", "/news/rss.xml"]
+        examples: [
+          %{
+            path: "/news/uk/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/news/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

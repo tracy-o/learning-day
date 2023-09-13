@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceAfriqueRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/afrique/sports-38506183/rss.xml", "/afrique/region/guinea_elections/rss.xml"]
+        examples: [
+          %{
+            path: "/afrique/sports-38506183/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/afrique/region/guinea_elections/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end
