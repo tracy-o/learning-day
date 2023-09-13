@@ -35,7 +35,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
   end
 
   defp get_platform_by_data(articles_data) do
-    if articles_data[:phase] in [%{}, %{label: "Post-16"}] do
+    if articles_data[:phase] in ["Post-16", %{}] do
       "Webcore"
     else
       "MorphRouter"

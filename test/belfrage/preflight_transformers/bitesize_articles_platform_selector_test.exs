@@ -48,7 +48,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
                {:ok,
                 %Envelope{
                   request: request,
-                  private: %Private{platform: "Webcore", production_environment: "test", preflight_metadata: %{}}
+                  private: %Private{
+                    platform: "Webcore",
+                    production_environment: "test",
+                    preflight_metadata: %{}
+                  }
                 }}
     end
 
@@ -56,7 +60,10 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
       "selects WebCore if env=test and preflight data article returns no phase",
       PreflightService,
       call: fn %Envelope{}, @service ->
-        {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{phase: %{}}}})}
+        {:ok,
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{phase: %{}}}
+         })}
       end
     ) do
       request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
@@ -80,7 +87,9 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
       PreflightService,
       call: fn %Envelope{}, @service ->
         {:ok,
-         Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{phase: %{label: "Primary"}}}})}
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{phase: "Primary"}}
+         })}
       end
     ) do
       request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
@@ -94,7 +103,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
                   private: %Private{
                     platform: "MorphRouter",
                     production_environment: "test",
-                    preflight_metadata: %{@service => %{phase: %{label: "Primary"}}}
+                    preflight_metadata: %{@service => %{phase: "Primary"}}
                   }
                 }}
     end
@@ -104,7 +113,9 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
       PreflightService,
       call: fn %Envelope{}, @service ->
         {:ok,
-         Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{phase: %{label: "Post-16"}}}})}
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{phase: "Post-16"}}
+         })}
       end
     ) do
       request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
@@ -118,7 +129,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
                   private: %Private{
                     platform: "Webcore",
                     production_environment: "test",
-                    preflight_metadata: %{@service => %{phase: %{label: "Post-16"}}}
+                    preflight_metadata: %{@service => %{phase: "Post-16"}}
                   }
                 }}
     end
@@ -132,7 +143,11 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
                {:ok,
                 %Envelope{
                   request: request,
-                  private: %Private{platform: "Webcore", production_environment: "live", preflight_metadata: %{}}
+                  private: %Private{
+                    platform: "Webcore",
+                    production_environment: "live",
+                    preflight_metadata: %{}
+                  }
                 }}
     end
   end
