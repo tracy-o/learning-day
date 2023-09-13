@@ -57,29 +57,11 @@ defmodule Test.Support.Helper do
     apply(__MODULE__, which, [])
   end
 
-  def get_route(endpoint, path), do: get_route(endpoint, path, [], nil)
+  def get_route(endpoint, path), do: get_route(endpoint, path, [])
 
-  def get_route(endpoint, path, headers, spec) do
-    host_header = {"x-forwarded-host", get_forwarded_host(endpoint, spec)}
-    request_route(endpoint, path, [host_header | headers])
-  end
-
-  defp request_route(endpoint, path, headers) do
+  def get_route(endpoint, path, headers) do
     Finch.build(:get, "https://#{endpoint}#{path}", headers)
     |> Finch.request(Finch, receive_timeout: 10_000)
-  end
-
-  defp get_forwarded_host(endpoint, "WorldService" <> _), do: do_get_host(endpoint, "com")
-  defp get_forwarded_host(endpoint, "UploaderWorldService"), do: do_get_host(endpoint, "com")
-  defp get_forwarded_host(endpoint, "NewsletterLegacy"), do: do_get_host(endpoint, "co.uk")
-  defp get_forwarded_host(endpoint, _spec), do: endpoint
-
-  defp do_get_host(endpoint, domain) do
-    if String.contains?(endpoint, ".test.") do
-      "www.test.bbc." <> domain
-    else
-      "www.bbc." <> domain
-    end
   end
 
   def header_item_exists(headers, header_id) do

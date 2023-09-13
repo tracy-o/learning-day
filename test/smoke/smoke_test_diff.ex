@@ -17,7 +17,7 @@ defmodule Belfrage.SmokeTestDiff do
     comparison_endpoint = get_live_endpoint(@comparison_bid)
 
     {:ok, %Finch.Response{headers: comparison_headers}} =
-      Helper.get_route(comparison_endpoint, path, Map.to_list(req_headers), spec)
+      Helper.get_route(comparison_endpoint, path, Map.to_list(req_headers))
 
     compare_headers(path, map_headers(www_headers, spec), map_headers(comparison_headers, spec))
   end

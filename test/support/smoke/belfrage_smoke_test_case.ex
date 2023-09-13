@@ -26,12 +26,12 @@ defmodule Belfrage.SmokeTestCase do
     end
   end
 
-  def retry_route(endpoint, path, headers, spec, retry_check) do
-    do_retry({endpoint, path, headers, spec}, retry_check, @retry_times)
+  def retry_route(endpoint, path, headers, retry_check) do
+    do_retry({endpoint, path, headers}, retry_check, @retry_times)
   end
 
-  defp do_retry({endpoint, path, headers, spec}, retry_check, times) do
-    with {:ok, resp} <- Helper.get_route(endpoint, path, Map.to_list(headers), spec),
+  defp do_retry({endpoint, path, headers}, retry_check, times) do
+    with {:ok, resp} <- Helper.get_route(endpoint, path, Map.to_list(headers)),
          :ok <- retry_check.(resp) do
       {:ok, resp}
     else
@@ -40,7 +40,7 @@ defmodule Belfrage.SmokeTestCase do
           Process.sleep(@retry_interval)
 
           IO.puts("[🐡] error: #{inspect(reason)}, retry #{times + 1 - @retry_times}/#{@retry_times}: #{path}")
-          do_retry({endpoint, path, headers, spec}, retry_check, times - 1)
+          do_retry({endpoint, path, headers}, retry_check, times - 1)
         else
           {:error, reason}
         end
@@ -49,24 +49,23 @@ defmodule Belfrage.SmokeTestCase do
 
   defmacro __using__(
              matcher_spec: matcher_spec,
-             environments: environments
+             environment: environment
            ) do
     quote do
       use ExUnit.Case, async: true
       alias Test.Support.Helper
 
       import Belfrage.SmokeTestCase,
-        only: [truncate_path: 1, tld: 1, targets_for: 1, retry_route: 5]
+        only: [truncate_path: 1, tld: 1, targets_for: 1, retry_route: 4]
 
       @matcher_spec unquote(matcher_spec)
-      @environments unquote(environments)
+      @environment unquote(environment)
 
-      for smoke_env <- @environments, {target, host} <- targets_for(smoke_env) do
+      for {target, host} <- targets_for(@environment) do
         @target target
-        @smoke_env smoke_env
         @host host
 
-        describe "#{@matcher_spec.spec} #{@matcher_spec.platform} against #{@smoke_env} #{@target}" do
+        describe "#{@matcher_spec.spec} #{@matcher_spec.platform} against #{@environment} #{@target}" do
           @describetag spec: @matcher_spec.spec
           @tag stack: @target
 
@@ -74,7 +73,7 @@ defmodule Belfrage.SmokeTestCase do
             test_properties = %{
               expected_status: @matcher_spec.expected_status,
               matcher: @matcher_spec,
-              smoke_env: @smoke_env,
+              smoke_env: @environment,
               target: @target,
               host: @host,
               tld: tld(@host)
@@ -84,9 +83,9 @@ defmodule Belfrage.SmokeTestCase do
               Expectations.expect_response(resp, test_properties)
             end
 
-            case retry_route(@host, @matcher_spec.path, @matcher_spec.headers, @matcher_spec.spec, retry_check) do
+            case retry_route(@host, @matcher_spec.path, @matcher_spec.headers, retry_check) do
               {:ok, resp} ->
-                case SmokeTestDiff.build(resp, @matcher_spec, @smoke_env) do
+                case SmokeTestDiff.build(resp, @matcher_spec, @environment) do
                   :ok -> assert true
                   {:error, reason} -> assert false, inspect(reason)
                 end
