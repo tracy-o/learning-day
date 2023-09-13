@@ -99,6 +99,30 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
                 }}
     end
 
+    test_with_mock(
+      "selects webcore and preflight data article returns a Post-16 phase label",
+      PreflightService,
+      call: fn %Envelope{}, @service ->
+        {:ok,
+         Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{phase: %{label: "Post-16"}}}})}
+      end
+    ) do
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
+      private = %Envelope.Private{production_environment: "test"}
+      envelope = %Envelope{request: request, private: private}
+
+      assert BitesizeArticlesPlatformSelector.call(envelope) ==
+               {:ok,
+                %Envelope{
+                  request: request,
+                  private: %Private{
+                    platform: "Webcore",
+                    production_environment: "test",
+                    preflight_metadata: %{@service => %{phase: %{label: "Post-16"}}}
+                  }
+                }}
+    end
+
     test "selects Webcore if env=live and the article id is a live webcore id" do
       request = %Envelope.Request{path: @path, path_params: %{"id" => "zj8yydm"}}
       private = %Envelope.Private{production_environment: "live"}

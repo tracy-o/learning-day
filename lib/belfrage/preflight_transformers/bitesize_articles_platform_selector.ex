@@ -18,6 +18,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
       case PreflightService.call(envelope, @service) do
         {:ok, envelope = %Envelope{private: %Envelope.Private{preflight_metadata: metadata}}} ->
           articles_data = Map.get(metadata, @service)
+
           {:ok, Envelope.add(envelope, :private, %{platform: get_platform_by_data(articles_data)})}
 
         {:error, envelope, :preflight_data_not_found} ->
@@ -34,7 +35,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
   end
 
   defp get_platform_by_data(articles_data) do
-    if articles_data[:phase] == %{} do
+    if articles_data[:phase] in [%{}, %{label: "Post-16"}] do
       "Webcore"
     else
       "MorphRouter"
