@@ -62,8 +62,8 @@ config :belfrage,
   ],
   date_time: Belfrage.Utils.Current.Real,
   preflight_metadata_cache: [
-    # 24 hours
-    default_ttl_ms: 86_400_000,
+    # 20 hours - temporary for testing purposes
+    default_ttl_ms: 72_000_000,
     expiration_interval_ms: 60_000,
     limit: [
       size: 48_000,
