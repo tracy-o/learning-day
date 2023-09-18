@@ -1059,6 +1059,9 @@ defroutefile "Sport" do
     return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
   end
 
+  ## Sport Embeds
+  handle "/sport/alpha/:sport/sport-embeds-previews/team-selector/:id", using: "SportEmbedsTeamSelector"
+
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
 
