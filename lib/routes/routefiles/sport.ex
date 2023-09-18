@@ -950,6 +950,12 @@ defroutefile "Sport" do
   redirect "/sport/football/european-championship/euro-2016/video", to: "/sport/football/european-championship/video", status: 301
   redirect "/sport/football/european-championship/fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301
   redirect "/sport/football/european-championship/fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301 
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301 
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures/:date.app", to: "/sport/football/european-championship/scores-fixtures/:date.app", status: 301 
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures/:date", to: "/sport/football/european-championship/scores-fixtures/:date", status: 301 
+  redirect "/sport/football/european-championship-qualifying/table.app", to: "/sport/football/european-championship/table.app", status: 301 
+  redirect "/sport/football/european-championship-qualifying/table", to: "/sport/football/european-championship/table", status: 301 
   redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
