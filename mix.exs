@@ -72,7 +72,7 @@ defmodule Belfrage.MixProject do
       {:mock, "~> 0.3.8", only: @test_envs},
       {:plug_cowboy, "~> 2.6"},
       {:sweet_xml, "~> 0.7"},
-      {:cachex, "~> 3.6.0"},
+      {:cachex, "~> 3.6"},
       {:poison, "~> 5.0", override: true},
       {:secure_random, "~> 0.5.1"},
       {:tabula, "~> 2.2", only: [:dev] ++ @test_envs},
