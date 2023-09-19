@@ -23,7 +23,6 @@ node {
     disableConcurrentBuilds(),
     pipelineTriggers([parameterizedCron(cronlist)]),
     parameters([
-        choice(name: 'ENVIRONMENT', choices: ['live', 'test'], description: 'The environment to run the tests against'),
         choice(name: 'TARGET', choices: ['belfrage', 'all', 'bruce-belfrage', 'cedric-belfrage', 'joan-belfrage', 'sally-belfrage', 'sydney-belfrage'], description: 'The target to run the tests against.'),
         booleanParam(defaultValue: false, description: 'forcibly report to slack?', name: 'SLACK_REPORT'),
         string(name: 'SLACK_MESSAGE', defaultValue: '', description: 'Optionally enter a value to send the result along with this message to the Belfrage slack channel.'),
@@ -58,9 +57,9 @@ node {
       try {
         ansiColor('xterm') {
           if (params.TARGET == 'all') {
-            sh "set -o pipefail ; mix smoke_test --raw-output .smoke_test_output --group-by spec --bbc-env ${params.ENVIRONMENT} | tee smoke_test_output.txt"
+            sh "set -o pipefail ; mix smoke_test --raw-output .smoke_test_output --group-by spec | tee smoke_test_output.txt"
           } else {
-            sh "set -o pipefail ; mix smoke_test --raw-output .smoke_test_output --group-by spec --bbc-env ${params.ENVIRONMENT} --only stack:${params.TARGET} | tee smoke_test_output.txt"
+            sh "set -o pipefail ; mix smoke_test --raw-output .smoke_test_output --group-by spec --only stack:${params.TARGET} | tee smoke_test_output.txt"
           }
         }
       } catch (err) {

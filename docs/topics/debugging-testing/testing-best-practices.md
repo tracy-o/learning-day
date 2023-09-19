@@ -34,9 +34,6 @@ To run the automatically generated smoke tests on the example routes in the rout
   mix smoke_test --only route:/wales
   mix smoke_test --only route:/topics/:id
 
-  # choose Cosmos environment with --bbc-env
-  mix smoke_test --bbc-env live --only route:/topics/:id
-
   # for further information
   mix help smoke_test
 ```

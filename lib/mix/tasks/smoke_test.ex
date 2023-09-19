@@ -9,9 +9,10 @@ defmodule Mix.Tasks.SmokeTest do
   This task runs the smoke tests in test/smoke/ directory for all
   or subsets of Belfage example routes via a list `mix test` options.
 
+  Please note that the tests are run on `live` Cosmos production environment only.
+
   ## Command line options
 
-    * `--bbc-env` - specify the Cosmos production environment to run the tests on, either `test` or `live`
     * `--only` - runs only tests that match the filter. See "Test route subset with `--only`" below
     * `--raw-output` - Writes the erlang term containing the result structure to the provided file path
     * `--with-diff` - specify a stack bid to get a comparison on the response headers between www and the other stack
@@ -33,7 +34,7 @@ defmodule Mix.Tasks.SmokeTest do
 
   Compare response headers
 
-      mix smoke_test --with-diff bruce --bbc-env live
+      mix smoke_test --with-diff bruce
 
   Using other `mix test` options, e.g. increase verbosity and outputs all test
   details with timing, as well as identify the slowest (3) tests
@@ -59,20 +60,9 @@ defmodule Mix.Tasks.SmokeTest do
       mix smoke_test --only route:/news/av/:id
       mix smoke_test --only route:/topics/:id
 
-  ## Specify Cosmos environment via `--bbc-env`
-
-  "test" (default)
-
-       mix smoke_test
-       mix smoke_test --bbc-env test
-
-  "live"
-
-       mix smoke_test --bbc-env live
-
   """
 
-  @custom_opts_parse_rules [{:group_by, :string}, {:bbc_env, :string}, {:raw_output, :string}, {:with_diff, :string}]
+  @custom_opts_parse_rules [{:group_by, :string}, {:raw_output, :string}, {:with_diff, :string}]
   @standard_mix_test_parse_rules [{:color, :boolean}, {:only, :string}, {:slowest, :string}]
 
   @impl Mix.Task
@@ -97,10 +87,6 @@ defmodule Mix.Tasks.SmokeTest do
   end
 
   defp parse_env_opts(_cli_args, _flag_args \\ [], result \\ "")
-
-  defp parse_env_opts([{:bbc_env, bbc_env} | rest], flag_args, result) do
-    parse_env_opts(rest, flag_args, "SMOKE_ENV=#{bbc_env} " <> result)
-  end
 
   defp parse_env_opts([{:group_by, group_by} | rest], flag_args, result) do
     parse_env_opts(rest, flag_args, "GROUP_BY=#{group_by} " <> result)
