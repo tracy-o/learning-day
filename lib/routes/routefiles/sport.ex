@@ -853,6 +853,8 @@ defroutefile "Sport" do
 
   ## Sport RSS feeds
   handle "/sport/rss.xml", using: "SportTopicRss"
+  handle "/sport/cricket/world-cup/rss.xml", using: "SportTopicRss"
+  handle "/sport/cricket/teams/netherlands/rss.xml", using: "SportTopicRss"
   handle "/sport/scotland/rss.xml", using: "SportTopicRss"
   handle "/sport/scotland/shinty/rss.xml", using: "SportTopicRss"
   handle "/sport/football/scottish/rss.xml", using: "SportTopicRss"
@@ -1650,6 +1652,10 @@ defroutefile "Sport" do
   handle "/sport/cricket/the-hundred", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
+  handle "/sport/cricket/world-cup", using: "SportDisciplineCompetitionTopic" do
+    return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
+  end
+
   handle "/sport/football/champions-league", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
@@ -1716,7 +1722,7 @@ defroutefile "Sport" do
   handle "/sport/football/womens-european-championship", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
-   handle "/sport/football/womens-world-cup", using: "SportDisciplineCompetitionTopic" do
+  handle "/sport/football/womens-world-cup", using: "SportDisciplineCompetitionTopic" do
     return_404 if: !integer_in_range?(conn.query_params["page"] || "1", 1..42)
   end
 

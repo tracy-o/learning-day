@@ -7,6 +7,8 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
 
   @sport_feed_mapping %{
     "/sport/rss.xml" => "c22ymglr3x3t",
+    "/sport/cricket/world-cup/rss.xml" => "cgvp34rr2get",
+    "/sport/cricket/teams/netherlands/rss.xml" => "cm03m1l7zzrt",
     "/sport/scotland/rss.xml" => "cxlx5km2kz4t",
     "/sport/scotland/shinty/rss.xml" => "c2q9x749znwt",
     "/sport/football/scottish/rss.xml" => "cn35kp0e8e9t",
