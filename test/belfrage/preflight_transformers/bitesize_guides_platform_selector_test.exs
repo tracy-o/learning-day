@@ -14,7 +14,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelectorTest do
     request: %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
   }
 
-  defp assert_platform(expected_platform, exam_specification) do
+  defp assert_platform(expected_platform, expected_preflight_metadata) do
     request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
     private = %Envelope.Private{production_environment: "test"}
     envelope = %Envelope{request: request, private: private}
@@ -26,7 +26,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelectorTest do
                 private: %Private{
                   platform: expected_platform,
                   production_environment: "test",
-                  preflight_metadata: %{@service => %{exam_specification: exam_specification}}
+                  preflight_metadata: %{@service => expected_preflight_metadata}
                 }
               }}
   end
@@ -37,31 +37,51 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelectorTest do
       PreflightService,
       call: fn %Envelope{}, @service ->
         {:ok,
-         Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{exam_specification: "z2synbk"}}})}
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{exam_specification: "z2synbk", level: "some_id"}}
+         })}
       end
     ) do
-      assert_platform("Webcore", "z2synbk")
+      assert_platform("Webcore", %{exam_specification: "z2synbk", level: "some_id"})
     end
 
     test_with_mock(
-      "selects Morph if preflight data guide returns an examSpecification and examSpecificationId is not examspec allowed ids list",
+      "selects Morph if preflight data guide examSpecificationId is not examspec allowed ids list and levelId is not a scottish level",
       PreflightService,
       call: fn %Envelope{}, @service ->
         {:ok,
-         Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{exam_specification: "z2sy123"}}})}
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{exam_specification: "z2sy123", level: "some_id"}}
+         })}
       end
     ) do
-      assert_platform("MorphRouter", "z2sy123")
+      assert_platform("MorphRouter", %{exam_specification: "z2sy123", level: "some_id"})
     end
 
     test_with_mock(
-      "selects Morph if preflight data guide returns an empty examSpecification",
+      "selects Webcore if preflight data guide returns a level id belonging to scottish study guides",
       PreflightService,
       call: fn %Envelope{}, @service ->
-        {:ok, Envelope.add(@mocked_envelope, :private, %{preflight_metadata: %{@service => %{exam_specification: ""}}})}
+        {:ok,
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{exam_specification: "some_id", level: "zy4qn39"}}
+         })}
       end
     ) do
-      assert_platform("MorphRouter", "")
+      assert_platform("Webcore", %{level: "zy4qn39", exam_specification: "some_id"})
+    end
+
+    test_with_mock(
+      "selects Morph if preflight data guide returns an empty examSpecification or empty level",
+      PreflightService,
+      call: fn %Envelope{}, @service ->
+        {:ok,
+         Envelope.add(@mocked_envelope, :private, %{
+           preflight_metadata: %{@service => %{exam_specification: "", level: ""}}
+         })}
+      end
+    ) do
+      assert_platform("MorphRouter", %{exam_specification: "", level: ""})
     end
 
     test_with_mock(

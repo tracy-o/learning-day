@@ -58,11 +58,11 @@ defmodule Belfrage.PreflightServices.BitesizeGuidesDataTest do
 
       assert {:ok,
               %Envelope{
-                private: %Private{preflight_metadata: %{@service => %{exam_specification: "z2synbk"}}}
+                private: %Private{preflight_metadata: %{@service => %{exam_specification: "z2synbk", level: "z98jmp3"}}}
               }} = PreflightService.call(@envelope, @service)
 
       assert Cachex.get(@table_name, {@service, "ztmktv4"}) ==
-               {:ok, %{exam_specification: "z2synbk"}}
+               {:ok, %{exam_specification: "z2synbk", level: "z98jmp3"}}
     end
 
     test "returns empty examSpecification if examSpecification does not exist for guide" do
@@ -102,7 +102,52 @@ defmodule Belfrage.PreflightServices.BitesizeGuidesDataTest do
                 private: %Private{
                   preflight_metadata: %{
                     @service => %{
-                      exam_specification: ""
+                      exam_specification: "",
+                      level: "z4kw2hv"
+                    }
+                  }
+                }
+              }} = PreflightService.call(@envelope, @service)
+    end
+
+    test "returns empty level and empty examSpec if level id and exam spec id does not exist for guide" do
+      clear_preflight_metadata_cache()
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: @url}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{},
+           status_code: 200,
+           body: """
+            {
+              "data": {
+                "topicOfStudy": {
+                  "id": "z7tp34j"
+                },
+                "examSpecification": {
+                },
+                "programmeOfStudy": {
+                  "id": "zvc9q6f"
+                },
+                "phase": {
+                  "id": "zc9d7ty",
+                  "label": "Secondary"
+                },
+                "level": {
+                }
+              }
+            }
+           """
+         }}
+      end)
+
+      assert {:ok,
+              %Envelope{
+                private: %Private{
+                  preflight_metadata: %{
+                    @service => %{
+                      exam_specification: "",
+                      level: ""
                     }
                   }
                 }

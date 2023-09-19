@@ -24,18 +24,29 @@ defmodule Belfrage.PreflightServices.BitesizeGuidesData do
   @impl PreflightService
   def handle_response(%{
         "data" => %{
-          "examSpecification" => %{"id" => exam_specification_id}
+          "examSpecification" => %{"id" => exam_specification_id},
+          "level" => %{"id" => level_id}
         }
       }),
-      do: {:ok, %{exam_specification: exam_specification_id}}
+      do: {:ok, %{exam_specification: exam_specification_id, level: level_id}}
 
   def handle_response(%{
         "data" => %{
-          "examSpecification" => map
+          "examSpecification" => map,
+          "level" => map
         }
       })
       when map == %{},
-      do: {:ok, %{exam_specification: ""}}
+      do: {:ok, %{exam_specification: "", level: ""}}
+
+  def handle_response(%{
+        "data" => %{
+          "examSpecification" => map,
+          "level" => %{"id" => level_id}
+        }
+      })
+      when map == %{},
+      do: {:ok, %{exam_specification: "", level: level_id}}
 
   def handle_response(_response), do: {:error, :preflight_data_error}
 end

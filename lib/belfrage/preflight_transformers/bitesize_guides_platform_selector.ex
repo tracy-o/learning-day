@@ -7,6 +7,8 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelector do
     "zp49cwx"
   ]
 
+  @scottish_level_ids ["zy4qn39", "zvk2fg8", "z8hhvcw", "zdpp34j", "zp3d7ty", "z6gw2hv", "zqq4wxs", "zkdqxnb"]
+
   @service "BitesizeGuidesData"
 
   @impl Transformer
@@ -25,7 +27,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelector do
   end
 
   defp get_platform_by_data(guides_data) do
-    if guides_data[:exam_specification] in @exam_spec_ids do
+    if guides_data[:exam_specification] in @exam_spec_ids || guides_data[:level] in @scottish_level_ids do
       "Webcore"
     else
       "MorphRouter"
