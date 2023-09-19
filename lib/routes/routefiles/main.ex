@@ -3440,7 +3440,7 @@ defroutefile "Main" do
   handle "/archive/*any", using: "Archive"
 
   # CBBC
-  handle "/cbbc/findoutmore/help-me-out-exercise", using: "CBBCArticlePage", only_on: "test"
+  handle "/cbbc/findoutmore/help-me-out-exercise", using: "CBBCArticlePage"
   handle "/cbbc/*any", using: "CBBCLegacy"
 
   # Newsround
