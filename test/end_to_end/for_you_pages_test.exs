@@ -29,6 +29,10 @@ defmodule EndToEnd.PersonalisedAccountTest do
   @valid_vary_com [
     "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
   ]
+  @valid_vary_account_unavailable [
+    "Accept-Encoding,X-BBC-Edge-Cache,X-BBC-Edge-Country,X-BBC-Edge-IsUK,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
+  ]
+
   @default_bbcid_state %{
     id_availability: true,
     foryou_flagpole: false,
@@ -39,6 +43,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
   setup do
     stub_dial(:personalisation, "on")
     :ets.delete_all_objects(:cache)
+    Agent.update(BBCID, fn _state -> @default_bbcid_state end)
     :ok
   end
 
@@ -106,8 +111,6 @@ defmodule EndToEnd.PersonalisedAccountTest do
     end
 
     test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent and foryou flagpole is false" do
-      Agent.update(BBCID, fn _state -> @default_bbcid_state end)
-
       conn =
         conn(:get, "/foryou")
         |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
@@ -178,7 +181,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
   end
 
   describe "does not redirect" do
-    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent, foryou flagpole is true and acess chance is 100" do
+    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent, foryou flagpole is true and access chance is 100" do
       Agent.update(BBCID, fn _state -> %{@default_bbcid_state | foryou_access_chance: 100, foryou_flagpole: true} end)
 
       expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
@@ -198,7 +201,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
       assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
 
-    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent, foryou flagpole is true, acess chance is 0, and user pseudonym is in allowlist" do
+    test "if request is_uk, user is authenticated and over 13, allow_personalisation is true or present, profile cookie is absent, foryou flagpole is true, access chance is 0, and user pseudonym is in allowlist" do
       Agent.update(BBCID, fn _state ->
         %{@default_bbcid_state | foryou_flagpole: true, foryou_allowlist: [Fixtures.AuthToken.valid_pseudonym_key()]}
       end)
@@ -217,6 +220,104 @@ defmodule EndToEnd.PersonalisedAccountTest do
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 200
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+  end
+
+  describe "flagpole combinations tests" do
+    test "redirect to /account if request is_uk, host is .co.uk, user is eligible and id_availability is true and foryou_flagpole is false" do
+      Agent.update(BBCID, fn _state ->
+        %{@default_bbcid_state | foryou_access_chance: 100, id_availability: true, foryou_flagpole: false}
+      end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "do not redirect if request is_uk, host is .co.uk, user is eligible, id_availability is true and foryou_flagpole is true" do
+      Agent.update(BBCID, fn _state -> %{@default_bbcid_state | foryou_access_chance: 100, foryou_flagpole: true} end)
+
+      expect(LambdaMock, :call, fn _credentials, _arn, _request, _ ->
+        {:ok, @lambda_response}
+      end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 200
+      assert get_resp_header(conn, "vary") == @valid_vary_co_uk
+    end
+
+    test "redirect to /account if request is_uk, host is .co.uk, user is eligible and id_availability is false and foryou_flagpole is true" do
+      Agent.update(BBCID, fn _state ->
+        %{@default_bbcid_state | foryou_access_chance: 100, id_availability: false, foryou_flagpole: true}
+      end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
+      assert get_resp_header(conn, "vary") == @valid_vary_account_unavailable
+    end
+
+    test "redirect to /account if request is_uk, host is .co.uk, user eligible and id_availability is false and foryou_flagpole is false" do
+      Agent.update(BBCID, fn _state ->
+        %{@default_bbcid_state | foryou_access_chance: 100, id_availability: false, foryou_flagpole: false}
+      end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
+      assert get_resp_header(conn, "vary") == @valid_vary_account_unavailable
+    end
+
+    test "redirect to /account if request is_uk, host is .co.uk, user is eligible and id_availability is true, foryou_flagpole is true, and access_chance is 0" do
+      Agent.update(BBCID, fn _state ->
+        %{@default_bbcid_state | foryou_access_chance: 0, id_availability: true, foryou_flagpole: true}
+      end)
+
+      conn =
+        conn(:get, "/foryou")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.co.uk")
+        |> put_req_header("x-bbc-edge-cache", "1")
+        |> put_req_header("x-bbc-edge-isuk", "yes")
+        |> put_req_header("x-id-oidc-signedin", "1")
+        |> put_req_header("cookie", "ckns_atkn=#{@valid_token}")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 302
+      assert get_resp_header(conn, "location") == ["https://www.bbc.co.uk/account"]
       assert get_resp_header(conn, "vary") == @valid_vary_co_uk
     end
   end

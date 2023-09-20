@@ -11,7 +11,7 @@ defmodule Belfrage.RequestTransformers.PersonalisedAccountIdAvailabilityTest do
     foryou_allowlist: []
   }
 
-  test "don't redirect to /account if id-availability is true" do
+  test "do not redirect to /account if id-availability is true" do
     Agent.update(BBCID, fn _state -> %{@default_bbcid_state | id_availability: true} end)
 
     envelope = %Envelope{
