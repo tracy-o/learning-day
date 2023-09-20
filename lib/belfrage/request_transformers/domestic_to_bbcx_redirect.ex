@@ -22,7 +22,7 @@ defmodule Belfrage.RequestTransformers.DomesticToBBCXRedirect do
     "/travel/columns/the-specialist" => "/travel/specialist",
     "/future" => "/future-planet",
     "/future/future-planet" => "/future-planet",
-    "/reel" => "/video",
+    "/reel" => "/video"
   }
 
   @impl Transformer
