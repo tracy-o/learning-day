@@ -4,10 +4,10 @@ defmodule Routes.Specs.WorldServiceSinhalaHomePageRss do
       specs: %{
         owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
-        platform: "Karanga",
-        request_pipeline: ["RssFeedDomainValidator"],
+        platform: "Fabl",
+        request_pipeline: ["RssFeedDomainValidator", "WorldServiceTopicRssFeedsMapper"],
         examples: ["/sinhala/rss.xml"]
       }
     }
-  end
+end
 end
