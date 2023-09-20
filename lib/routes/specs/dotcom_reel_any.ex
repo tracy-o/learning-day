@@ -3,7 +3,7 @@ defmodule Routes.Specs.DotComReelAny do
     %{
       specs: %{
         platform: "DotComReel",
-        examples: ["/reel", "/reel/playlists", "/reel/playlist/musical-lives"]
+        examples: ["/reel/playlists", "/reel/playlist/musical-lives"]
       }
     }
   end

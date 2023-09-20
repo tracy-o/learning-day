@@ -6,6 +6,7 @@ defmodule Routes.Specs.DotComFuture do
         %{
           platform: "DotComFuture",
           examples: [
+            "/future",
             "/future/article/20230630-will-texas-become-too-hot-for-humans",
             "/future/tags/oceans"
           ]

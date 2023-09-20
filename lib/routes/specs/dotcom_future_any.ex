@@ -3,7 +3,7 @@ defmodule Routes.Specs.DotComFutureAny do
     %{
       specs: %{
         platform: "DotComFuture",
-        examples: ["/future", "/future/tags", "/future/columns"]
+        examples: ["/future/tags", "/future/columns"]
       }
     }
   end
