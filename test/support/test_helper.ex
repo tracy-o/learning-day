@@ -75,20 +75,15 @@ defmodule Test.Support.Helper do
     end)
   end
 
-  def gtm_host("test"), do: "www.test.bbc.co.uk"
-  def gtm_host("live"), do: "www.bbc.co.uk"
+  def gtm_host(), do: "www.bbc.co.uk"
 
-  def gtm_host_com("test"), do: "www.test.bbc.com"
-  def gtm_host_com("live"), do: "www.bbc.com"
+  def gtm_host_com(), do: "www.bbc.com"
 
-  def cdn_web_host("test"), do: "web-cdn.test.api.bbci.co.uk"
-  def cdn_web_host("live"), do: "web-cdn.api.bbci.co.uk"
+  def cdn_web_host(), do: "web-cdn.api.bbci.co.uk"
 
-  def cdn_sport_host("test"), do: "sport-app.test.api.bbc.co.uk"
-  def cdn_sport_host("live"), do: "sport-app.api.bbc.co.uk"
+  def cdn_sport_host(), do: "sport-app.api.bbc.co.uk"
 
-  def cdn_news_host("test"), do: "news-app.test.api.bbc.co.uk"
-  def cdn_news_host("live"), do: "news-app.api.bbc.co.uk"
+  def cdn_news_host(), do: "news-app.api.bbc.co.uk"
 
   def wait_for(condition, tries \\ 100, sleep_interval_ms \\ 1) do
     unless condition.() do
