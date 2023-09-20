@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceSomali do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/somali/popular/read", "/somali.json", "/somali.amp"]
+        examples: ["/somali/popular/read"]
       }
     }
   end

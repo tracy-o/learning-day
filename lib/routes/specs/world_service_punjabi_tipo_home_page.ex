@@ -3,7 +3,9 @@ defmodule Routes.Specs.WorldServicePunjabiTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/punjabi", "/punjabi.amp"]
+
       }
     }
   end

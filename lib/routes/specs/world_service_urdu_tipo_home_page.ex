@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceUrduTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/urdu", "/urdu.amp"]
       }
     }
   end

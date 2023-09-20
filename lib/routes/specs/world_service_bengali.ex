@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceBengali do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/bengali/popular/read", "/bengali.json", "/bengali.amp"]
+        examples: ["/bengali/popular/read"]
       }
     }
   end

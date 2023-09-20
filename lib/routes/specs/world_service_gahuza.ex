@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceGahuza do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/gahuza/popular/read", "/gahuza.json", "/gahuza.amp"]
+        examples: ["/gahuza/popular/read"]
       }
     }
   end

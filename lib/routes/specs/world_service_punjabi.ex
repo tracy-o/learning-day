@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServicePunjabi do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/punjabi/popular/read", "/punjabi.json", "/punjabi.amp"]
+        examples: ["/punjabi/popular/read"]
       }
     }
   end

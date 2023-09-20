@@ -972,16 +972,26 @@ defroutefile "Main" do
   redirect "/afaanoromoo/topics/c44dyn08mejt", to: "/afaanoromoo", status: 301
   redirect "/amharic/topics/cg58k91re1gt", to: "/amharic", status: 301
   redirect "/azeri/topics/c1295dq496yt", to: "/azeri", status: 301
+  redirect "/bengali/topics/cg81xp242zxt", to: "/bengali", status: 301
   redirect "/burmese/topics/cn6rql5k0z5t", to: "/burmese", status: 301
+  redirect "/gahuza/topics/cz4vn9gy9pyt", to: "/gahuza", status: 301
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
   redirect "/igbo/topics/cp2dkn6rzj5t", to: "/igbo", status: 301
   redirect "/hindi/india-66590093", to: "/hindi/topics/cqe17zz2k1nt", status: 301
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
+  redirect "/nepali/topics/c44d8kpmzlgt", to: "/nepali", status: 301
+  redirect "/marathi/topics/crezq2dg90mt", to: "/marathi", status: 301
   redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+  redirect "/punjabi/topics/c0rp0kp5ezmt", to: "/punjabi", status: 301
+  redirect "/sinhala/topics/c1x6gk68neqt", to: "/sinhala", status: 301
   redirect "/somali/media-54071665", to: "/somali/topics/cn6rqlrkm0pt", status: 301
+  redirect "/somali/topics/c89m6yjv965t", to: "/somali", status: 301
+  redirect "/tamil/topics/c1x6gk68w9zt", to: "/tamil", status: 301
+  redirect "/telugu/topics/c2w0dk010q2t", to: "/telugu", status: 301
   redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
+  redirect "/urdu/topics/c44d8kd7lgzt", to: "/urdu", status: 301
   redirect "/yoruba/topics/cvpk14mq48kt", to: "/yoruba", status: 301
 
   ## World Service - Homepage Redirects
@@ -1016,12 +1026,22 @@ defroutefile "Main" do
   redirect "/afaanoromoo/front_page/rss.xml", to: "/afaanoromoo/rss.xml", status: 301
   redirect "/amharic/front_page/rss.xml", to: "/amharic/rss.xml", status: 301
   redirect "/azeri/front_page/rss.xml", to: "/azeri/rss.xml", status: 301
+  redirect "/bengali/front_page/rss.xml", to: "/bengali/rss.xml", status: 301
   redirect "/burmese/front_page/rss.xml", to: "/burmese/rss.xml", status: 301
   redirect "/kyrgyz/front_page/rss.xml", to: "/kyrgyz/rss.xml", status: 301
+  redirect "/gahuza/front_page/rss.xml", to: "/gahuza/rss.xml", status: 301
   redirect "/gujarati/front_page/rss.xml", to: "/gujarati/rss.xml", status: 301
   redirect "/igbo/front_page/rss.xml", to: "/igbo/rss.xml", status: 301
+  redirect "/nepali/front_page/rss.xml", to: "/nepali/rss.xml", status: 301
+  redirect "/marathi/front_page/rss.xml", to: "/marathi/rss.xml", status: 301
   redirect "/pidgin/front_page/rss.xml", to: "/pidgin/rss.xml", status: 301
+  redirect "/punjabi/front_page/rss.xml", to: "/punjabi/rss.xml", status: 301
+  redirect "/sinhala/front_page/rss.xml", to: "/sinhala/rss.xml", status: 301
+  redirect "/somali/front_page/rss.xml", to: "/somali/rss.xml", status: 301
+  redirect "/tamil/front_page/rss.xml", to: "/tamil/rss.xml", status: 301
+  redirect "/telugu/front_page/rss.xml", to: "/telugu/rss.xml", status: 301
   redirect "/tigrinya/front_page/rss.xml", to: "/tigrinya/rss.xml", status: 301
+  redirect "/urdu/front_page/rss.xml", to: "/urdu/rss.xml", status: 301
   redirect "/yoruba/front_page/rss.xml", to: "/yoruba/rss.xml", status: 301
 
 
@@ -1252,13 +1272,10 @@ defroutefile "Main" do
   redirect "/bengali/mobile/image/*any", to: "/bengali/*any", status: 302
   redirect "/bengali/mobile/*any", to: "/bengali", status: 301
 
-  handle "/bengali.amp", using: "WorldServiceBengali"
-  handle "/bengali.json", using: "WorldServiceBengali"
+  handle "/bengali.amp", using: "WorldServiceBengaliTipoHomePage"
   handle "/bengali/manifest.json", using: "WorldServiceBengaliAssets"
   handle "/bengali/sw.js", using: "WorldServiceBengaliAssets"
   handle "/bengali/rss.xml", using: "WorldServiceBengaliHomePageRss"
-
-  handle "/bengali/tipohome.amp", using: "WorldServiceBengaliTipoHomePage", only_on: "test"
 
   handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1292,7 +1309,7 @@ defroutefile "Main" do
   end
 
   handle "/bengali/send/:id", using: "UploaderWorldService"
-  handle "/bengali", using: "WorldServiceBengaliTipoHomePage", only_on: "test"
+  handle "/bengali", using: "WorldServiceBengaliTipoHomePage"
   handle "/bengali/*any", using: "WorldServiceBengali"
 
   redirect "/burmese/mobile/image/*any", to: "/burmese/*any", status: 302
@@ -1347,13 +1364,10 @@ defroutefile "Main" do
 
   redirect "/gahuza/mobile/*any", to: "/gahuza", status: 301
 
-  handle "/gahuza.amp", using: "WorldServiceGahuza"
-  handle "/gahuza.json", using: "WorldServiceGahuza"
+  handle "/gahuza.amp", using: "WorldServiceGahuzaTipoHomePage"
   handle "/gahuza/manifest.json", using: "WorldServiceGahuzaAssets"
   handle "/gahuza/sw.js", using: "WorldServiceGahuzaAssets"
   handle "/gahuza/rss.xml", using: "WorldServiceGahuzaHomePageRss"
-
-  handle "/gahuza/tipohome.amp", using: "WorldServiceGahuzaTipoHomePage", only_on: "test"
 
   handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1387,7 +1401,7 @@ defroutefile "Main" do
   end
 
   handle "/gahuza/send/:id", using: "UploaderWorldService"
-  handle "/gahuza", using: "WorldServiceGahuzaTipoHomePage", only_on: "test"
+  handle "/gahuza", using: "WorldServiceGahuzaTipoHomePage"
   handle "/gahuza/*any", using: "WorldServiceGahuza"
 
   handle "/gujarati.amp", using: "WorldServiceGujaratiTipoHomePage"
@@ -1738,13 +1752,10 @@ defroutefile "Main" do
   handle "/kyrgyz", using: "WorldServiceKyrgyzTipoHomePage"
   handle "/kyrgyz/*any", using: "WorldServiceKyrgyz"
 
-  handle "/marathi.amp", using: "WorldServiceMarathi"
-  handle "/marathi.json", using: "WorldServiceMarathi"
+  handle "/marathi.amp", using: "WorldServiceMarathiTipoHomePage"
   handle "/marathi/manifest.json", using: "WorldServiceMarathiAssets"
   handle "/marathi/sw.js", using: "WorldServiceMarathiAssets"
   handle "/marathi/rss.xml", using: "WorldServiceMarathiHomePageRss"
-
-  handle "/marathi/tipohome.amp", using: "WorldServiceMarathiTipoHomePage", only_on: "test"
 
   handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1777,7 +1788,7 @@ defroutefile "Main" do
   end
 
   handle "/marathi/send/:id", using: "UploaderWorldService"
-  handle "/marathi", using: "WorldServiceMarathiTipoHomePage", only_on: "test"
+  handle "/marathi", using: "WorldServiceMarathiTipoHomePage"
   handle "/marathi/*any", using: "WorldServiceMarathi"
 
   ## World Service - Olympic Redirects
@@ -1845,13 +1856,10 @@ defroutefile "Main" do
   redirect "/nepali/mobile/image/*any", to: "/nepali/*any", status: 302
   redirect "/nepali/mobile/*any", to: "/nepali", status: 301
 
-  handle "/nepali.amp", using: "WorldServiceNepali"
-  handle "/nepali.json", using: "WorldServiceNepali"
+  handle "/nepali.amp", using: "WorldServiceNepaliTipoHomePage"
   handle "/nepali/manifest.json", using: "WorldServiceNepaliAssets"
   handle "/nepali/sw.js", using: "WorldServiceNepaliAssets"
   handle "/nepali/rss.xml", using: "WorldServiceNepaliHomePageRss"
-
-  handle "/nepali/tipohome.amp", using: "WorldServiceNepaliTipoHomePage", only_on: "test"
 
   handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1885,7 +1893,7 @@ defroutefile "Main" do
   end
 
   handle "/nepali/send/:id", using: "UploaderWorldService"
-  handle "/nepali", using: "WorldServiceNepaliTipoHomePage", only_on: "test"
+  handle "/nepali", using: "WorldServiceNepaliTipoHomePage"
   handle "/nepali/*any", using: "WorldServiceNepali"
 
   redirect "/pashto/mobile/image/*any", to: "/pashto/*any", status: 302
@@ -2072,13 +2080,10 @@ defroutefile "Main" do
   handle "/portuguese", using: "WorldServicePortugueseTipoHomePage", only_on: "test"
   handle "/portuguese/*any", using: "WorldServicePortuguese"
 
-  handle "/punjabi.amp", using: "WorldServicePunjabi"
-  handle "/punjabi.json", using: "WorldServicePunjabi"
+  handle "/punjabi.amp", using: "WorldServicePunjabiTipoHomePage"
   handle "/punjabi/manifest.json", using: "WorldServicePunjabiAssets"
   handle "/punjabi/sw.js", using: "WorldServicePunjabiAssets"
   handle "/punjabi/rss.xml", using: "WorldServicePunjabiHomePageRss"
-
-  handle "/punjabi/tipohome.amp", using: "WorldServicePunjabiTipoHomePage", only_on: "test"
 
   handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2111,7 +2116,7 @@ defroutefile "Main" do
   end
 
   handle "/punjabi/send/:id", using: "UploaderWorldService"
-  handle "/punjabi", using: "WorldServicePunjabiTipoHomePage", only_on: "test"
+  handle "/punjabi", using: "WorldServicePunjabiTipoHomePage"
   handle "/punjabi/*any", using: "WorldServicePunjabi"
 
   ## World Service - Russian Partners Redirects
@@ -2254,13 +2259,10 @@ defroutefile "Main" do
   redirect "/sinhala/mobile/image/*any", to: "/sinhala/*any", status: 302
   redirect "/sinhala/mobile/*any", to: "/sinhala", status: 301
 
-  handle "/sinhala.amp", using: "WorldServiceSinhala"
-  handle "/sinhala.json", using: "WorldServiceSinhala"
+  handle "/sinhala.amp", using: "WorldServiceSinhalaTipoHomePage"
   handle "/sinhala/manifest.json", using: "WorldServiceSinhalaAssets"
   handle "/sinhala/sw.js", using: "WorldServiceSinhalaAssets"
   handle "/sinhala/rss.xml", using: "WorldServiceSinhalaHomePageRss"
-
-  handle "/sinhala/tipohome.amp", using: "WorldServiceSinhalaTipoHomePage", only_on: "test"
 
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2294,18 +2296,16 @@ defroutefile "Main" do
   end
 
   handle "/sinhala/send/:id", using: "UploaderWorldService"
-  handle "/sinhala", using: "WorldServiceSinhalaTipoHomePage", only_on: "test"
+  handle "/sinhala", using: "WorldServiceSinhalaTipoHomePage"
   handle "/sinhala/*any", using: "WorldServiceSinhala"
 
   redirect "/somali/mobile/*any", to: "/somali", status: 301
 
-  handle "/somali.amp", using: "WorldServiceSomali"
-  handle "/somali.json", using: "WorldServiceSomali"
+  handle "/somali.amp", using: "WorldServiceSomaliTipoHomePage"
   handle "/somali/manifest.json", using: "WorldServiceSomaliAssets"
   handle "/somali/sw.js", using: "WorldServiceSomaliAssets"
   handle "/somali/rss.xml", using: "WorldServiceSomaliHomePageRss"
 
-  handle "/somali/tipohome.amp", using: "WorldServiceSomaliTipoHomePage", only_on: "test"
 
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2339,7 +2339,7 @@ defroutefile "Main" do
   end
 
   handle "/somali/send/:id", using: "UploaderWorldService"
-  handle "/somali", using: "WorldServiceSomaliTipoHomePage", only_on: "test"
+  handle "/somali", using: "WorldServiceSomaliTipoHomePage"
   handle "/somali/*any", using: "WorldServiceSomali"
 
   redirect "/swahili/mobile/*any", to: "/swahili", status: 301
@@ -2392,13 +2392,10 @@ defroutefile "Main" do
   redirect "/tamil/mobile/image/*any", to: "/tamil/*any", status: 302
   redirect "/tamil/mobile/*any", to: "/tamil", status: 301
 
-  handle "/tamil.amp", using: "WorldServiceTamil"
-  handle "/tamil.json", using: "WorldServiceTamil"
+  handle "/tamil.amp", using: "WorldServiceTamilTipoHomePage"
   handle "/tamil/manifest.json", using: "WorldServiceTamilAssets"
   handle "/tamil/sw.js", using: "WorldServiceTamilAssets"
   handle "/tamil/rss.xml", using: "WorldServiceTamilHomePageRss"
-
-  handle "/tamil/tipohome.amp", using: "WorldServiceTamilTipoHomePage", only_on: "test"
 
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2432,16 +2429,13 @@ defroutefile "Main" do
   end
 
   handle "/tamil/send/:id", using: "UploaderWorldService"
-  handle "/tamil", using: "WorldServiceTamilTipoHomePage", only_on: "test"
+  handle "/tamil", using: "WorldServiceTamilTipoHomePage"
   handle "/tamil/*any", using: "WorldServiceTamil"
 
-  handle "/telugu.amp", using: "WorldServiceTelugu"
-  handle "/telugu.json", using: "WorldServiceTelugu"
+  handle "/telugu.amp", using: "WorldServiceTeluguTipoHomePage"
   handle "/telugu/manifest.json", using: "WorldServiceTeluguAssets"
   handle "/telugu/sw.js", using: "WorldServiceTeluguAssets"
   handle "/telugu/rss.xml", using: "WorldServiceTeluguHomePageRss"
-
-  handle "/telugu/tipohome.amp", using: "WorldServiceTeluguTipoHomePage", only_on: "test"
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2474,7 +2468,7 @@ defroutefile "Main" do
   end
 
   handle "/telugu/send/:id", using: "UploaderWorldService"
-  handle "/telugu", using: "WorldServiceTeluguTipoHomePage", only_on: "test"
+  handle "/telugu", using: "WorldServiceTeluguTipoHomePage"
   handle "/telugu/*any", using: "WorldServiceTelugu"
 
   handle "/thai.amp", using: "WorldServiceThai"
@@ -2687,13 +2681,10 @@ defroutefile "Main" do
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302
   redirect "/urdu/mobile/*any", to: "/urdu", status: 301
 
-  handle "/urdu.amp", using: "WorldServiceUrdu"
-  handle "/urdu.json", using: "WorldServiceUrdu"
+  handle "/urdu.amp", using: "WorldServiceUrduTipoHomePage"
   handle "/urdu/manifest.json", using: "WorldServiceUrduAssets"
   handle "/urdu/sw.js", using: "WorldServiceUrduAssets"
   handle "/urdu/rss.xml", using: "WorldServiceUrduHomePageRss"
-
-  handle "/urdu/tipohome.amp", using: "WorldServiceUrduTipoHomePage", only_on: "test"
 
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2734,7 +2725,7 @@ defroutefile "Main" do
   end
 
   handle "/urdu/send/:id", using: "UploaderWorldService"
-  handle "/urdu", using: "WorldServiceUrduTipoHomePage", only_on: "test"
+  handle "/urdu", using: "WorldServiceUrduTipoHomePage"
   handle "/urdu/*any", using: "WorldServiceUrdu"
 
   redirect "/uzbek/mobile/*any", to: "/uzbek", status: 301

@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceSomaliTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/somali", "/somali.amp"]
       }
     }
   end

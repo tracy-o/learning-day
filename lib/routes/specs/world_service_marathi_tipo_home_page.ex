@@ -3,7 +3,9 @@ defmodule Routes.Specs.WorldServiceMarathiTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/marathi", "/marathi.amp"]
+
       }
     }
   end

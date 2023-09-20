@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceUrdu do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/urdu/popular/read", "/urdu.json", "/urdu.amp"]
+        examples: ["/urdu/popular/read"]
       }
     }
   end

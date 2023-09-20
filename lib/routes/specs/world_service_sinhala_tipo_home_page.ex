@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceSinhalaTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/sinhala", "/sinhala.amp"]
       }
     }
   end

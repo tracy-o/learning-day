@@ -3,7 +3,9 @@ defmodule Routes.Specs.WorldServiceBengaliTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/bengali", "/bengali.amp"]
+
       }
     }
   end

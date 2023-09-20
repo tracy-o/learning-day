@@ -3,7 +3,9 @@ defmodule Routes.Specs.WorldServiceTamilTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/tamil", "/tamil.amp"]
+
       }
     }
   end

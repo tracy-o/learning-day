@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceSinhala do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/sinhala/popular/read", "/sinhala.json", "/sinhala.amp"]
+        examples: ["/sinhala/popular/read"]
       }
     }
   end
