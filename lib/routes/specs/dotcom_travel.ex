@@ -16,12 +16,17 @@ defmodule Routes.Specs.DotComTravel do
         },
         %{
           platform: "BBCX",
+          request_pipeline: ["DomesticToBBCXRedirect"],
           examples: [
             "/travel",
             "/travel/destinations",
             "/travel/destinations/asia",
             "/travel/tags/covid-19",
-            "/travel/worlds-table"
+            "/travel/worlds-table",
+            %{expected_status: 302, path: "/travel/tags/history"},
+            %{expected_status: 302, path: "/travel/columns/culture-identity"},
+            %{expected_status: 302, path: "/travel/columns/adventure-experience"},
+            %{expected_status: 302, path: "/travel/columns/the-specialist"},
           ]
         }
       ]
