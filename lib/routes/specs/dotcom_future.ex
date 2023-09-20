@@ -8,7 +8,8 @@ defmodule Routes.Specs.DotComFuture do
           examples: [
             "/future",
             "/future/article/20230630-will-texas-become-too-hot-for-humans",
-            "/future/tags/oceans"
+            "/future/tags/oceans",
+            "/future/future-planet"
           ]
         },
         %{

@@ -11,7 +11,11 @@ defmodule Routes.Specs.DotComTravel do
             "/travel/destinations/asia",
             "/travel/destinations/japan",
             "/travel/tags/covid-19",
-            "/travel/worlds-table"
+            "/travel/worlds-table",
+            "/travel/tags/history",
+            "/travel/columns/culture-identity",
+            "/travel/columns/adventure-experience",
+            "/travel/columns/the-specialist"
           ]
         },
         %{
