@@ -206,4 +206,95 @@ defmodule BelfrageWeb.Validators do
   def is_zid?(param) do
     String.match?(param, ~r/^z[bcdfghjkmnpqrstvwxy2346789]{6,10}$/)
   end
+
+  @doc """
+  Validate ISO 8601 dates in the format 'yyyy-MM-dd'
+  ## Examples
+    iex> is_iso_date?("2023-09-18")
+    true
+
+    iex> is_iso_date?("2023-02-31")
+    false
+
+    iex> is_iso_date?("2023-09")
+    false
+
+    iex> is_iso_date?("not-a-date")
+    false
+  """
+  def is_iso_date?(date) do
+    case Date.from_iso8601(date) do
+      {:ok, _date} -> true
+      _ -> false
+    end
+  end
+
+  @doc """
+  Validate ISO 8601 months in the format 'yyyy-MM'
+  ## Examples
+    iex> is_iso_month?("2023-09")
+    true
+
+    iex> is_iso_month?("2023-13")
+    false
+
+    iex> is_iso_month?("2023-09-18")
+    false
+
+    iex> is_iso_month?("not-a-date")
+    false
+  """
+  def is_iso_month?(month) do
+    String.match?(month, ~r/^\d{4}-(0[1-9]|1[0-2])$/)
+  end
+
+  @doc """
+  Validate ISO 8601 dates in the format '202y-MM-dd' (i.e. from the year 2020-2029)
+  ## Examples
+    iex> is_2020s_iso_date?("2020-09-18")
+    true
+
+    iex> is_2020s_iso_date?("2029-09-18")
+    true
+
+    iex> is_2020s_iso_date?("2019-09-18")
+    false
+
+    iex> is_2020s_iso_date?("2030-09-18")
+    false
+
+    iex> is_2020s_iso_date?("3020-09-18")
+    false
+
+    iex> is_2020s_iso_date?("2120-09-18")
+    false
+  """
+  def is_2020s_iso_date?(date) do
+    String.match?(date, ~r/^202[0-9]/) and is_iso_date?(date)
+  end
+
+  @doc """
+  Validate ISO 8601 months in the format '202y-MM' (i.e. from the year 2020-2029)
+  ## Examples
+    iex> is_2020s_iso_month?("2020-09")
+    true
+
+    iex> is_2020s_iso_month?("2029-09")
+    true
+
+    iex> is_2020s_iso_month?("2019-09")
+    false
+
+    iex> is_2020s_iso_month?("2030-09")
+    false
+
+    iex> is_2020s_iso_month?("3020-09")
+    false
+
+    iex> is_2020s_iso_month?("2120-09")
+    false
+  """
+  def is_2020s_iso_month?(date) do
+    String.match?(date, ~r/^202[0-9]/) and is_iso_month?(date)
+  end
 end

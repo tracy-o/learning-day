@@ -1043,32 +1043,62 @@ defroutefile "Sport" do
   handle "/sport/internal/player-rater/:event_id", using: "Sport"
   handle "/sport/internal/ranked-list/:slug", using: "Sport"
 
-  ## Sport Top 4
+  ## Sport Alpha Trials
   handle "/sport/alpha/top-4.app", using: "Sport"
   handle "/sport/alpha/top-4", using: "Sport"
+
+  handle "/sport/alpha/basketball/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/alpha/basketball/scores-fixtures/:date", using: "SportDataWebcore" do
+    return_404 if: !is_2020s_iso_date?(date)
+  end
+  handle "/sport/alpha/basketball/:tournament/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/alpha/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
+    return_404 if: !is_2020s_iso_date?(date)
+  end
+
+  handle "/sport/alpha/netball/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/alpha/netball/scores-fixtures/:date", using: "SportDataWebcore" do
+    return_404 if: !is_2020s_iso_date?(date)
+  end
+  handle "/sport/alpha/netball/:tournament/scores-fixtures", using: "SportDataWebcore"
+  handle "/sport/alpha/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
+    return_404 if: !is_2020s_iso_date?(date)
+  end
+
+  handle "/sport/alpha/:sport/scores-fixtures", using: "SportDataScoresFixturesWebcore"
+  handle "/sport/alpha/:sport/scores-fixtures.app", using: "SportDataScoresFixturesWebcore"
+  handle "/sport/alpha/:sport/scores-fixtures/:date", using: "SportDataScoresFixturesWebcore" do
+    return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
+  end
+  handle "/sport/alpha/:sport/scores-fixtures/:date.app", using: "SportDataScoresFixturesWebcore" do
+    return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
+  end
+  handle "/sport/alpha/:sport/:tournament/scores-fixtures", using: "SportDataScoresFixturesWebcore"
+  handle "/sport/alpha/:sport/:tournament/scores-fixtures.app", using: "SportDataScoresFixturesWebcore"
+  handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date", using: "SportDataScoresFixturesWebcore" do
+    return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
+  end
+  handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date.app", using: "SportDataScoresFixturesWebcore" do
+    return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
+  end
+  handle "/sport/alpha/:sport/teams/:team/scores-fixtures", using: "SportDataScoresFixturesWebcore"
+  handle "/sport/alpha/:sport/teams/:team/scores-fixtures.app", using: "SportDataScoresFixturesWebcore"
+  handle "/sport/alpha/:sport/teams/:team/scores-fixtures/:date", using: "SportDataScoresFixturesWebcore" do
+    return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
+  end
+  handle "/sport/alpha/:sport/teams/:team/scores-fixtures/:date.app", using: "SportDataScoresFixturesWebcore" do
+    return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
+  end
+
+  ## Sport Embeds Alpha Trials
+  handle "/sport/alpha/:sport/sport-embeds-previews/team-selector/:id", using: "SportEmbedsTeamSelector"
+
+  ## Sport Alpha Trials Default
+  handle "/sport/alpha/*any", using: "SportAlpha"
+
+  ## Sport Top 4
   handle "/sport/top-4.app", using: "Sport"
   handle "/sport/top-4", using: "Sport"
-
-  ## Sport Alpha Trials
-  handle "/sport/alpha/:sport/scores-fixtures", using: "SportDataWebcore"
-  handle "/sport/alpha/:sport/scores-fixtures.app", using: "SportDataWebcore"
-  handle "/sport/alpha/:sport/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
-  end
-  handle "/sport/alpha/:sport/scores-fixtures/:date.app", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
-  end
-  handle "/sport/alpha/:sport/:tournament/scores-fixtures", using: "SportDataWebcore"
-  handle "/sport/alpha/:sport/:tournament/scores-fixtures.app", using: "SportDataWebcore"
-  handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
-  end
-  handle "/sport/alpha/:sport/:tournament/scores-fixtures/:date.app", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9](-[0123][0-9])?$/)
-  end
-
-  ## Sport Embeds
-  handle "/sport/alpha/:sport/sport-embeds-previews/team-selector/:id", using: "SportEmbedsTeamSelector"
 
   ## Sport BBC Live - use query string params in example URLs to use live data via Mozart where required
   ## Smoke test on this route are sometimes flakey
@@ -1147,7 +1177,6 @@ defroutefile "Sport" do
 
   ## Sport Misc
   handle "/sport/sitemap.xml", using: "Sport"
-  handle "/sport/alpha/*any", using: "SportAlpha"
 
   ## Sport Live Guide
   handle "/sport/live-guide.app", using: "SportLiveGuide"
@@ -1324,11 +1353,11 @@ defroutefile "Sport" do
   ## Sport Basketball Scores-Fixtures pages
   handle "/sport/basketball/scores-fixtures", using: "SportDataWebcore"
   handle "/sport/basketball/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !is_2020s_iso_date?(date)
   end
   handle "/sport/basketball/:tournament/scores-fixtures", using: "SportDataWebcore"
   handle "/sport/basketball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !is_2020s_iso_date?(date)
   end
 
   ## Sport Netball Scores-Fixtures pages
@@ -1337,10 +1366,10 @@ defroutefile "Sport" do
   redirect "/sport/netball/scores-fixtures.app", to: "/sport/app-webview/netball/scores-fixtures", status: 302
 
   handle "/sport/netball/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !is_2020s_iso_date?(date)
   end
   handle "/sport/app-webview/netball/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !is_2020s_iso_date?(date)
   end
   redirect "/sport/netball/scores-fixtures/:date.app", to: "/sport/app-webview/netball/scores-fixtures/:date", status: 302
 
@@ -1349,10 +1378,10 @@ defroutefile "Sport" do
   redirect "/sport/netball/:tournament/scores-fixtures.app", to: "/sport/app-webview/netball/:tournament/scores-fixtures", status: 302
 
   handle "/sport/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !is_2020s_iso_date?(date)
   end
   handle "/sport/app-webview/netball/:tournament/scores-fixtures/:date", using: "SportDataWebcore" do
-    return_404 if: !String.match?(date, ~r/^202[0-9]-[01][0-9]-[0123][0-9]$/)
+    return_404 if: !is_2020s_iso_date?(date)
   end
   redirect "/sport/netball/:tournament/scores-fixtures/:date.app", to: "/sport/app-webview/netball/:tournament/scores-fixtures/:date", status: 302
 
