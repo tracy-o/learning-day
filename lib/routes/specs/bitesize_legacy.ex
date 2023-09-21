@@ -12,7 +12,16 @@ defmodule Routes.Specs.BitesizeLegacy do
         owner: "bitesize-production@lists.forge.bbc.co.uk",
         platform: "MorphRouter",
         language_from_cookie: true,
-        examples: ["/bitesize/levels", "/bitesize/guides/zcvy6yc/test.hybrid"]
+        examples: [
+          %{
+            path: "/bitesize/levels",
+            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+          },
+          %{
+            path: "/bitesize/guides/zcvy6yc/test.hybrid",
+            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+          }
+        ]
       }
     }
   end
