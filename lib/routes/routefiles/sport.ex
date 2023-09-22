@@ -885,6 +885,8 @@ defroutefile "Sport" do
   handle "/sport/football/european-championship/rss.xml", using: "SportTopicRss"
   handle "/sport/football/fa-cup/rss.xml", using: "SportTopicRss"
   handle "/sport/football/premier-league/rss.xml", using: "SportTopicRss"
+  handle "/sport/olympics/rss.xml", using: "SportTopicRss"
+  handle "/sport/winter-olympics/rss.xml", using: "SportTopicRss"
   handle "/sport/:discipline/rss.xml", using: "SportRssGuid"
   handle "/sport/:discipline/:tournament/rss.xml", using: "SportRss"
   handle "/sport/:discipline/:tournament/:year/rss.xml", using: "SportRss"
@@ -1248,7 +1250,7 @@ defroutefile "Sport" do
   handle "/sport/northern-ireland", using: "SportWebcoreNationIndexPage"
   handle "/sport/northern-ireland/gaelic-games", using: "SportWebcoreIndexPage"
   handle "/sport/northern-ireland/motorbikes", using: "SportWebcoreIndexPage"
-  handle "/sport/olympics", using: "SportIndexPage"
+  handle "/sport/olympics", using: "SportWebcoreIndexPage"
   handle "/sport/rugby-league", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union/english", using: "SportWebcoreIndexPage"
@@ -1262,7 +1264,7 @@ defroutefile "Sport" do
   handle "/sport/swimming", using: "SportIndexPage"
   handle "/sport/tennis", using: "SportMajorIndexPage"
   handle "/sport/wales", using: "SportWebcoreNationIndexPage"
-  handle "/sport/winter-olympics", using: "SportIndexPage"
+  handle "/sport/winter-olympics", using: "SportWebcoreIndexPage"
   handle "/sport/winter-sports", using: "SportWebcoreIndexPage"
 
   ## Morph (.app) Sport Manual Indexes

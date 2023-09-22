@@ -38,7 +38,9 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
     "/sport/football/european/rss.xml" => "cdlxk1deej1t",
     "/sport/football/european-championship/rss.xml" => "clx6k2y2n26t",
     "/sport/football/fa-cup/rss.xml" => "cn35kp0pn90t",
-    "/sport/football/premier-league/rss.xml" => "clx6k2yqjm2t"
+    "/sport/football/premier-league/rss.xml" => "clx6k2yqjm2t",
+    "/sport/olympics/rss.xml" => "clx6k2yrzkjt",
+    "/sport/winter-olympics/rss.xml" => "cezyk0v3j11t"
   }
 
   @impl Transformer
