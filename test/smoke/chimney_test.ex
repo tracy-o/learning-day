@@ -16,17 +16,13 @@ defmodule BelfrageChimneySmokeTest do
   @bruce_header Application.compile_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]["bruce-belfrage"]
   @sally_header Application.compile_env(:belfrage, :smoke)[:endpoint_to_stack_id_mapping]["sally-belfrage"]
 
-  setup do
-    %{smoke_env: System.get_env("SMOKE_ENV") || "test"}
-  end
-
   describe "GTM tests" do
     @describetag stack: "gtm"
 
     @tag spec: "SportVideos"
     @tag platform: "Webcore"
-    test "GTM /sport/av/cricket/48521428", %{smoke_env: smoke_env} do
-      endpoint = Helper.gtm_host(smoke_env)
+    test "GTM /sport/av/cricket/48521428" do
+      endpoint = Helper.gtm_host()
 
       resp = Helper.get_route(endpoint, "/sport/av/cricket/48521428")
 
@@ -36,8 +32,8 @@ defmodule BelfrageChimneySmokeTest do
 
     @tag spec: "WorldServiceTajik"
     @tag platform: "MozartNews"
-    test "GTM .com /tajik", %{smoke_env: smoke_env} do
-      endpoint = Helper.gtm_host_com(smoke_env)
+    test "GTM .com /tajik" do
+      endpoint = Helper.gtm_host_com()
       resp = Helper.get_route(endpoint, "/tajik")
 
       assert resp.status_code == 200
@@ -50,8 +46,8 @@ defmodule BelfrageChimneySmokeTest do
     @describetag spec: "FablData"
     @describetag platform: "Fabl"
 
-    test "web", %{smoke_env: smoke_env} do
-      endpoint = Helper.cdn_web_host(smoke_env)
+    test "web" do
+      endpoint = Helper.cdn_web_host()
 
       resp =
         Helper.get_route(
@@ -64,8 +60,8 @@ defmodule BelfrageChimneySmokeTest do
       assert Helper.get_header(resp.headers, "content-type") == "application/json; charset=utf-8"
     end
 
-    test "sport", %{smoke_env: smoke_env} do
-      endpoint = Helper.cdn_sport_host(smoke_env)
+    test "sport" do
+      endpoint = Helper.cdn_sport_host()
 
       resp =
         Helper.get_route(
@@ -78,8 +74,8 @@ defmodule BelfrageChimneySmokeTest do
       assert Helper.get_header(resp.headers, "content-type") == "application/json; charset=utf-8"
     end
 
-    test "news", %{smoke_env: smoke_env} do
-      endpoint = Helper.cdn_news_host(smoke_env)
+    test "news" do
+      endpoint = Helper.cdn_news_host()
 
       resp =
         Helper.get_route(

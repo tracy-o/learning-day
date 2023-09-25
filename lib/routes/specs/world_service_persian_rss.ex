@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServicePersianRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/persian/tv-and-radio-37434376/rss.xml", "/persian/indepth/cluster_ptv_click/rss.xml"]
+        examples: [
+          %{
+            path: "/persian/tv-and-radio-37434376/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/persian/indepth/cluster_ptv_click/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

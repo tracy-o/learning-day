@@ -125,9 +125,15 @@ defmodule Routes.SpecExamplesTest do
 
   defp put_headers(conn, headers) do
     Enum.reduce(headers, conn, fn {header, value}, conn_acc ->
-      put_req_header(conn_acc, header, value)
+      case header do
+        "host" -> %Plug.Conn{conn_acc | host: value}
+        _ -> put_req_header(conn_acc, header, maybe_replace_header_placeholder(value))
+      end
     end)
   end
+
+  defp maybe_replace_header_placeholder(endpoint_placeholder) when is_atom(endpoint_placeholder), do: "www.bbc.co.uk"
+  defp maybe_replace_header_placeholder(header), do: header
 
   defp add_platform(envelope, platform) do
     Envelope.add(envelope, :private, %{platform: platform})

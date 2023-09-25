@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceKyrgyzHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "WorldServiceTopicRssFeedsMapper"],
-        examples: ["/kyrgyz/rss.xml"]
+        examples: [
+          %{
+            path: "/kyrgyz/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

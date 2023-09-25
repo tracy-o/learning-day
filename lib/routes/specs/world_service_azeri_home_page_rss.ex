@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceAzeriHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "WorldServiceTopicRssFeedsMapper"],
-        examples: ["/azeri/rss.xml"]
+        examples: [
+          %{
+            path: "/azeri/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

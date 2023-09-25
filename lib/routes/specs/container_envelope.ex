@@ -7,7 +7,12 @@ defmodule Routes.Specs.ContainerEnvelope do
         runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book#PresentationLayerRunBook-ContainerAPI",
         query_params_allowlist: ["static"],
         request_pipeline: ["UserAgentValidator"],
-        examples: ["/container/envelope/global-footer/hasFetcher/true"]
+        examples: [
+          %{
+            path: "/container/envelope/global-footer/hasFetcher/true",
+            headers: %{"user-agent" => "MozartFetcher"}
+          }
+        ]
       }
     } # TODO: Add something (query string requirement?) that indicates this catch-all shouldn't be used in production
   end

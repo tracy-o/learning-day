@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceNepaliTopicRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
-        examples: ["/nepali/topics/c340q4p5136t/rss.xml"]
+        examples: [
+          %{
+            path: "/nepali/topics/c340q4p5136t/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

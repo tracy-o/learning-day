@@ -6,7 +6,16 @@ defmodule Routes.Specs.WorldServiceGahuzaRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/gahuza/imikino-36980340/rss.xml", "/gahuza/video/umukinnyi/rss.xml"]
+        examples: [
+          %{
+            path: "/gahuza/imikino-36980340/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/gahuza/video/umukinnyi/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

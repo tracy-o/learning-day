@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceRussianTopicRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
-        examples: ["/russian/topics/c50nzm54vzmt/rss.xml"]
+        examples: [
+          %{
+            path: "/russian/topics/c50nzm54vzmt/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

@@ -8,7 +8,10 @@ defmodule Routes.Platforms.MozartSimorgh do
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200,
-      signature_keys: %{add: [:is_advertise], skip: [:country]}
+      signature_keys: %{add: [:is_advertise], skip: [:country]},
+      examples: %{
+        headers: %{"x-forwarded-host" => "www.bbc.com"}
+      }
     }
   end
 

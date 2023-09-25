@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceVietnameseHomePageRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedDomainValidator"],
-        examples: ["/vietnamese/rss.xml"]
+        examples: [
+          %{
+            path: "/vietnamese/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

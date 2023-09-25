@@ -6,7 +6,12 @@ defmodule Routes.Specs.SportRssGuid do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Karanga",
         request_pipeline: ["RssFeedRedirect", "SportGuidRssFeedsPlatformDiscriminator"],
-        examples: ["/sport/football/rss.xml"]
+        examples: [
+          %{
+            path: "/sport/football/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end

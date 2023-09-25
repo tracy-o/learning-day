@@ -6,7 +6,12 @@ defmodule Routes.Specs.WorldServiceYorubaTopicRss do
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/RSS+Feeds+-+WebCore+-+Runbook",
         platform: "Fabl",
         request_pipeline: ["RssFeedDomainValidator", "TopicRssFeeds"],
-        examples: ["/yoruba/topics/c12jqpnxn44t/rss.xml"]
+        examples: [
+          %{
+            path: "/yoruba/topics/c12jqpnxn44t/rss.xml",
+            headers: %{"host" => "feeds.bbci.co.uk"}
+          }
+        ]
       }
     }
   end
