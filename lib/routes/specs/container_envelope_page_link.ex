@@ -10,7 +10,7 @@ defmodule Routes.Specs.ContainerEnvelopePageLink do
         examples: [
           %{
             path: "/container/envelope/page-link/linkHref/%23belfrage/linkLabel/Belfrage%20Test",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           }
         ]
       }

@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceGahuzaRss do
         examples: [
           %{
             path: "/gahuza/imikino-36980340/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/gahuza/video/umukinnyi/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

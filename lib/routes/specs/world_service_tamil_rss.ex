@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceTamilRss do
         examples: [
           %{
             path: "/tamil/india-51798836/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/tamil/india/oldageseriescluster/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

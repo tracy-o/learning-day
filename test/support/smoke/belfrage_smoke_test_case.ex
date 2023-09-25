@@ -83,7 +83,7 @@ defmodule Belfrage.SmokeTestCase do
               Expectations.expect_response(resp, test_properties)
             end
 
-            case retry_route(@host, @matcher_spec.path, @matcher_spec.headers, retry_check) do
+            case retry_route(@host, @matcher_spec.path, @matcher_spec.request_headers, retry_check) do
               {:ok, resp} ->
                 case SmokeTestDiff.build(resp, @matcher_spec, @environment) do
                   :ok -> assert true

@@ -15,11 +15,11 @@ defmodule Routes.Specs.BitesizeLegacy do
         examples: [
           %{
             path: "/bitesize/levels",
-            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+            request_headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
           },
           %{
             path: "/bitesize/guides/zcvy6yc/test.hybrid",
-            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+            request_headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
           }
         ]
       }

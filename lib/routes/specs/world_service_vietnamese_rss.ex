@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceVietnameseRss do
         examples: [
           %{
             path: "/vietnamese/in-depth-43037169/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/vietnamese/indepth/euro_france_2016/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

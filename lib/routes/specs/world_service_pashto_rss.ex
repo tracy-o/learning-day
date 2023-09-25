@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServicePashtoRss do
         examples: [
           %{
             path: "/pashto/afghanistan/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/pashto/in_depth/migration_special_page_iy/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

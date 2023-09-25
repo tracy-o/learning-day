@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServicePidginTopicRss do
         examples: [
           %{
             path: "/pidgin/topics/c95y35941vrt/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

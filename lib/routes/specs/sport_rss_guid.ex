@@ -9,7 +9,7 @@ defmodule Routes.Specs.SportRssGuid do
         examples: [
           %{
             path: "/sport/football/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

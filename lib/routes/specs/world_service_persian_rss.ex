@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServicePersianRss do
         examples: [
           %{
             path: "/persian/tv-and-radio-37434376/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/persian/indepth/cluster_ptv_click/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

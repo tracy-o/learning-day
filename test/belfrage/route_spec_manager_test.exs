@@ -45,7 +45,7 @@ defmodule Belfrage.RouteSpecManagerTest do
   describe "list_examples" do
     test "retrieves examples with expected values" do
       Enum.each(Belfrage.RouteSpecManager.list_examples(), fn example ->
-        assert match?(%{expected_status: _, headers: _, path: _, platform: _, spec: _}, example)
+        assert match?(%{expected_status: _, request_headers: _, path: _, platform: _, spec: _}, example)
       end)
     end
   end

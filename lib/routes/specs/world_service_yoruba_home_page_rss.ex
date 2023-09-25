@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceYorubaHomePageRss do
         examples: [
           %{
             path: "/yoruba/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

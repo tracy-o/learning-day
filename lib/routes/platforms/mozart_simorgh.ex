@@ -10,7 +10,7 @@ defmodule Routes.Platforms.MozartSimorgh do
       circuit_breaker_error_threshold: 200,
       signature_keys: %{add: [:is_advertise], skip: [:country]},
       examples: %{
-        headers: %{"x-forwarded-host" => "www.bbc.com"}
+        request_headers: %{"x-forwarded-host" => "www.bbc.com"}
       }
     }
   end

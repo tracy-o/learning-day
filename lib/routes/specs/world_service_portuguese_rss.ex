@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServicePortugueseRss do
         examples: [
           %{
             path: "/portuguese/internacional/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/portuguese/especiais/cluster_zika/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

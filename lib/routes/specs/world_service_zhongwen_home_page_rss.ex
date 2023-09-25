@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceZhongwenHomePageRss do
         examples: [
           %{
             path: "/zhongwen/trad/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/zhongwen/simp/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

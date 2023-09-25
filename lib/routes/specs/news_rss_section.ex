@@ -8,7 +8,7 @@ defmodule Routes.Specs.NewsRssSection do
         examples: [
           %{
             path: "/news/rss/newsonline_uk_edition/front_page/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

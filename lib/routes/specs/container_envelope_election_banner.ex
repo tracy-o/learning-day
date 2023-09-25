@@ -10,11 +10,11 @@ defmodule Routes.Specs.ContainerEnvelopeElectionBanner do
         examples: [
           %{
             path: "/container/envelope/election-banner/logoOnly/true",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           },
           %{
             path: "/container/envelope/election-banner/assetUri/%2Fnews/hasFetcher/true?static=true&mode=testData",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           }
         ]
       }

@@ -10,11 +10,11 @@ defmodule Routes.Specs.ContainerEnvelopeEditorialText do
         examples: [
           %{
             path: "/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           },
           %{
             path: "/container/envelope/editorial-text/heading/Belfrage%20Test/headingLevel/2?static=true&mode=testData",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           }
         ]
       }

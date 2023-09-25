@@ -10,11 +10,11 @@ defmodule Routes.Specs.ContainerEnvelopeTurnout do
         examples: [
           %{
             path: "/container/envelope/turnout/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           },
           %{
             path: "/container/envelope/turnout/assetUri/%2Fnews%2Felection%2F2021%2Fscotland%2Fconstituencies%2FS16000084/hasFetcher/true?static=true&mode=testData",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           }
         ]
       }

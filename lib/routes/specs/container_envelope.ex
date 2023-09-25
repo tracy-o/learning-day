@@ -10,7 +10,7 @@ defmodule Routes.Specs.ContainerEnvelope do
         examples: [
           %{
             path: "/container/envelope/global-footer/hasFetcher/true",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           }
         ]
       }

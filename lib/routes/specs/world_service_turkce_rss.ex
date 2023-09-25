@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceTurkceRss do
         examples: [
           %{
             path: "/turkce/haberler-dunya-51801130/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/turkce/konular/turkey/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

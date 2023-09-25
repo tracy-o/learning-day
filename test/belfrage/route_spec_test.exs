@@ -330,7 +330,7 @@ defmodule Belfrage.RouteSpecTest do
     test "merges tests and platform example attributes" do
       define_platform("ExampleAttrsPlatform1", %{
         examples: %{
-          headers: %{"header-1": "header-value-1"},
+          request_headers: %{"header-1": "header-value-1"},
           non_existing_attribute: "some_value"
         }
       })
@@ -348,7 +348,7 @@ defmodule Belfrage.RouteSpecTest do
                 "/path/1",
                 %{
                   path: "/path/2",
-                  headers: %{
+                  request_headers: %{
                     "header-1": "spec-header-value-1",
                     "spec-header-2": "spec-header-value-2"
                   }
@@ -371,12 +371,12 @@ defmodule Belfrage.RouteSpecTest do
       spec_1_examples_result = [
         %{
           path: "/path/1",
-          headers: %{"header-1": "header-value-1"},
+          request_headers: %{"header-1": "header-value-1"},
           expected_status: 200
         },
         %{
           path: "/path/2",
-          headers: %{
+          request_headers: %{
             "header-1": "spec-header-value-1",
             "spec-header-2": "spec-header-value-2"
           },
@@ -387,7 +387,7 @@ defmodule Belfrage.RouteSpecTest do
       spec_2_examples_result = [
         %{
           path: "/path/3",
-          headers: %{},
+          request_headers: %{},
           expected_status: 301
         }
       ]
@@ -411,7 +411,7 @@ defmodule Belfrage.RouteSpecTest do
 
       assert example1 == %{
                expected_status: 200,
-               headers: %{},
+               request_headers: %{},
                path: "/path/1",
                platform: "GetExamplePlatform",
                spec: "GetExampleRoute"
@@ -419,7 +419,7 @@ defmodule Belfrage.RouteSpecTest do
 
       assert example2 == %{
                expected_status: 200,
-               headers: %{},
+               request_headers: %{},
                path: "/path/2",
                platform: "GetExamplePlatform",
                spec: "GetExampleRoute"
