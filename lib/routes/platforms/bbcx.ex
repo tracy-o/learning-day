@@ -9,7 +9,7 @@ defmodule Routes.Platforms.BBCX do
       headers_allowlist: ["cookie-ckns_bbccom_beta"],
       circuit_breaker_error_threshold: 200,
       examples: %{
-        headers: %{
+        request_headers: %{
           "x-country" => "us",
           "x-bbc-edge-host" => "www.bbc.com",
           "cookie-ckns_bbccom_beta" => "1"

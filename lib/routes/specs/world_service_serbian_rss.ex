@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceSerbianRss do
         examples: [
           %{
             path: "/serbian/lat/front_page/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/serbian/cyr/front_page/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

@@ -15,7 +15,7 @@ defmodule Routes.Platforms.MorphRouter do
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],
       circuit_breaker_error_threshold: 200,
       examples: %{
-        headers: %{"x-forwarded-host" => "www.bbc.com"}
+        request_headers: %{"x-forwarded-host" => "www.bbc.com"}
       }
     }
   end

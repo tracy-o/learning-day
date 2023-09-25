@@ -9,11 +9,11 @@ defmodule Routes.Specs.NewsRss do
         examples: [
           %{
             path: "/news/uk/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/news/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

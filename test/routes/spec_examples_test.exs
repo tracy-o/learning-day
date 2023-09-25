@@ -44,7 +44,7 @@ defmodule Routes.SpecExamplesTest do
       [spec] = RouteSpecManager.get_spec("ProxyPass").specs
 
       validate(spec.examples, fn example ->
-        conn = make_call(:get, example.path, example.headers)
+        conn = make_call(:get, example.path, example.request_headers)
 
         if conn.status == 404 && conn.resp_body =~ "404" do
           :ok
@@ -110,10 +110,10 @@ defmodule Routes.SpecExamplesTest do
         {PreflightTransformers.AssetTypePlatformSelector, [],
          [call: fn envelope -> {:ok, add_platform(envelope, example.platform)} end]}
       ]) do
-        make_call(:get, example.path, example.headers)
+        make_call(:get, example.path, example.request_headers)
       end
     else
-      make_call(:get, example.path, example.headers)
+      make_call(:get, example.path, example.request_headers)
     end
   end
 

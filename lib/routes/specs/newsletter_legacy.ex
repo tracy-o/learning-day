@@ -9,7 +9,7 @@ defmodule Routes.Specs.NewsletterLegacy do
         examples: [
           %{
             path: "/newsletters/daily_news/zbdmwty",
-            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+            request_headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
           }
         ]
       }

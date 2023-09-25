@@ -9,11 +9,11 @@ defmodule Routes.Specs.BitesizeLevels do
         examples: [
           %{
             path: "/bitesize/levels/z3g4d2p/year/zjpqqp3",
-            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+            request_headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
           },
           %{
             path: "/bitesize/levels/zr48q6f",
-            headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
+            request_headers: %{"x-forwarded-host" => "www.bbc.co.uk"}
           }
         ]
       }

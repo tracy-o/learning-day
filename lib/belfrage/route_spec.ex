@@ -128,7 +128,11 @@ defmodule Belfrage.RouteSpec do
     %{
       path: path,
       expected_status: Map.get(example, :expected_status, 200),
-      headers: Map.merge(Map.get(platform_example, :headers, %{}), Map.get(example, :headers, %{}))
+      request_headers:
+        Map.merge(
+          Map.get(platform_example, :request_headers, %{}),
+          Map.get(example, :request_headers, %{})
+        )
     }
   end
 

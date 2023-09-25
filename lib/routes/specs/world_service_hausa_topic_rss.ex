@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceHausaTopicRss do
         examples: [
           %{
             path: "/hausa/topics/c5qvpxkx1j7t/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

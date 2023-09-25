@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceSwahiliRss do
         examples: [
           %{
             path: "/swahili/habari-53516858/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/swahili/michezo/caf_2013/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

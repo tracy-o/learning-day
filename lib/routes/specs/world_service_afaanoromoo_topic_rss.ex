@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceAfaanoromooTopicRss do
         examples: [
           %{
             path: "/afaanoromoo/topics/c7zp5z9n3x5t/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

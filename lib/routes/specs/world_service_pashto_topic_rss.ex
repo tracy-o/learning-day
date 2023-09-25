@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServicePashtoTopicRss do
         examples: [
           %{
             path: "/pashto/topics/c8y94yr7y9rt/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

@@ -10,7 +10,7 @@ defmodule Routes.Specs.ContainerEnvelopeNavigationLinks do
         examples: [
           %{
             path: "/container/envelope/navigation-links/brandPalette/weatherLight/corePalette/light/country/gb/fontPalette/sansSimple/hasFetcher/true/language/en/service/weather?static=true",
-            headers: %{"user-agent" => "MozartFetcher"}
+            request_headers: %{"user-agent" => "MozartFetcher"}
           }
         ]
       }

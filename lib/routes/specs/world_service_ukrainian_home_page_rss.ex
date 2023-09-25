@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceUkrainianHomePageRss do
         examples: [
           %{
             path: "/ukrainian/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

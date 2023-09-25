@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceIgboTopicRss do
         examples: [
           %{
             path: "/igbo/topics/c340qr24xggt/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

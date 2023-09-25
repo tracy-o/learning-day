@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceTigrinyaHomePageRss do
         examples: [
           %{
             path: "/tigrinya/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

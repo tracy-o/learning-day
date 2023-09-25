@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceSinhalaTopicRss do
         examples: [
           %{
             path: "/sinhala/topics/c2dwqd311xyt/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

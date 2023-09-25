@@ -9,11 +9,11 @@ defmodule Routes.Specs.WorldServiceSinhalaRss do
         examples: [
           %{
             path: "/sinhala/world-37926046/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           },
           %{
             path: "/sinhala/sport/kumar_sangakkara_cricket/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

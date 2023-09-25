@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServicePunjabiRss do
         examples: [
           %{
             path: "/punjabi/india-49321130/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

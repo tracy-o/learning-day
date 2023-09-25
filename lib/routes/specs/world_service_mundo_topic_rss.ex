@@ -9,7 +9,7 @@ defmodule Routes.Specs.WorldServiceMundoTopicRss do
         examples: [
           %{
             path: "/mundo/topics/cdr5613yzwqt/rss.xml",
-            headers: %{"host" => "feeds.bbci.co.uk"}
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
           }
         ]
       }

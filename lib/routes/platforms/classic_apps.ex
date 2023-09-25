@@ -16,7 +16,7 @@ defmodule Routes.Platforms.ClassicApps do
       circuit_breaker_error_threshold: 1000,
       fallback_write_sample: 0.0,
       examples: %{
-        headers: %{"host" => "news-app-classic.api.bbci.co.uk"}
+        request_headers: %{"host" => "news-app-classic.api.bbci.co.uk"}
       }
     }
   end
