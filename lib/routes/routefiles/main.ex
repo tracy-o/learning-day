@@ -403,6 +403,9 @@ defroutefile "Main" do
   redirect "/news/topics/c5m8rrkp46dt/*any", to: "/news/election/us2020", status: 302
   redirect "/news/topics/cxqvep8kqext/*any", to: "/news/the_reporters", status: 302
 
+  # News to Pan BBC
+  redirect "/news/topics/ce2gz9xykgkt", to: "/topics/ce2gz9xykgkt", status: 301
+
   # News Correspondents
   redirect "/news/correspondents/allegrastratton", to: "/news/topics/cl16knzkz9yt", status: 301, ttl: 3600
   redirect "/news/correspondents/amolrajan", to: "/news/topics/cl16knz07e2t", status: 301, ttl: 3600
