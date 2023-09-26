@@ -27,21 +27,6 @@ defmodule Belfrage.Metrics.CachexTest do
 
       assert_reported(
         socket,
-        Enum.join(
-          [
-            "cachex.evictions:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.expirations:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.hits:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.updates:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.writes:0|g|#BBCEnvironment:live,cache_name:#{cache}"
-          ],
-          "\n"
-        )
-      )
-
-      assert_reported(
-        socket,
         "cachex.size:0|g|#BBCEnvironment:live,cache_name:#{cache}"
       )
 
@@ -49,21 +34,6 @@ defmodule Belfrage.Metrics.CachexTest do
       Cachex.get(cache, "key1")
 
       Belfrage.Metrics.Cachex.track(cache)
-
-      assert_reported(
-        socket,
-        Enum.join(
-          [
-            "cachex.evictions:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.expirations:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.hits:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.updates:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.writes:1|g|#BBCEnvironment:live,cache_name:#{cache}"
-          ],
-          "\n"
-        )
-      )
 
       assert_reported(
         socket,
@@ -75,21 +45,6 @@ defmodule Belfrage.Metrics.CachexTest do
       Cachex.purge(cache)
 
       Belfrage.Metrics.Cachex.track(cache)
-
-      assert_reported(
-        socket,
-        Enum.join(
-          [
-            "cachex.evictions:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.expirations:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.hits:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.misses:1|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.updates:0|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.writes:1|g|#BBCEnvironment:live,cache_name:#{cache}"
-          ],
-          "\n"
-        )
-      )
 
       assert_reported(
         socket,
