@@ -11,6 +11,7 @@ defmodule Routes.Specs.NewsWorld do
         },
         %{
           platform: "BBCX",
+          request_pipeline: ["DomesticToBBCXRedirect"],
           examples: [
             "/news/world",
             "/news/world/africa",
@@ -20,7 +21,8 @@ defmodule Routes.Specs.NewsWorld do
             "/news/world/australia",
             "/news/world/europe",
             "/news/world/latin_america",
-            "/news/world/middle_east"
+            "/news/world/middle_east",
+            %{expected_status: 302, path: "/news/world/us_and_canada"}
           ]
         }
       ]

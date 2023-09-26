@@ -10,12 +10,21 @@ defmodule Routes.Specs.NewsTopics do
           query_params_allowlist: query_params_allowlist(production_env),
           request_pipeline: ["NewsTopicsPlatformDiscriminator"],
           personalisation: "test_only",
-          examples: ["/news/topics/cljev4jz3pjt", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9"}, "/news/topics/c207p54mljpt/aberdeenshire-council", %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9/aberdeenshire-council"}]
+          examples: [
+            "/news/topics/cljev4jz3pjt",
+            %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9"},
+            "/news/topics/c207p54mljpt/aberdeenshire-council",
+            %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9/aberdeenshire-council"}
+          ]
         },
         %{
           platform: "BBCX",
           request_pipeline: ["DomesticToBBCXRedirect"],
-          examples: ["/news/topics/cljev4jz3pjt", "/news/topics/cp7r8vglnnwt", %{expected_status: 302, path: "/news/topics/cw9l5jelpl1t"}]
+          examples: [
+            "/news/topics/cljev4jz3pjt",
+            "/news/topics/cp7r8vglnnwt",
+            %{expected_status: 302, path: "/news/topics/cw9l5jelpl1t"}
+          ]
         }
       ]
     }

@@ -7,7 +7,22 @@ defmodule Belfrage.RequestTransformers.DomesticToBBCXRedirect do
   alias Belfrage.Envelope
 
   @bbcx_redirect_mapping %{
-    "/news/topics/cw9l5jelpl1t" => "/business/technology-of-business"
+    "/news/world-60525350" => "/news/war-in-ukraine",
+    "/news/world/us_and_canada" => "/news/us-canada",
+    "/news/topics/cw9l5jelpl1t" => "/business/technology-of-business",
+    "/news/business" => "/business",
+    "/news/technology" => "/innovation",
+    "/news/entertainment_and_arts" => "/culture/entertainment-news",
+    "/culture/columns/film" => "/culture/film-tv",
+    "/culture/columns/art" => "/culture/art",
+    "/culture/tags/books" => "/culture/books",
+    "/travel/tags/history" => "/travel/history-heritage",
+    "/travel/columns/culture-identity" => "/travel/cultural-experiences",
+    "/travel/columns/adventure-experience" => "/travel/adventures",
+    "/travel/columns/the-specialist" => "/travel/specialist",
+    "/future" => "/future-planet",
+    "/future/future-planet" => "/future-planet",
+    "/reel" => "/video"
   }
 
   @impl Transformer
