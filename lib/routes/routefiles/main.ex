@@ -3630,6 +3630,82 @@ defroutefile "Main" do
 
   redirect "/bitesize/articles/zv6yhbk", to: "/usingthebbc/privacy/privacy-notice-for-bbc-quizzes-and-polls", status: 301      # privacy-notice-for-bbc-quizzes-and-polls
 
+  redirect "/bitesize/articles/z7j6jhv", to: "/bitesize/careers", status: 301                                                  # Careers homepage
+  redirect "/bitesize/articles/zhst2sg", to: "/bitesize/groups/cpw27rkvq6pt", status: 301                                      # Jobs that use...
+  redirect "/bitesize/articles/zmdc382", to: "/bitesize/groups/cpw27rkdkkyt", status: 301                                      # Careers in…
+  redirect "/bitesize/collections/job-profiles", to: "/bitesize/groups/cpw27rkdkkyt", status: 301                              # Careers in…
+  redirect "/bitesize/collections/job-profiles/*_any", to: "/bitesize/groups/cpw27rkdkkyt", status: 301                        # Careers in…
+  redirect "/bitesize/articles/zv6992p", to: "/bitesize/groups/cpw27rkdkkyt", status: 301                                      # Careers in…
+  redirect "/bitesize/articles/zn377nb", to: "/bitesize/groups/cpw27rkdkkyt", status: 301                                      # Careers in…
+  redirect "/bitesize/articles/znyyt39", to: "/bitesize/groups/cpw27rkdkkyt", status: 301                                      # Careers in…
+  redirect "/bitesize/tags/zbb692p/job-applications", to: "/bitesize/groups/ckqd82k4m03t", status: 301                         # Skills and qualities
+  redirect "/bitesize/tags/zbb692p/job-applications/*_any", to: "/bitesize/groups/ckqd82k4m03t", status: 301                   # Skills and qualities
+  redirect "/bitesize/tags/zrrh8xs/cvs", to: "/bitesize/groups/ckqd82k4m03t", status: 301                                      # Skills and qualities
+  redirect "/bitesize/tags/zrrh8xs/cvs/*_any", to: "/bitesize/groups/ckqd82k4m03t", status: 301                                # Skills and qualities
+  redirect "/bitesize/tags/znpwvk7/interviews", to: "/bitesize/groups/ckqd82k4m03t", status: 301                               # Skills and qualities
+  redirect "/bitesize/tags/znpwvk7/interviews/*_any", to: "/bitesize/groups/ckqd82k4m03t", status: 301                         # Skills and qualities
+  redirect "/bitesize/collections/tips-and-advice", to: "/bitesize/groups/ckqd82k4m03t", status: 301                           # Skills and qualities
+  redirect "/bitesize/collections/tips-and-advice/*_any", to: "/bitesize/groups/ckqd82k4m03t", status: 301                    # Skills and qualities
+  redirect "/bitesize/articles/zdyfhcw", to: "/bitesize/groups/ckqd82k4m03t", status: 301                                      # Skills and qualities
+  redirect "/bitesize/articles/zn9k92p", to: "/bitesize/groups/ckqd82k4m03t", status: 301                                      # Skills and qualities
+  redirect "/bitesize/articles/zmfstrd", to: "/bitesize/groups/ckqd82k4m03t", status: 301                                      # Skills and qualities
+  redirect "/bitesize/articles/zkgbhbk", to: "/bitesize/groups/ckqd82k4m03t", status: 301                                      # Skills and qualities
+  redirect "/bitesize/collections/college-and-apprenticeships", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301               # College, apprenticeships and uni
+  redirect "/bitesize/collections/college-and-apprenticeships/*_any", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301         # College, apprenticeships and uni
+  redirect "/bitesize/tags/z7vct39/apprenticeships", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                          # College, apprenticeships and uni
+  redirect "/bitesize/tags/z7vct39/apprenticeships/*_any", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                    # College, apprenticeships and uni
+  redirect "/bitesize/tags/zk9sjhv/college", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                                  # College, apprenticeships and uni
+  redirect "/bitesize/tags/zk9sjhv/college/*_any", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                            # College, apprenticeships and uni
+  redirect "/bitesize/tags/z6r8scw/university", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                               # College, apprenticeships and uni
+  redirect "/bitesize/tags/z6r8scw/university/*_any", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                         # College, apprenticeships and uni
+  redirect "/bitesize/tags/zjw3mfr/a-levels", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                                 # College, apprenticeships and uni
+  redirect "/bitesize/tags/zjw3mfr/a-levels/*_any", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                           # College, apprenticeships and uni
+  redirect "/bitesize/articles/zbwbnrd", to: "/bitesize/groups/cm5m6rkdwyvt", status: 301                                      # College, apprenticeships and uni
+  redirect "/bitesize/articles/z79h2sg", to: "/bitesize/groups/cj13rxxpq0vt", status: 301                                      # Tips and inspiration
+  redirect "/bitesize/articles/zvtrscw", to: "/bitesize/groups/cerwn4l35mrt", status: 301                                      # Careers in performing arts
+  redirect "/bitesize/articles/znwtjhv", to: "/bitesize/groups/cpevl4pq6z4t", status: 301                                      # Careers in healthcare and frontline services
+  redirect "/bitesize/articles/z7rd96f", to: "/bitesize/groups/cljdxvywe6rt", status: 301                                      # Careers in media and creative sector
+  redirect "/bitesize/articles/z7t27nb", to: "/bitesize/groups/cljdxvywe6rt", status: 301                                      # Careers in media and creative sector
+  redirect "/bitesize/articles/zdtgy9q", to: "/bitesize/groups/cxvx2n3zxkqt", status: 301                                      # Careers in education and childcare
+  redirect "/bitesize/articles/zhbjkmn", to: "/bitesize/groups/cw9ydv3l74qt", status: 301                                      # Careers in agriculture, environment, sustainability and animal care
+  redirect "/bitesize/articles/zr73pg8", to: "/bitesize/groups/c44dvle5jemt", status: 301                                      # Careers in business, marketing and finance
+  redirect "/bitesize/tags/zk39nrd/jobs-that-use-modern-foreign-languages", to: "/bitesize/groups/c44r0vv4498t", status: 301          # Jobs that use Modern Languages
+  redirect "/bitesize/tags/zk39nrd/jobs-that-use-modern-foreign-languages/*_any", to: "/bitesize/groups/c44r0vv4498t", status: 301    # Jobs that use Modern Languages
+  redirect "/bitesize/tags/zhj692p/jobs-that-use-computing-and-ict", to: "/bitesize/groups/cvpqdxx04v3t", status: 301                 # Jobs that use Computing and ICT
+  redirect "/bitesize/tags/zhj692p/jobs-that-use-computing-and-ict/*_any", to: "/bitesize/groups/cvpqdxx04v3t", status: 301           # Jobs that use Computing and ICT
+  redirect "/bitesize/tags/zrsg6v4/jobs-that-use-maths", to: "/bitesize/groups/c2e2vnne0nkt", status: 301                             # Jobs that use Maths
+  redirect "/bitesize/tags/zrsg6v4/jobs-that-use-maths/*_any", to: "/bitesize/groups/c2e2vnne0nkt", status: 301                       # Jobs that use Maths
+  redirect "/bitesize/tags/zfmnwty/jobs-that-use-english-and-drama", to: "/bitesize/groups/cr0r5883rj8t", status: 301                 # Jobs that use English and Drama
+  redirect "/bitesize/tags/zfmnwty/jobs-that-use-english-and-drama/*_any", to: "/bitesize/groups/cr0r5883rj8t", status: 301           # Jobs that use English and Drama
+  redirect "/bitesize/tags/zbp3mfr/jobs-that-use-geography", to: "/bitesize/groups/c0rx344r1g5t", status: 301                         # Jobs that use Geography, History and Religious Studies
+  redirect "/bitesize/tags/zbp3mfr/jobs-that-use-geography/*_any", to: "/bitesize/groups/c0rx344r1g5t", status: 301                   # Jobs that use Geography, History and Religious Studies
+  redirect "/bitesize/tags/z7p6d6f/jobs-that-use-history", to: "/bitesize/groups/c0rx344r1g5t", status: 301                           # Jobs that use Geography, History and Religious Studies
+  redirect "/bitesize/tags/z7p6d6f/jobs-that-use-history/*_any", to: "/bitesize/groups/c0rx344r1g5t", status: 301                     # Jobs that use Geography, History and Religious Studies
+  redirect "/bitesize/tags/z79qbdm/jobs-that-use-religious-studies", to: "/bitesize/groups/c0rx344r1g5t", status: 301                 # Jobs that use Geography, History and Religious Studies
+  redirect "/bitesize/tags/z79qbdm/jobs-that-use-religious-studies/*_any", to: "/bitesize/groups/c0rx344r1g5t", status: 301           # Jobs that use Geography, History and Religious Studies
+  redirect "/bitesize/tags/zkjnwty/jobs-that-use-art-and-design", to: "/bitesize/groups/c44r0vv1xe4t", status: 301                    # Jobs that use Art and Design
+  redirect "/bitesize/tags/zkjnwty/jobs-that-use-art-and-design/*_any", to: "/bitesize/groups/c44r0vv1xe4t", status: 301              # Jobs that use Art and Design
+  redirect "/bitesize/tags/z4x3y9q/jobs-that-use-biology", to: "/bitesize/groups/ce8q155gnd3t", status: 301                           # Jobs that use Science
+  redirect "/bitesize/tags/z4x3y9q/jobs-that-use-biology/*_any", to: "/bitesize/groups/ce8q155gnd3t", status: 301                     # Jobs that use Science
+  redirect "/bitesize/tags/zdpcgwx/jobs-that-use-physics", to: "/bitesize/groups/ce8q155gnd3t", status: 301                           # Jobs that use Science
+  redirect "/bitesize/tags/zdpcgwx/jobs-that-use-physics/*_any", to: "/bitesize/groups/ce8q155gnd3t", status: 301                     # Jobs that use Science
+  redirect "/bitesize/tags/zktg382/jobs-that-use-chemistry", to: "/bitesize/groups/ce8q155gnd3t", status: 301                         # Jobs that use Science
+  redirect "/bitesize/tags/zktg382/jobs-that-use-chemistry/*_any", to: "/bitesize/groups/ce8q155gnd3t", status: 301                   # Jobs that use Science
+  redirect "/bitesize/tags/zjb8f4j/jobs-that-use-science", to: "/bitesize/groups/ce8q155gnd3t", status: 301                           # Jobs that use Science
+  redirect "/bitesize/tags/zjb8f4j/jobs-that-use-science/*_any", to: "/bitesize/groups/ce8q155gnd3t", status: 301                     # Jobs that use Science
+  redirect "/bitesize/tags/zjcwvk7/jobs-that-use-pe", to: "/bitesize/groups/c44r0vvjp5vt", status: 301                                # Jobs that use PE
+  redirect "/bitesize/tags/zjcwvk7/jobs-that-use-pe/*_any", to: "/bitesize/groups/c44r0vvjp5vt", status: 301                          # Jobs that use PE
+  redirect "/bitesize/tags/zn7h8xs/jobs-that-use-design-and-technology", to: "/bitesize/groups/cvpqdxxd824t", status: 301             # Jobs that use Design and Technology
+  redirect "/bitesize/tags/zn7h8xs/jobs-that-use-design-and-technology/*_any", to: "/bitesize/groups/cvpqdxxd824t", status: 301       # Jobs that use Design and Technology
+  redirect "/bitesize/tags/zd7fqp3/jobs-that-use-business", to: "/bitesize/groups/cynj6r3jy5yt", status: 301                          # Jobs that use Business Studies
+  redirect "/bitesize/tags/zd7fqp3/jobs-that-use-business/*_any", to: "/bitesize/groups/cynj6r3jy5yt", status: 301                    # Jobs that use Business Studies
+  redirect "/bitesize/tags/zdg8f4j/jobs-that-use-music", to: "/bitesize/groups/cn3zjnnjk8gt", status: 301                             # Jobs that use Music
+  redirect "/bitesize/tags/zdg8f4j/jobs-that-use-music/*_any", to: "/bitesize/groups/cn3zjnnjk8gt", status: 301                       # Jobs that use Music
+  redirect "/bitesize/tags/zvty7nb/jobs-that-use-food-and-nutrition", to: "/bitesize/groups/c5qrjvvnmqet", status: 301                # Jobs that use Food and Nutrition
+  redirect "/bitesize/tags/zvty7nb/jobs-that-use-food-and-nutrition/*_any", to: "/bitesize/groups/c5qrjvvnmqet", status: 301          # Jobs that use Food and Nutrition
+  redirect "/bitesize/tags/z4ychbk/jobs-that-use-media-studies", to: "/bitesize/groups/cjyxej576d4t", status: 301                     # Jobs that use Media Studies
+  redirect "/bitesize/tags/z4ychbk/jobs-that-use-media-studies/*_any", to: "/bitesize/groups/cjyxej576d4t", status: 301               # Jobs that use Media Studies
+
   handle "/bitesize", using: "BitesizeHomePage"
 
   handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
@@ -3689,7 +3765,7 @@ defroutefile "Main" do
   handle "/bitesize/parents", using: "BitesizeTipoTopic"
   handle "/bitesize/study-support", using: "BitesizeTipoTopic"
   handle "/bitesize/learn", using: "BitesizeTipoTopic"
-  handle "/bitesize/careers", using: "BitesizeTipoTopic", only_on: "test"
+  handle "/bitesize/careers", using: "BitesizeTipoTopic"
 
   handle "/bitesize/*any", using: "BitesizeLegacy"
 
