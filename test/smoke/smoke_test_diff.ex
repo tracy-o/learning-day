@@ -5,7 +5,7 @@ defmodule Belfrage.SmokeTestDiff do
 
   def build(_resp = %Finch.Response{headers: resp_headers}, matcher_spec, "live") do
     if "www" == Map.new(resp_headers)["bid"] and @comparison_bid do
-      now_compare_with_stack(resp_headers, matcher_spec.path, matcher_spec.headers, matcher_spec.spec)
+      now_compare_with_stack(resp_headers, matcher_spec.path, matcher_spec.request_headers, matcher_spec.spec)
     else
       :ok
     end
