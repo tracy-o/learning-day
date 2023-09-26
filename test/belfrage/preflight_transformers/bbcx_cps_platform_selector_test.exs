@@ -10,14 +10,14 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
     stub_dials(bbcx_enabled: "true")
   end
 
-  test "when the request can be BBCX and the last part of the id is over 62729301" do
+  test "when the request can be BBCX and the last part of the id is over 40091649" do
     {:ok, response} =
       BBCXCPSPlatformSelector.call(%Envelope{
         request: %Request{
           raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
           country: "ca",
-          path_params: %{"id" => "uk-foo-62729302"}
+          path_params: %{"id" => "uk-foo-40091650"}
         },
         private: %Envelope.Private{
           production_environment: "test",
@@ -29,7 +29,7 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
     assert response.private.bbcx_enabled == true
   end
 
-  test "when the request can be BBCX and the last part of the id is below 62729302" do
+  test "when the request can be BBCX and the last part of the id is below 40091650" do
     {:ok, response} =
       BBCXCPSPlatformSelector.call(%Envelope{
         request: %Request{
@@ -74,7 +74,7 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           raw_headers: %{"cookie-ckns_bbccom_beta" => "1"},
           host: "www.bbc.com",
           country: "ca",
-          path_params: %{"id" => "62729302"}
+          path_params: %{"id" => "40091650"}
         },
         private: %Envelope.Private{
           production_environment: "test",
@@ -112,7 +112,7 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelectorTest do
           raw_headers: %{"cookie-ckns_bbccom_beta" => "0"},
           host: "www.bbc.com",
           country: "ie",
-          path_params: %{"id" => "uk-foo-6272930"}
+          path_params: %{"id" => "uk-foo-40091651"}
         },
         private: %Envelope.Private{
           production_environment: "test",

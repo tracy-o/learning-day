@@ -3,9 +3,9 @@ defmodule Belfrage.PreflightTransformers.BBCXCPSPlatformSelector do
   alias Belfrage.{Brands, Envelope}
   alias Belfrage.Envelope.Request
 
-  # CPS IDs generated after 1st of January 2021
+  # CPS IDs generated after 1st of June 2017.
   # have been ingested in the BBCX middlelayer.
-  @cps_id_min_value 55_491_197
+  @cps_id_min_value 40_091_650
 
   @impl Transformer
   def call(envelope) do
