@@ -954,12 +954,12 @@ defroutefile "Sport" do
   redirect "/sport/football/european-championship/euro-2016/video", to: "/sport/football/european-championship/video", status: 301
   redirect "/sport/football/european-championship/fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301
   redirect "/sport/football/european-championship/fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301
-  redirect "/sport/football/european-championship-qualifying/scores-fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301 
-  redirect "/sport/football/european-championship-qualifying/scores-fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301 
-  redirect "/sport/football/european-championship-qualifying/scores-fixtures/:date.app", to: "/sport/football/european-championship/scores-fixtures/:date.app", status: 301 
-  redirect "/sport/football/european-championship-qualifying/scores-fixtures/:date", to: "/sport/football/european-championship/scores-fixtures/:date", status: 301 
-  redirect "/sport/football/european-championship-qualifying/table.app", to: "/sport/football/european-championship/table.app", status: 301 
-  redirect "/sport/football/european-championship-qualifying/table", to: "/sport/football/european-championship/table", status: 301 
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures.app", to: "/sport/football/european-championship/scores-fixtures.app", status: 301
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures", to: "/sport/football/european-championship/scores-fixtures", status: 301
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures/:date.app", to: "/sport/football/european-championship/scores-fixtures/:date.app", status: 301
+  redirect "/sport/football/european-championship-qualifying/scores-fixtures/:date", to: "/sport/football/european-championship/scores-fixtures/:date", status: 301
+  redirect "/sport/football/european-championship-qualifying/table.app", to: "/sport/football/european-championship/table.app", status: 301
+  redirect "/sport/football/european-championship-qualifying/table", to: "/sport/football/european-championship/table", status: 301
   redirect "/sport/olympics/rio-2016/video.app", to: "/sport/olympics/video.app", status: 301
   redirect "/sport/olympics/rio-2016/video", to: "/sport/olympics/video", status: 301
 
@@ -1284,7 +1284,7 @@ defroutefile "Sport" do
   handle "/sport/formula1.app", using: "SportMajorIndexPage"
   handle "/sport/get-inspired.app", using: "SportIndexPage"
   handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage"
-  handle "/sport/horse-racing.app", using: "SportIndexPage" 
+  handle "/sport/horse-racing.app", using: "SportIndexPage"
   handle "/sport/olympics.app", using: "SportIndexPage"
   handle "/sport/rugby-league.app", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union.app", using: "SportRugbyIndexPage"
@@ -1841,6 +1841,38 @@ defroutefile "Sport" do
   end
 
   handle "/sport/tennis/:id", using: "SportMajorStoryPage" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/karate/:id.app", using: "SportArticleAppPage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/karate/:id", using: "SportArticlePage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/sport-climbing/:id.app", using: "SportArticleAppPage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/sport-climbing/:id", using: "SportArticlePage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/surfing/:id.app", using: "SportArticleAppPage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/surfing/:id", using: "SportArticlePage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/volleyball/:id.app", using: "SportArticleAppPage", only_on: "test" do
+    return_404 if: !is_numeric_cps_id?(id)
+  end
+
+  handle "/sport/volleyball/:id", using: "SportArticlePage", only_on: "test" do
     return_404 if: !is_numeric_cps_id?(id)
   end
 
