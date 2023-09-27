@@ -39,6 +39,11 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
     "/sport/football/european-championship/rss.xml" => "clx6k2y2n26t",
     "/sport/football/fa-cup/rss.xml" => "cn35kp0pn90t",
     "/sport/football/premier-league/rss.xml" => "clx6k2yqjm2t",
+    "/sport/cricket/rss.xml" => "czp1xkm2jyyt",
+    "/sport/cricket/video/rss.xml" => "cp0ezd3devwt",
+    "/sport/cricket/womens/rss.xml" => "cpv3k82951pt",
+    "/sport/cricket/counties/rss.xml" => "cpql9gyqj56t",
+    "/sport/commonwealth-games/rss.xml" => "cpyd2m1m76dt",
     "/sport/olympics/rss.xml" => "clx6k2yrzkjt",
     "/sport/winter-olympics/rss.xml" => "cezyk0v3j11t"
   }

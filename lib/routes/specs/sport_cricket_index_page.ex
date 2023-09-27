@@ -5,7 +5,7 @@ defmodule Routes.Specs.SportCricketIndexPage do
         owner: "#help-sport",
         runbook: "https://confluence.dev.bbc.co.uk/display/ONEWEB/BBC+Sport+Mozart+Content+Pages+Run+Book",
         platform: "MozartSport",
-        examples: ["/sport/cricket/womens", "/sport/cricket/womens.app", "/sport/cricket/counties", "/sport/cricket/counties.app", "/sport/cricket", "/sport/cricket.app"]
+        examples: ["/sport/cricket/womens.app", "/sport/cricket/counties.app", "/sport/cricket.app"]
       }
     }
   end
