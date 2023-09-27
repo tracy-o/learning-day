@@ -208,7 +208,6 @@ defroutefile "Sport" do
   redirect "/sport/cricket/teams/mumbai-indians/rss.xml", to: "https://feeds.bbci.co.uk/sport/cc2373e0-829a-4263-b94c-06d92c34b101/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/namibia/rss.xml", to: "https://feeds.bbci.co.uk/sport/d847d0eb-8ef3-4621-bc99-1bcb48295d95/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/nepal/rss.xml", to: "https://feeds.bbci.co.uk/sport/12ad8c10-085a-46d3-99ba-40ed97f5c95e/rss.xml", status: 301, ttl: 3600
-  redirect "/sport/cricket/teams/netherlands/rss.xml", to: "https://feeds.bbci.co.uk/sport/1a741adc-d962-473a-b0aa-3548e4fed0b2/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/new-south-wales/rss.xml", to: "https://feeds.bbci.co.uk/sport/5678134f-7b08-4bb8-845b-0c7d03b91ebd/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/new-zealand-women/rss.xml", to: "https://feeds.bbci.co.uk/sport/cae8e6d6-18d2-49a1-9318-11ab76a96250/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/new-zealand/rss.xml", to: "https://feeds.bbci.co.uk/sport/24e14219-8ae2-4ee7-b180-cad9b0d5bfa2/rss.xml", status: 301, ttl: 3600
@@ -262,6 +261,9 @@ defroutefile "Sport" do
   redirect "/sport/cricket/teams/yorkshire-diamonds-women/rss.xml", to: "https://feeds.bbci.co.uk/sport/313ec4fc-9a31-4ba7-ac03-9120f3c936ff/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/yorkshire/rss.xml", to: "https://feeds.bbci.co.uk/sport/ae6a1e5a-1636-4e8d-8e0e-fac28430e53e/rss.xml", status: 301, ttl: 3600
   redirect "/sport/cricket/teams/zimbabwe/rss.xml", to: "https://feeds.bbci.co.uk/sport/c645646c-0ca5-46c6-96cd-9eb3d9f278d1/rss.xml", status: 301, ttl: 3600
+
+  ## Sport RSS feed redirects to nice url - cricket teams
+  redirect "/sport/1a741adc-d962-473a-b0aa-3548e4fed0b2/rss.xml", to: "https://feeds.bbci.co.uk/sport/cricket/teams/netherlands/rss.xml", status: 301, ttl: 3600
 
   ## Sport RSS feed redirects - football teams
   redirect "/sport/football/teams/aalborg-bk/rss.xml", to: "https://feeds.bbci.co.uk/sport/45338d77-b0de-44ae-9468-6e6f06c06f03/rss.xml", status: 301, ttl: 3600
