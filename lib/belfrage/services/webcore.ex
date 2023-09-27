@@ -17,7 +17,7 @@ defmodule Belfrage.Services.Webcore do
     response =
       with {:ok, response} <- call_lambda(envelope),
            {:ok, response} <- build_response(response) do
-        Metrics.multi_execute([[:belfage, :webcore, :response], [:belfrage, :platform, :response]], %{}, %{
+        :telemetry.execute([:belfrage, :platform, :response], %{}, %{
           platform: "Webcore",
           status_code: response.http_status,
           route_spec: route_spec

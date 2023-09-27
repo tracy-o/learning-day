@@ -140,11 +140,6 @@ defmodule Belfrage.MetricsMigration do
 
       def platform_metrics() do
         [
-          counter("platform.response",
-            event_name: "belfrage.platform.response",
-            measurement: :count,
-            tags: [:status_code, :platform]
-          ),
           counter(
             "platform.response",
             event_name: "belfrage.platform.response",
@@ -367,11 +362,6 @@ defmodule Belfrage.MetricsMigration do
             event_name: "belfrage.webcore.request.stop",
             unit: {:native, :millisecond},
             tags: [:route_spec]
-          ),
-          counter(
-            "webcore.response",
-            event_name: "belfrage.webcore.response",
-            tags: [:status_code, :route_spec]
           ),
           counter(
             "webcore.error",
