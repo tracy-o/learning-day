@@ -6,6 +6,8 @@ defmodule Routes.Specs.NewsWebcoreIndex do
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         platform: "Webcore",
         examples: [
+          "/news/education",
+          "/news/coronavirus",
           "/news/the_reporters",
           "/news/stories",
           "/news/have_your_say",
