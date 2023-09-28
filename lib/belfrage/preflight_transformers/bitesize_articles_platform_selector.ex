@@ -22,7 +22,7 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelector do
           {:ok, Envelope.add(envelope, :private, %{platform: get_platform_by_data(articles_data)})}
 
         {:error, envelope, :preflight_data_not_found} ->
-          {:error, envelope, 404}
+          {:ok, Envelope.add(envelope, :private, %{platform: "MorphRouter"})}
 
         {:error, envelope, :preflight_data_error} ->
           {:error, envelope, 500}

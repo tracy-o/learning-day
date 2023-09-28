@@ -28,15 +28,24 @@ defmodule Belfrage.PreflightTransformers.BitesizeArticlesPlatformSelectorTest do
     end
 
     test_with_mock(
-      "returns error tuple if env=test and preflight data service returns data not found error",
+      "selects Morph Router if env=test and preflight data service returns data not found error",
       PreflightService,
       call: fn %Envelope{}, @service -> {:error, @mocked_envelope, :preflight_data_not_found} end
     ) do
-      request = %Envelope.Request{path: @path}
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
       private = %Envelope.Private{production_environment: "test"}
       envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeArticlesPlatformSelector.call(envelope) == {:error, @mocked_envelope, 404}
+      assert BitesizeArticlesPlatformSelector.call(envelope) ==
+               {:ok,
+                %Envelope{
+                  request: request,
+                  private: %Private{
+                    platform: "MorphRouter",
+                    production_environment: "test",
+                    preflight_metadata: %{}
+                  }
+                }}
     end
 
     test "selects WebCore if env=test and article id is in webcore_ids" do

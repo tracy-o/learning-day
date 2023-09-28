@@ -85,15 +85,24 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelectorTest do
     end
 
     test_with_mock(
-      "returns 404 if preflight data service returns preflight_data_not_found",
+      "selects Morph Router if preflight data service returns preflight_data_not_found",
       PreflightService,
       call: fn %Envelope{}, @service -> {:error, @mocked_envelope, :preflight_data_not_found} end
     ) do
-      request = %Envelope.Request{path: @path}
+      request = %Envelope.Request{path: @path, path_params: %{"id" => "some_id"}}
       private = %Envelope.Private{production_environment: "test"}
       envelope = %Envelope{request: request, private: private}
 
-      assert BitesizeGuidesPlatformSelector.call(envelope) == {:error, @mocked_envelope, 404}
+      assert BitesizeGuidesPlatformSelector.call(envelope) ==
+               {:ok,
+                %Envelope{
+                  request: request,
+                  private: %Private{
+                    platform: "MorphRouter",
+                    production_environment: "test",
+                    preflight_metadata: %{}
+                  }
+                }}
     end
 
     test_with_mock(
