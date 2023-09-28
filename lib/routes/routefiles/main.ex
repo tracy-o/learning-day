@@ -3716,20 +3716,40 @@ defroutefile "Main" do
   handle "/bitesize/preview/secondary", using: "Bitesize", only_on: "test"
 
   handle "/bitesize/subjects", using: "Bitesize"
-  handle "/bitesize/subjects/:id", using: "BitesizeSubjects"
-  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjectsYear"
+  handle "/bitesize/subjects/:id", using: "BitesizeSubjects" do
+    return_404 if: !is_zid?(id)
+  end
 
-  handle "/bitesize/preview/subjects/:id", using: "Bitesize", only_on: "test"
-  handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/subjects/:id/year/:year_id", using: "BitesizeSubjectsYear" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/subjects/:id", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/subjects/:id/year/:year_id", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
 
   handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test"
 
-  handle "/bitesize/articles/:id", using: "BitesizeArticles"
-  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles"
+  handle "/bitesize/articles/:id", using: "BitesizeArticles" do
+    return_404 if: !is_zid?(id)
+  end
 
-  handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/topics/:topic_id/articles/:id", using: "BitesizeArticles" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/articles/:id", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
+
   handle "/bitesize/preview/articles/:id/:game_version", using: "Bitesize", only_on: "test"
-  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test"
+  handle "/bitesize/preview/topics/:topic_id/articles/:id", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
 
 
   handle "/bitesize/levels/:id", using: "BitesizeLevels"
@@ -3741,22 +3761,44 @@ defroutefile "Main" do
   end
 
   handle "/bitesize/preview/levels/:id", using: "Bitesize", only_on: "test"
-  handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", only_on: "test"  do
+  handle "/bitesize/preview/levels/:id/year/:year_id", using: "Bitesize", only_on: "test" do
     return_404 if: !(
       String.match?(id, ~r/^(z3g4d2p)$/) and String.match?(year_id, ~r/^(zjpqqp3|z7s22sg)$/)
       or String.match?(id, ~r/^(zbr9wmn)$/) and String.match?(year_id, ~r/^(zmyxxyc|z63tt39|zhgppg8|zncsscw)$/)
     )
   end
 
-  handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides"
-  handle "/bitesize/guides/:id/test", using: "BitesizeGuides"
-  handle "/bitesize/guides/:id/audio", using: "BitesizeGuides"
-  handle "/bitesize/guides/:id/video", using: "BitesizeGuides"
+  handle "/bitesize/guides/:id/revision/:page", using: "BitesizeGuides" do
+    return_404 if: !is_zid?(id)
+  end
 
-  handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test"
-  handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test"
-  handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test"
-  handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test"
+  handle "/bitesize/guides/:id/test", using: "BitesizeGuides" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/guides/:id/audio", using: "BitesizeGuides" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/guides/:id/video", using: "BitesizeGuides" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/guides/:id/revision/:page", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/guides/:id/test", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/guides/:id/audio", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
+
+  handle "/bitesize/preview/guides/:id/video", using: "Bitesize", only_on: "test" do
+    return_404 if: !is_zid?(id)
+  end
 
   handle "/bitesize/topics/:id", using: "BitesizeTopics"
   handle "/bitesize/topics/:id/year/:year_id", using: "BitesizeTopics"
