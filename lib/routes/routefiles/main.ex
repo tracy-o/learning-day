@@ -950,8 +950,11 @@ defroutefile "Main" do
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
   ## World Service - Article Redirects
+  redirect "/arabic/middleeast-65449088", to: "/arabic/articles/cv2310xx8n5o", status: 301
   redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
+  redirect "/mundo/noticias/2015/02/150210_salud_como_ganar_peso_si_estas_muy_delgado_bd", to: "/mundo/articles/c6p7ry76ryko", status: 301
   redirect "/mundo/noticias/2016/03/160317_semana_santa_causas_sangre_heces_cancer_ac", to: "/mundo/articles/c2qd71z6y3wo", status: 301
+  redirect "/mundo/noticias/2016/04/160429_salud_cancer_10_sintomas_generales_il", to: "/mundo/articles/cevzx098d1ko", status: 301
   redirect "/portuguese/articles/ckdzj02w2g1o", to: "/portuguese/articles/c4nqkqx7lgko", status: 301
   redirect "/portuguese/brasil-45229400", to: "/portuguese/articles/c3gjpmvkv5eo", status: 301
   redirect "/portuguese/brasil-45428722", to: "/portuguese/articles/cw56kkzgnq6o", status: 301
