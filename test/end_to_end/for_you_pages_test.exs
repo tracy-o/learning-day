@@ -43,6 +43,8 @@ defmodule EndToEnd.PersonalisedAccountTest do
   setup do
     stub_dial(:personalisation, "on")
     :ets.delete_all_objects(:cache)
+    old_state = Agent.get(BBCID, & &1)
+    on_exit(fn -> Agent.update(BBCID, fn _ -> old_state end) end)
     Agent.update(BBCID, fn _state -> @default_bbcid_state end)
     :ok
   end
