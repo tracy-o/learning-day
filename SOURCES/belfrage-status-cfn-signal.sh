@@ -1,18 +1,16 @@
 #!/bin/bash -x
 
-COMPONENT_NAME=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["name"]')
-ENVIRONMENT=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["environment"]')
-REGION=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["aws_region"]')
+COMPONENT_NAME=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["name"])')
+ENVIRONMENT=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["environment"])')
+REGION=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["configuration"]["aws_region"])')
 
 # STACKID should be changed to evaluate to the name of your Main stack
 STACKID=${ENVIRONMENT}-${COMPONENT_NAME}-main
 
-sudo easy_install-3.6 https://dev-mozart-rpms.s3.eu-west-1.amazonaws.com/aws-cfn-bootstrap-py3-2.0-19.tar.gz
-
 # beginning of app testing route_state
 # edit the contents of the next two lines to define a specific test for your application
 until [ "$status" == "pong" ]; do
-status=$(sudo su - component -c "/home/component/belfrage/bin/belfrage ping");
+status=$(sudo /home/component/belfrage/bin/belfrage ping);
 sleep 5;
 done
 # end of app testing route_state

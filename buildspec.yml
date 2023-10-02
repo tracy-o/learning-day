@@ -1,0 +1,53 @@
+version: 0.2
+env:
+  git-credential-helper: yes
+  variables:
+    CLIENT_CERT: "/etc/pki/tls/certs/client.crt"
+    CLIENT_CERT_KEY: "/etc/pki/tls/private/client.key"
+    CLIENT_CERT_CA: "/etc/pki/tls/certs/ca-bundle.crt"
+    COSMOS_CERT: "/etc/pki/tls/certs/client.crt"
+    COSMOS_CERT_KEY: "/etc/pki/tls/private/client.key"
+    SERVICE_CERT: "/etc/pki/tls/certs/service.crt"
+    SERVICE_CERT_KEY: "/etc/pki/tls/private/service.key"
+    SERVICE_CERT_CA: "/etc/pki/tls/certs/service_chain.crt"
+    ORIGIN_SIMULATOR: "http://test-Inter-14VE7PIGSER8P-a69beccda4c6c0fb.elb.eu-west-1.amazonaws.com"
+    LOG_PATH: "/var/log/component/app.log"
+    LOG_PATH_ACCESS: "/var/log/component/access.log"
+phases:
+  install:
+    on-failure: ABORT
+    commands:
+      - certee-fetch
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - export BRANCH_NAME=$(git branch --contains ${CODEBUILD_RESOLVED_SOURCE_VERSION} --remote | sed 's@origin/@@')
+      - export CLEANED_BRANCH_NAME=$(echo ${BRANCH_NAME} | tr -d ' -/' | cut -c 1-56)
+      - export RELEASABLE_BRANCH=$(git branch --contains ${CODEBUILD_RESOLVED_SOURCE_VERSION} --remote | grep -c -E '^\s*origin/(main|master)$' || true)
+      - export SHORT_COMMIT_ID=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}
+      - |
+        set -e
+        if [ "${RELEASABLE_BRANCH}" = "1" ]; then
+          export COSMOS_VERSION=${SHORT_COMMIT_ID}
+        else
+          export COSMOS_VERSION=${SHORT_COMMIT_ID}.${CLEANED_BRANCH_NAME}
+        fi
+  build:
+    on-failure: ABORT
+    commands:
+      - make lint
+      - make test
+      - make fetch_jwk
+      - make download_bbc_error_pages
+      - make build
+  post_build:
+    on-failure: ABORT
+    commands:
+      - |
+        set -e
+        if [ "${RELEASABLE_BRANCH}" = "1" ] || [ "${FORCE}" = "true" ]; then
+          make release;
+          make deploy;
+        else
+          echo "No release"
+        fi

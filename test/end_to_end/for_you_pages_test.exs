@@ -2,6 +2,7 @@ defmodule EndToEnd.PersonalisedAccountTest do
   use ExUnit.Case
   use Plug.Test
   use Test.Support.Helper, :mox
+  import Belfrage.Test.PersonalisationHelper
 
   alias BelfrageWeb.Router
   alias Belfrage.Clients.LambdaMock
@@ -40,11 +41,11 @@ defmodule EndToEnd.PersonalisedAccountTest do
     foryou_allowlist: []
   }
 
+  setup :reset_bbc_id_on_exit
+
   setup do
     stub_dial(:personalisation, "on")
     :ets.delete_all_objects(:cache)
-    old_state = Agent.get(BBCID, & &1)
-    on_exit(fn -> Agent.update(BBCID, fn _ -> old_state end) end)
     Agent.update(BBCID, fn _state -> @default_bbcid_state end)
     :ok
   end

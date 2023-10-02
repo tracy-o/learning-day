@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ARN=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["XRAY_ROLE_ARN"]')
+ARN=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["configuration"]["XRAY_ROLE_ARN"])')
 
 cat > /etc/amazon/xray/cfg.yaml <<EOF
 # Maximum buffer size in MB (minimum 3). Choose 0 to use 1% of host memory.

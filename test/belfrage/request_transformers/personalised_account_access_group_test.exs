@@ -1,5 +1,6 @@
 defmodule Belfrage.RequestTransformers.PersonalisedAccessGroupTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
+  import Belfrage.Test.PersonalisationHelper
   alias Belfrage.{Envelope}
   alias Belfrage.RequestTransformers.PersonalisedAccountAccessGroup
   alias Belfrage.Authentication.BBCID
@@ -10,6 +11,8 @@ defmodule Belfrage.RequestTransformers.PersonalisedAccessGroupTest do
     foryou_access_chance: 0,
     foryou_allowlist: []
   }
+
+  setup :reset_bbc_id_on_exit
 
   test "generate correct hash values" do
     assert PersonalisedAccountAccessGroup.generate_hash_value("eyJkbiI6IkEgV2ViQ29yZSB1c2VyIiwicHMiOiIwIn0") == 26

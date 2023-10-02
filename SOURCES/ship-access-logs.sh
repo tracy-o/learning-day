@@ -11,18 +11,18 @@ export PATH=${PATH}:/usr/local/bin:/sbin
 START_DATE=$(date)
 
 # Inject values obtained via Cosmos
-GCS_ACCESS_LOGS_BUCKET_NAME=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["GCS_ACCESS_LOGS_BUCKET_NAME"]')
-ACCESS_LOG_ENV=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["environment"]')
+GCS_ACCESS_LOGS_BUCKET_NAME=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["configuration"]["GCS_ACCESS_LOGS_BUCKET_NAME"])')
+ACCESS_LOG_ENV=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["environment"])')
 ACCESS_LOG_FAMILY="www"
 ACCESS_LOG_TYPE="access"
-STACK_ID=$(cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["configuration"]["STACK_ID"]')
+STACK_ID=$(cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["configuration"]["STACK_ID"])')
 AUTHENTICATION_FLAG_FILE="/tmp/gcp_authenticated"
 
 # GCS bucket path, dependent on some injected info
 BUCKET_PATH="gs://$GCS_ACCESS_LOGS_BUCKET_NAME/$ACCESS_LOG_ENV/$ACCESS_LOG_FAMILY/$ACCESS_LOG_TYPE/$STACK_ID"
 
 # Let's create the service account key file
-cat /etc/bake-scripts/config.json | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["secure_configuration"]["GCP_AUTH"]' > /tmp/gcp_auth.json
+cat /etc/bake-scripts/config.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["secure_configuration"]["GCP_AUTH"])' > /tmp/gcp_auth.json
 
 # google-cloud-sdk configuration
 configure_gcloud() {

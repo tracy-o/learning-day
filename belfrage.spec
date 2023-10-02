@@ -1,5 +1,5 @@
 Name: belfrage
-Version: %{cosmosversion}
+Version: %{version}
 Release: 1%{?dist}
 License: MPL-2.0
 Group: Development/Frameworks
@@ -20,11 +20,11 @@ Source9: delete-uploaded-files-cron
 Source10: delete-uploaded-files.sh
 Source11: ship-access-logs-cron
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: /root/rpmbuild
 BuildArch: x86_64
 
-Requires: cosmos-ca-chains cosmos-ca-tools
 Requires: amazon-cloudwatch-agent
+Requires: aws-cfn-bootstrap
 Requires: component-logger
 Requires: belfrage-performance-tuning
 Requires: dial-agent
@@ -38,7 +38,6 @@ from browsers to the lambda web renderers of web-core
 %pre
 /usr/bin/getent group component >/dev/null || groupadd -r component
 /usr/bin/getent passwd component >/dev/null || useradd -r -g component -G component -s /sbin/nologin -c 'component service' component
-/usr/bin/chsh -s /bin/bash component
 
 %install
 mkdir -p %{buildroot}/home/component
@@ -78,18 +77,14 @@ touch /etc/cron.d/ship-access-logs-cron
 
 %files
 %attr(0755, component, component) /etc/bake-scripts/%{name}/*
-%attr(0755, component, component) /home/component/belfrage-status-cfn-signal.sh
-%attr(0755, component, component) /home/component/ship-access-logs.sh
-%attr(0755, component, component) /home/component/delete-uploaded-files.sh
+%attr(0755, component, component) /home/component/*
 %attr(0644, root, root) /etc/logrotate.d/access
 %attr(0644, root, root) /etc/cron.d/component-cron
 %attr(0644, root, root) /etc/cron.d/access-cron
 %attr(0644, root, root) /etc/cron.d/delete-uploaded-files-cron
 %attr(0644, root, root) /etc/cron.d/ship-access-logs-cron
-/home/component
 /usr/lib/systemd/system/belfrage.service
 /usr/lib/systemd/system/cloudformation-signal.service
-/etc/bake-scripts/%{name}
 /etc/systemd/system/belfrage.service.d/env.conf
 /var/log/component/app.log
 /var/log/component/access.log

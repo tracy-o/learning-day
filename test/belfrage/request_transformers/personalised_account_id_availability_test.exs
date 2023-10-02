@@ -1,8 +1,9 @@
 defmodule Belfrage.RequestTransformers.PersonalisedAccountIdAvailabilityTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
   alias Belfrage.{Envelope}
   alias Belfrage.RequestTransformers.PersonalisedAccountIdAvailability
   alias Belfrage.Authentication.BBCID
+  import Belfrage.Test.PersonalisationHelper
 
   @default_bbcid_state %{
     id_availability: true,
@@ -10,6 +11,8 @@ defmodule Belfrage.RequestTransformers.PersonalisedAccountIdAvailabilityTest do
     foryou_access_chance: 0,
     foryou_allowlist: []
   }
+
+  setup :reset_bbc_id_on_exit
 
   test "do not redirect to /account if id-availability is true" do
     Agent.update(BBCID, fn _state -> %{@default_bbcid_state | id_availability: true} end)

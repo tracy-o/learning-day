@@ -1,5 +1,6 @@
 defmodule Belfrage.Test.PersonalisationHelper do
   import Belfrage.Test.StubHelper
+  import ExUnit.Callbacks, only: [on_exit: 1]
 
   alias Plug.Conn
   alias Belfrage.Envelope
@@ -109,5 +110,17 @@ defmodule Belfrage.Test.PersonalisationHelper do
   """
   def disable_personalisation() do
     stub_dial(:personalisation, "off")
+  end
+
+  @doc """
+  Resets the BBCID Agent by terminating and restarting the GenServer
+  """
+  def reset_bbc_id_on_exit(context) do
+    on_exit(fn ->
+      :ok = Supervisor.terminate_child(Belfrage.Authentication.Supervisor, Belfrage.Authentication.BBCID)
+      {:ok, _pid} = Supervisor.restart_child(Belfrage.Authentication.Supervisor, Belfrage.Authentication.BBCID)
+    end)
+
+    context
   end
 end

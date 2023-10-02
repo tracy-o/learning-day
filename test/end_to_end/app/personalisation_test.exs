@@ -22,7 +22,7 @@ defmodule EndToEnd.App.PersonalisationTest do
               }
             })
 
-  setup :clear_cache
+  setup [:clear_cache, :reset_bbc_id_on_exit]
 
   describe "personalised route" do
     test "non-personalised request" do
