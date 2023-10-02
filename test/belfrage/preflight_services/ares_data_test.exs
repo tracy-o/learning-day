@@ -76,5 +76,25 @@ defmodule Belfrage.PreflightServices.AresDataTest do
       assert log =~
                ~s("service":"AresData","response_status":"500","request_path":"/some/path","reason":"nil","preflight_error":"preflight_unacceptable_status_code")
     end
+
+    test "returns asset type on test" do
+      envelope = %Belfrage.Envelope{
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "testData"}}
+      }
+
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath?mode=testData"
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{"ctx-request-env" => "test"},
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"MAP\"}}"
+         }}
+      end)
+
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(envelope, @service)
+    end
   end
 end

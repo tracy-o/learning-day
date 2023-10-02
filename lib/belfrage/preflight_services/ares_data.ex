@@ -5,12 +5,12 @@ defmodule Belfrage.PreflightServices.AresData do
   @behaviour PreflightService
 
   @impl PreflightService
-  def request(%Envelope{request: %Envelope.Request{path: path}}) do
+  def request(%Envelope{request: %Envelope.Request{path: path, query_params: query_params}}) do
     %{
       method: :get,
       url:
         Application.get_env(:belfrage, :fabl_endpoint) <>
-          "/module/ares-asset-identifier" <> QueryParams.encode(%{path: path}),
+          "/module/ares-asset-identifier" <> QueryParams.encode(%{path: path}) <> QueryParams.encode(query_params),
       timeout: 500
     }
   end
