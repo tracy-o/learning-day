@@ -39,6 +39,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "gahuza",
       "gujarati",
       "igbo",
+      "indonesia",
       "kyrgyz",
       "marathi",
       "nepali",
@@ -48,8 +49,10 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "somali",
       "tamil",
       "telugu",
+      "thai",
       "tigrinya",
       "urdu",
+      "vietnamese",
       "yoruba"
     ]
 
@@ -84,7 +87,6 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "arabic",
       "hausa",
       "hindi",
-      "indonesia",
       "japanese",
       "korean",
       "mundo",
@@ -95,13 +97,11 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapperTest do
       "serbian/cyr",
       "serbian/lat",
       "swahili",
-      "thai",
       "turkce",
       "ukchina/simp",
       "ukchina/trad",
       "ukrainian",
       "uzbek",
-      "vietnamese",
       "zhongwen/simp",
       "zhongwen/trad"
     ]
