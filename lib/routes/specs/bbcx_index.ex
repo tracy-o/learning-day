@@ -10,7 +10,6 @@ defmodule Routes.Specs.BBCXIndex do
           "/business/future-of-business",
           "/business/global-business",
           "/business/technology-of-business",
-          "/business/us-canada-business",
           "/culture/art",
           "/culture/books",
           "/culture/entertainment-news",
@@ -31,8 +30,7 @@ defmodule Routes.Specs.BBCXIndex do
           "/travel/cultural-experiences",
           "/travel/history-heritage",
           "/travel/specialist",
-          "/video",
-          "/watch-live-news"
+          "/video"
         ]
       }
     }
