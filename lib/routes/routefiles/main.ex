@@ -550,14 +550,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
   end
 
-  # Trial news assets setup for initial MVT test experiment
-  handle "/news/articles/cn3zl2drk0ko", using: "NewsArticleMvt"
-  handle "/news/articles/cyxjrk98x59o", using: "NewsArticleMvt"
-  handle "/news/articles/ce5108j80gpo", using: "NewsArticleMvt"
-  handle "/news/articles/ce4xrgggdvgo", using: "NewsArticleMvt"
-
   handle "/news/articles/:optimo_id.amp", using: "NewsAmp"
-  handle "/news/articles/:optimo_id.json", using: "NewsAmp"
 
   handle "/news/articles/:optimo_id", using: "NewsStorytellingPage" do
     return_404 if: !String.match?(optimo_id, ~r/^c[abcdefghjklmnpqrstuvwxyz0-9]{10,}o$/)
@@ -737,7 +730,6 @@ defroutefile "Main" do
   end
 
   handle "/news/:id.amp", using: "NewsAmp"
-  handle "/news/:id.json", using: "NewsAmp"
 
   handle "/news/sitemap.xml", using: "News"
   handle "/news/news_sitemap.xml", using: "News"
@@ -3431,7 +3423,6 @@ defroutefile "Main" do
   # Newsround
   redirect "/newsround/amp/:id", to: "/newsround/:id.amp", status: 301
   handle "/newsround/:id.amp", using: "NewsroundAmp"
-  handle "/newsround/:id.json", using: "NewsroundAmp"
   handle "/newsround/articles/manifest.json", using: "NewsroundAmp"
 
   handle "/newsround/articles/:optimo_id", using: "NewsroundStorytellingPage" do
