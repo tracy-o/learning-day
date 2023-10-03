@@ -8,13 +8,12 @@ defmodule Belfrage.Metrics.Cachex do
   alias Belfrage.Metrics
 
   def track(cache) do
-    with {:ok, stats} <- Cachex.stats(cache),
-         {:ok, size} <- Cachex.size(cache) do
-      Metrics.measurement(
-        [:cachex, :stats],
-        fill_in_blanks(Map.put(stats, :size, size)),
-        %{cache_name: cache}
-      )
+    case Cachex.size(cache) do
+      {:ok, size} ->
+        Metrics.measurement([:cachex, :stats], %{size: size}, %{cache_name: cache})
+
+      _ ->
+        :ok
     end
   end
 
@@ -35,18 +34,7 @@ defmodule Belfrage.Metrics.Cachex do
   end
 
   def measurements() do
-    [:cache_memory, :average_cache_entry_size, :limit | stats_measurements()]
-  end
-
-  defp stats_measurements do
-    ~w(evictions expirations hits misses updates writes size)a
-  end
-
-  defp fill_in_blanks(stats) do
-    stats_measurements()
-    |> Enum.reduce(stats, fn measurement, stats ->
-      Map.update(stats, measurement, 0, fn value -> value end)
-    end)
+    [:cache_memory, :average_cache_entry_size, :limit, :size]
   end
 
   defp get_cache_memory(cache) do
