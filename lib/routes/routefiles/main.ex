@@ -960,6 +960,7 @@ defroutefile "Main" do
   redirect "/gahuza/topics/cz4vn9gy9pyt", to: "/gahuza", status: 301
   redirect "/gujarati/topics/cx0edn859g0t", to: "/gujarati", status: 301
   redirect "/igbo/topics/cp2dkn6rzj5t", to: "/igbo", status: 301
+  redirect "/indonesia/topics/c89lm51033zt", to: "/indonesia", status: 301
   redirect "/hindi/india-66590093", to: "/hindi/topics/cqe17zz2k1nt", status: 301
   redirect "/japanese/video-55128146", to: "/japanese/topics/c132079wln0t", status: 301
   redirect "/kyrgyz/topics/crg7kj2e52nt", to: "/kyrgyz", status: 301
@@ -973,8 +974,10 @@ defroutefile "Main" do
   redirect "/somali/topics/c89m6yjv965t", to: "/somali", status: 301
   redirect "/tamil/topics/c1x6gk68w9zt", to: "/tamil", status: 301
   redirect "/telugu/topics/c2w0dk010q2t", to: "/telugu", status: 301
+  redirect "/thai/topics/c2w0dk01g2kt", to: "/thai", status: 301
   redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
   redirect "/urdu/topics/c44d8kd7lgzt", to: "/urdu", status: 301
+  redirect "/vietnamese/topics/c5q5105m81dt", to: "/vietnamese", status: 301
   redirect "/yoruba/topics/cvpk14mq48kt", to: "/yoruba", status: 301
 
   ## World Service - Homepage Redirects
@@ -1015,6 +1018,7 @@ defroutefile "Main" do
   redirect "/gahuza/front_page/rss.xml", to: "/gahuza/rss.xml", status: 301
   redirect "/gujarati/front_page/rss.xml", to: "/gujarati/rss.xml", status: 301
   redirect "/igbo/front_page/rss.xml", to: "/igbo/rss.xml", status: 301
+  redirect "/indonesia/front_page/rss.xml", to: "/indonesia/rss.xml", status: 301
   redirect "/nepali/front_page/rss.xml", to: "/nepali/rss.xml", status: 301
   redirect "/marathi/front_page/rss.xml", to: "/marathi/rss.xml", status: 301
   redirect "/pidgin/front_page/rss.xml", to: "/pidgin/rss.xml", status: 301
@@ -1023,8 +1027,10 @@ defroutefile "Main" do
   redirect "/somali/front_page/rss.xml", to: "/somali/rss.xml", status: 301
   redirect "/tamil/front_page/rss.xml", to: "/tamil/rss.xml", status: 301
   redirect "/telugu/front_page/rss.xml", to: "/telugu/rss.xml", status: 301
+  redirect "/thai/front_page/rss.xml", to: "/thai/rss.xml", status: 301
   redirect "/tigrinya/front_page/rss.xml", to: "/tigrinya/rss.xml", status: 301
   redirect "/urdu/front_page/rss.xml", to: "/urdu/rss.xml", status: 301
+  redirect "/vietnamese/front_page/rss.xml", to: "/vietnamese/rss.xml", status: 301
   redirect "/yoruba/front_page/rss.xml", to: "/yoruba/rss.xml", status: 301
 
 
@@ -1559,13 +1565,10 @@ defroutefile "Main" do
 
   redirect "/indonesia/mobile/*any", to: "/indonesia", status: 301
 
-  handle "/indonesia.amp", using: "WorldServiceIndonesia"
-  handle "/indonesia.json", using: "WorldServiceIndonesia"
+  handle "/indonesia.amp", using: "WorldServiceIndonesiaTipoHomePage"
   handle "/indonesia/manifest.json", using: "WorldServiceIndonesiaAssets"
   handle "/indonesia/sw.js", using: "WorldServiceIndonesiaAssets"
   handle "/indonesia/rss.xml", using: "WorldServiceIndonesiaHomePageRss"
-
-  handle "/indonesia/tipohome.amp", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test"
 
   handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -1599,7 +1602,7 @@ defroutefile "Main" do
   end
 
   handle "/indonesia/send/:id", using: "UploaderWorldService"
-  handle "/indonesia", using: "WorldServiceIndonesiaTipoHomePage", only_on: "test"
+  handle "/indonesia", using: "WorldServiceIndonesiaTipoHomePage"
   handle "/indonesia/*any", using: "WorldServiceIndonesia"
 
   handle "/japanese.amp", using: "WorldServiceJapanese"
@@ -2454,13 +2457,10 @@ defroutefile "Main" do
   handle "/telugu", using: "WorldServiceTeluguTipoHomePage"
   handle "/telugu/*any", using: "WorldServiceTelugu"
 
-  handle "/thai.amp", using: "WorldServiceThai"
-  handle "/thai.json", using: "WorldServiceThai"
+  handle "/thai.amp", using: "WorldServiceThaiTipoHomePage"
   handle "/thai/manifest.json", using: "WorldServiceThaiAssets"
   handle "/thai/sw.js", using: "WorldServiceThaiAssets"
   handle "/thai/rss.xml", using: "WorldServiceThaiHomePageRss"
-
-  handle "/thai/tipohome.amp", using: "WorldServiceThaiTipoHomePage", only_on: "test"
 
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2493,7 +2493,7 @@ defroutefile "Main" do
   end
 
   handle "/thai/send/:id", using: "UploaderWorldService"
-  handle "/thai", using: "WorldServiceThaiTipoHomePage", only_on: "test"
+  handle "/thai", using: "WorldServiceThaiTipoHomePage"
   handle "/thai/*any", using: "WorldServiceThai"
 
   handle "/tigrinya.amp", using: "WorldServiceTigrinyaTipoHomePage"
@@ -2761,13 +2761,10 @@ defroutefile "Main" do
 
   redirect "/vietnamese/mobile/*any", to: "/vietnamese", status: 301
 
-  handle "/vietnamese.amp", using: "WorldServiceVietnamese"
-  handle "/vietnamese.json", using: "WorldServiceVietnamese"
+  handle "/vietnamese.amp", using: "WorldServiceVietnameseTipoHomePage"
   handle "/vietnamese/manifest.json", using: "WorldServiceVietnameseAssets"
   handle "/vietnamese/sw.js", using: "WorldServiceVietnameseAssets"
   handle "/vietnamese/rss.xml", using: "WorldServiceVietnameseHomePageRss"
-
-  handle "/vietnamese/tipohome.amp", using: "WorldServiceVietnameseTipoHomePage", only_on: "test"
 
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2801,7 +2798,7 @@ defroutefile "Main" do
   end
 
   handle "/vietnamese/send/:id", using: "UploaderWorldService"
-  handle "/vietnamese", using: "WorldServiceVietnameseTipoHomePage", only_on: "test"
+  handle "/vietnamese", using: "WorldServiceVietnameseTipoHomePage"
   handle "/vietnamese/*any", using: "WorldServiceVietnamese"
 
   handle "/yoruba.amp", using: "WorldServiceYorubaTipoHomePage"

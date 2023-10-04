@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceIndonesiaTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/indonesia", "/indonesia.amp"]
       }
     }
   end

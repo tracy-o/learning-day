@@ -3,7 +3,8 @@ defmodule Routes.Specs.WorldServiceVietnameseTipoHomePage do
     %{
       specs: %{
         platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"]
+        request_pipeline: ["WorldServiceRedirect"],
+        examples: ["/vietnamese", "/vietnamese.amp"]
       }
     }
   end

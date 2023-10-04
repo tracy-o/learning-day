@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceVietnamese do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/vietnamese/popular/read", "/vietnamese.json", "/vietnamese.amp"]
+        examples: ["/vietnamese/popular/read"]
       }
     }
   end
