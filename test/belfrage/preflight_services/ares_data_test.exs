@@ -77,17 +77,58 @@ defmodule Belfrage.PreflightServices.AresDataTest do
                ~s("service":"AresData","response_status":"500","request_path":"/some/path","reason":"nil","preflight_error":"preflight_unacceptable_status_code")
     end
 
-    test "returns asset type on test" do
+    test "returns test asset type when query params are testData" do
       envelope = %Belfrage.Envelope{
         request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "testData"}}
       }
 
-      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath?mode=testData"
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
+      headers = %{"ctx-service-env" => "test"}
 
-      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url}, :Preflight ->
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url, headers: ^headers}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"MAP\"}}"
+         }}
+      end)
+
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(envelope, @service)
+    end
+
+    test "returns test asset type when query_params are previewFABLWithTestData" do
+      envelope = %Belfrage.Envelope{
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "previewFABLWithTestData"}}
+      }
+
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
+      headers = %{"ctx-service-env" => "test"}
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url, headers: ^headers}, :Preflight ->
         {:ok,
          %HTTP.Response{
            headers: %{"ctx-request-env" => "test"},
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"MAP\"}}"
+         }}
+      end)
+
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(envelope, @service)
+    end
+
+    test "returns asset type on test" do
+      envelope = %Belfrage.Envelope{
+        request: %Envelope.Request{path: "/some/path"}
+      }
+
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
+      headers = %{}
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url, headers: ^headers}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
            status_code: 200,
            body: "{\"data\": {\"type\": \"MAP\"}}"
          }}

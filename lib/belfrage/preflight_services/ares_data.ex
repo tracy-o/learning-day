@@ -10,10 +10,21 @@ defmodule Belfrage.PreflightServices.AresData do
       method: :get,
       url:
         Application.get_env(:belfrage, :fabl_endpoint) <>
-          "/module/ares-asset-identifier" <> QueryParams.encode(%{path: path}) <> QueryParams.encode(query_params),
-      timeout: 500
+          "/module/ares-asset-identifier" <> QueryParams.encode(%{path: path}),
+      timeout: 500,
+      headers: maybe_put_test_header(query_params)
     }
   end
+
+  defp maybe_put_test_header(%{"mode" => "testData"}) do
+    %{"ctx-service-env" => "test"}
+  end
+
+  defp maybe_put_test_header(%{"mode" => "previewFABLWithTestData"}) do
+    %{"ctx-service-env" => "test"}
+  end
+
+  defp maybe_put_test_header(_), do: %{}
 
   @impl PreflightService
   def cache_key(%Envelope{request: %Envelope.Request{path: path}}) do
