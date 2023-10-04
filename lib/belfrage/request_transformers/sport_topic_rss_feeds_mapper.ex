@@ -45,7 +45,11 @@ defmodule Belfrage.RequestTransformers.SportTopicRssFeedsMapper do
     "/sport/cricket/counties/rss.xml" => "cpql9gyqj56t",
     "/sport/commonwealth-games/rss.xml" => "cpyd2m1m76dt",
     "/sport/olympics/rss.xml" => "clx6k2yrzkjt",
-    "/sport/winter-olympics/rss.xml" => "cezyk0v3j11t"
+    "/sport/winter-olympics/rss.xml" => "cezyk0v3j11t",
+    "/sport/athletics/rss.xml" => "cj59kpnp319t",
+    "/sport/cycling/rss.xml" => "cpzrw9qgwelt",
+    "/sport/horse-racing/rss.xml" => "cmnqk2vm53zt",
+    "/sport/swimming/rss.xml" => "cdlxk1d3lp1t"
   }
 
   @impl Transformer

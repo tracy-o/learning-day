@@ -150,7 +150,23 @@ defmodule Routes.Specs.SportTopicRss do
           %{
             path: "/sport/commonwealth-games/rss.xml",
             request_headers: %{"host" => "feeds.bbci.co.uk"}
-          }
+          },
+          %{
+            path: "/sport/athletics/rss.xml",
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/sport/cycling/rss.xml",
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/sport/horse-racing/rss.xml",
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
+          },
+          %{
+            path: "/sport/swimming/rss.xml",
+            request_headers: %{"host" => "feeds.bbci.co.uk"}
+          }                    
         ]
       }
     }
