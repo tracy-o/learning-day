@@ -19,6 +19,7 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapper do
     "/nepali/rss.xml" => "c44d8kpmzlgt",
     "/marathi/rss.xml" => "crezq2dg90mt",
     "/pidgin/rss.xml" => "ck3yk9nz25qt",
+    "/portuguese/rss.xml" => "c0rp0kp57p1t",
     "/punjabi/rss.xml" => "c0rp0kp5ezmt",
     "/sinhala/rss.xml" => "c1x6gk68neqt",
     "/somali/rss.xml" => "c89m6yjv965t",
@@ -26,6 +27,8 @@ defmodule Belfrage.RequestTransformers.WorldServiceTopicRssFeedsMapper do
     "/telugu/rss.xml" => "c2w0dk010q2t",
     "/thai/rss.xml" => "c2w0dk01g2kt",
     "/tigrinya/rss.xml" => "cq01ke649v0t",
+    "/turkce/rss.xml" => "c3eg5kgl56zt",
+    "/ukrainian/rss.xml" => "c3eg5kglplrt",
     "/urdu/rss.xml" => "c44d8kd7lgzt",
     "/vietnamese/rss.xml" => "c5q5105m81dt",
     "/yoruba/rss.xml" => "cvpk14mq48kt"
