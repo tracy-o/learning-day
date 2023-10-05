@@ -79,7 +79,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
     test "returns test asset type when query params are testData" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "testData"}}
+        request: %Envelope.Request{path: "/some/path", host: "www.test.bbc.co.uk", query_params: %{"mode" => "testData"}}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -99,7 +99,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
     test "returns test asset type when query_params are previewFABLWithTestData" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "previewFABLWithTestData"}}
+        request: %Envelope.Request{path: "/some/path", host: "www.test.bbc.co.uk", query_params: %{"mode" => "previewFABLWithTestData"}}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -120,7 +120,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
     test "returns asset type on test" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path"}
+        request: %Envelope.Request{path: "/some/path", host: "www.test.bbc.co.uk"}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
