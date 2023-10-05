@@ -118,9 +118,9 @@ defmodule Belfrage.PreflightServices.AresDataTest do
                PreflightService.call(envelope, @service)
     end
 
-    test "returns asset type on test" do
+    test "does add test headers on live" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path", host: "www.test.bbc.co.uk"}
+        request: %Envelope.Request{path: "/some/path", host: "www.bbc.co.uk"}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
