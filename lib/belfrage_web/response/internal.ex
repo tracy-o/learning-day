@@ -17,13 +17,16 @@ defmodule BelfrageWeb.Response.Internal do
                  ]
              )
 
-  def new(envelope = %Envelope{}, conn = %Conn{}) do
+  def new(envelope = %Envelope{}, conn = %Conn{private: %{bbc_headers: %{req_svc_chain: svc_chain}}}) do
     Metrics.latency_span(:generate_internal_response, fn ->
       {content_type, body} = body(envelope.response, conn)
 
       %Response{
         envelope.response
-        | headers: %{"content-type" => content_type},
+        | headers: %{
+            "content-type" => content_type,
+            "req-svc-chain" => svc_chain
+          },
           body: body,
           cache_directive: cache_control(envelope)
       }
