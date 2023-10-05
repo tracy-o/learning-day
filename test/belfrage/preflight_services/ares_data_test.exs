@@ -79,7 +79,8 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
     test "returns test asset type when query params are testData" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path", host: "www.test.bbc.co.uk", query_params: %{"mode" => "testData"}}
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "testData"}},
+        private: %Envelope.Private{production_environment: "test"}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -99,7 +100,8 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
     test "returns test asset type when query_params are previewFABLWithTestData" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path", host: "www.test.bbc.co.uk", query_params: %{"mode" => "previewFABLWithTestData"}}
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "previewFABLWithTestData"}},
+        private: %Envelope.Private{production_environment: "test"}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
@@ -120,7 +122,8 @@ defmodule Belfrage.PreflightServices.AresDataTest do
 
     test "does add test headers on live" do
       envelope = %Belfrage.Envelope{
-        request: %Envelope.Request{path: "/some/path", host: "www.bbc.co.uk"}
+        request: %Envelope.Request{path: "/some/path"},
+        private: %Envelope.Private{production_environment: "live"}
       }
 
       url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
