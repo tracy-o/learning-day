@@ -1343,7 +1343,7 @@ defroutefile "Main" do
   handle "/burmese/new_live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
@@ -1730,7 +1730,7 @@ defroutefile "Main" do
   handle "/kyrgyz/new_live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
@@ -1831,7 +1831,7 @@ defroutefile "Main" do
   handle "/mundo/new_live/:id", using: "WorldServiceMundoLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
@@ -2012,7 +2012,7 @@ defroutefile "Main" do
   handle "/pidgin/new_live/:id", using: "WorldServicePidginLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
@@ -2228,14 +2228,14 @@ defroutefile "Main" do
   handle "/serbian/new_live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
   handle "/serbian/new_live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
@@ -2703,7 +2703,7 @@ defroutefile "Main" do
   handle "/urdu/new_live/:id", using: "WorldServiceUrduLivePage", only_on: "test" do
     return_404 if: [
       !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !integer_in_range?(conn.query_params["page"] || "1", 1..999)
+      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
     ]
   end
 
