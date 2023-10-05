@@ -113,6 +113,55 @@ defmodule BelfrageWeb.Validators do
   @doc """
   Documentation on short ID generation: https://confluence.dev.bbc.co.uk/display/cps/Generating+Short+IDs
   ## Examples
+    iex> is_ws_tipo_page_id?("c07zr0zwjnnt")
+    true
+
+    iex> is_ws_tipo_page_id?("t7p765ynk9qd")
+    false
+  """
+  def is_ws_tipo_page_id?(param) do
+    String.match?(param, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/)
+  end
+
+  @doc """
+  ## Examples
+    iex> is_valid_ws_topic_page_parameter?("1")
+    true
+
+    iex> is_valid_ws_topic_page_parameter?("40")
+    true
+
+    iex> is_valid_ws_topic_page_parameter?("-1")
+    false
+
+    iex> is_valid_ws_topic_page_parameter?("41")
+    false
+  """
+  def is_valid_ws_topic_page_parameter?(param) do
+    String.match?(param, ~r/\A([1-3][0-9]|40|[1-9])\z/)
+  end
+
+  @doc """
+  ## Examples
+    iex> is_valid_ws_live_page_parameter?("1")
+    true
+
+    iex> is_valid_ws_live_page_parameter?("50")
+    true
+
+    iex> is_valid_ws_live_page_parameter?("-1")
+    false
+
+    iex> is_valid_ws_live_page_parameter?("51")
+    false
+  """
+  def is_valid_ws_live_page_parameter?(param) do
+    String.match?(param, ~r/\A([1-4][0-9]|50|[1-9])\z/)
+  end
+
+  @doc """
+  Documentation on short ID generation: https://confluence.dev.bbc.co.uk/display/cps/Generating+Short+IDs
+  ## Examples
     iex> is_cps_id?("23247541")
     true
 

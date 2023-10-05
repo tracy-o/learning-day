@@ -1052,15 +1052,15 @@ defroutefile "Main" do
 
   handle "/afaanoromoo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/afaanoromoo/topics/:id", using: "WorldServiceAfaanoromooTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1096,15 +1096,15 @@ defroutefile "Main" do
 
   handle "/afrique/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/afrique/topics/:id", using: "WorldServiceAfriqueTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1136,15 +1136,15 @@ defroutefile "Main" do
 
   handle "/amharic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/amharic/topics/:id", using: "WorldServiceAmharicTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1183,15 +1183,15 @@ defroutefile "Main" do
 
   handle "/arabic/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/arabic/topics/:id", using: "WorldServiceArabicTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1225,15 +1225,15 @@ defroutefile "Main" do
 
   handle "/azeri/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/azeri/topics/:id", using: "WorldServiceAzeriTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1268,15 +1268,15 @@ defroutefile "Main" do
 
   handle "/bengali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/bengali/topics/:id", using: "WorldServiceBengaliTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1311,15 +1311,15 @@ defroutefile "Main" do
 
   handle "/burmese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/burmese/topics/:id", using: "WorldServiceBurmeseTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1342,8 +1342,8 @@ defroutefile "Main" do
 
   handle "/burmese/new_live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1360,15 +1360,15 @@ defroutefile "Main" do
 
   handle "/gahuza/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/gahuza/topics/:id", using: "WorldServiceGahuzaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1400,15 +1400,15 @@ defroutefile "Main" do
 
   handle "/gujarati/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/gujarati/topics/:id", using: "WorldServiceGujaratiTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1444,15 +1444,15 @@ defroutefile "Main" do
 
   handle "/hausa/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/hausa/topics/:id", using: "WorldServiceHausaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1490,15 +1490,15 @@ defroutefile "Main" do
 
   handle "/hindi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/hindi/topics/:id", using: "WorldServiceHindiTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1530,16 +1530,16 @@ defroutefile "Main" do
 
   handle "/igbo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
 
   handle "/igbo/topics/:id", using: "WorldServiceIgboTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1572,15 +1572,15 @@ defroutefile "Main" do
 
   handle "/indonesia/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/indonesia/topics/:id", using: "WorldServiceIndonesiaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1615,15 +1615,15 @@ defroutefile "Main" do
 
   handle "/japanese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/japanese/topics/:id", using: "WorldServiceJapaneseTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1657,15 +1657,15 @@ defroutefile "Main" do
 
   handle "/korean/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/korean/topics/:id", using: "WorldServiceKoreanTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1698,15 +1698,15 @@ defroutefile "Main" do
 
   handle "/kyrgyz/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/kyrgyz/topics/:id", using: "WorldServiceKyrgyzTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1729,8 +1729,8 @@ defroutefile "Main" do
 
   handle "/kyrgyz/new_live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1745,15 +1745,15 @@ defroutefile "Main" do
 
   handle "/marathi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/marathi/topics/:id", using: "WorldServiceMarathiTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1799,15 +1799,15 @@ defroutefile "Main" do
 
   handle "/mundo/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/mundo/topics/:id", using: "WorldServiceMundoTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1830,8 +1830,8 @@ defroutefile "Main" do
 
   handle "/mundo/new_live/:id", using: "WorldServiceMundoLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1849,15 +1849,15 @@ defroutefile "Main" do
 
   handle "/nepali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/nepali/topics/:id", using: "WorldServiceNepaliTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1895,15 +1895,15 @@ defroutefile "Main" do
 
   handle "/pashto/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/pashto/topics/:id", using: "WorldServicePashtoTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1941,15 +1941,15 @@ defroutefile "Main" do
 
   handle "/persian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/persian/topics/:id", using: "WorldServicePersianTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -1981,15 +1981,15 @@ defroutefile "Main" do
 
   handle "/pidgin/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/pidgin/topics/:id", using: "WorldServicePidginTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2011,8 +2011,8 @@ defroutefile "Main" do
 
   handle "/pidgin/new_live/:id", using: "WorldServicePidginLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2033,15 +2033,15 @@ defroutefile "Main" do
 
   handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/portuguese/topics/:id", using: "WorldServicePortugueseTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2073,15 +2073,15 @@ defroutefile "Main" do
 
   handle "/punjabi/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/punjabi/topics/:id", using: "WorldServicePunjabiTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2125,15 +2125,15 @@ defroutefile "Main" do
 
   handle "/russian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/russian/topics/:id", using: "WorldServiceRussianTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2171,27 +2171,27 @@ defroutefile "Main" do
 
   handle "/serbian/cyr/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
   handle "/serbian/lat/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/serbian/cyr/topics/:id", using: "WorldServiceSerbianTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
   handle "/serbian/lat/topics/:id", using: "WorldServiceSerbianTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2227,15 +2227,15 @@ defroutefile "Main" do
 
   handle "/serbian/new_live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/serbian/new_live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2252,15 +2252,15 @@ defroutefile "Main" do
 
   handle "/sinhala/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/sinhala/topics/:id", using: "WorldServiceSinhalaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2295,15 +2295,15 @@ defroutefile "Main" do
 
   handle "/somali/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/somali/topics/:id", using: "WorldServiceSomaliTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2340,15 +2340,15 @@ defroutefile "Main" do
 
   handle "/swahili/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/swahili/topics/:id", using: "WorldServiceSwahiliTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2385,15 +2385,15 @@ defroutefile "Main" do
 
   handle "/tamil/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/tamil/topics/:id", using: "WorldServiceTamilTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2425,15 +2425,15 @@ defroutefile "Main" do
 
   handle "/telugu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/telugu/topics/:id", using: "WorldServiceTeluguTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2464,15 +2464,15 @@ defroutefile "Main" do
 
   handle "/thai/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/thai/topics/:id", using: "WorldServiceThaiTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2503,15 +2503,15 @@ defroutefile "Main" do
 
   handle "/tigrinya/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/tigrinya/topics/:id", using: "WorldServiceTigrinyaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2548,15 +2548,15 @@ defroutefile "Main" do
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/turkce/topics/:id", using: "WorldServiceTurkceTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2589,27 +2589,27 @@ defroutefile "Main" do
 
   handle "/ukchina/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
   handle "/ukchina/trad/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/ukchina/simp/topics/:id", using: "WorldServiceUkchinaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
   handle "/ukchina/trad/topics/:id", using: "WorldServiceUkchinaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2628,15 +2628,15 @@ defroutefile "Main" do
 
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/ukrainian/topics/:id", using: "WorldServiceUkrainianTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2671,15 +2671,15 @@ defroutefile "Main" do
 
   handle "/urdu/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/urdu/topics/:id", using: "WorldServiceUrduTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2702,8 +2702,8 @@ defroutefile "Main" do
 
   handle "/urdu/new_live/:id", using: "WorldServiceUrduLivePage", only_on: "test" do
     return_404 if: [
-      !matches?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-4][0-9]|50|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2727,15 +2727,15 @@ defroutefile "Main" do
 
   handle "/uzbek/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/uzbek/topics/:id", using: "WorldServiceUzbekTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2768,15 +2768,15 @@ defroutefile "Main" do
 
   handle "/vietnamese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/vietnamese/topics/:id", using: "WorldServiceVietnameseTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2808,15 +2808,15 @@ defroutefile "Main" do
 
   handle "/yoruba/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/yoruba/topics/:id", using: "WorldServiceYorubaTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
@@ -2856,27 +2856,27 @@ defroutefile "Main" do
 
   handle "/zhongwen/simp/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
   handle "/zhongwen/trad/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/zhongwen/simp/topics/:id", using: "WorldServiceZhongwenTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
   handle "/zhongwen/trad/topics/:id", using: "WorldServiceZhongwenTopicPage" do
     return_404 if: [
-      !String.match?(id, ~r/^(c[a-zA-Z0-9]{10}t)|([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})$/),
-      !String.match?(conn.query_params["page"] || "1", ~r/\A([1-3][0-9]|40|[1-9])\z/)
+      !is_ws_tipo_page_id?(id),
+      !is_valid_ws_topic_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
