@@ -968,6 +968,7 @@ defroutefile "Main" do
   redirect "/marathi/topics/crezq2dg90mt", to: "/marathi", status: 301
   redirect "/pidgin/topics/ck3yk9nz25qt", to: "/pidgin", status: 301
   redirect "/pidgin/sport", to: "/pidgin/topics/cjgn7gv77vrt", status: 301
+  redirect "/portuguese/topics/c0rp0kp57p1t", to: "/portuguese", status: 301
   redirect "/punjabi/topics/c0rp0kp5ezmt", to: "/punjabi", status: 301
   redirect "/sinhala/topics/c1x6gk68neqt", to: "/sinhala", status: 301
   redirect "/somali/media-54071665", to: "/somali/topics/cn6rqlrkm0pt", status: 301
@@ -976,6 +977,8 @@ defroutefile "Main" do
   redirect "/telugu/topics/c2w0dk010q2t", to: "/telugu", status: 301
   redirect "/thai/topics/c2w0dk01g2kt", to: "/thai", status: 301
   redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
+  redirect "/turkce/topics/c3eg5kgl56zt", to: "/turkce", status: 301
+  redirect "/ukrainian/topics/c3eg5kglplrt", to: "/ukrainian", status: 301
   redirect "/urdu/topics/c44d8kd7lgzt", to: "/urdu", status: 301
   redirect "/vietnamese/topics/c5q5105m81dt", to: "/vietnamese", status: 301
   redirect "/yoruba/topics/cvpk14mq48kt", to: "/yoruba", status: 301
@@ -1022,6 +1025,7 @@ defroutefile "Main" do
   redirect "/nepali/front_page/rss.xml", to: "/nepali/rss.xml", status: 301
   redirect "/marathi/front_page/rss.xml", to: "/marathi/rss.xml", status: 301
   redirect "/pidgin/front_page/rss.xml", to: "/pidgin/rss.xml", status: 301
+  redirect "/portuguese/front_page/rss.xml", to: "/portuguese/rss.xml", status: 301
   redirect "/punjabi/front_page/rss.xml", to: "/punjabi/rss.xml", status: 301
   redirect "/sinhala/front_page/rss.xml", to: "/sinhala/rss.xml", status: 301
   redirect "/somali/front_page/rss.xml", to: "/somali/rss.xml", status: 301
@@ -1029,6 +1033,8 @@ defroutefile "Main" do
   redirect "/telugu/front_page/rss.xml", to: "/telugu/rss.xml", status: 301
   redirect "/thai/front_page/rss.xml", to: "/thai/rss.xml", status: 301
   redirect "/tigrinya/front_page/rss.xml", to: "/tigrinya/rss.xml", status: 301
+  redirect "/turkce/front_page/rss.xml", to: "/turkce/rss.xml", status: 301
+  redirect "/ukrainian/front_page/rss.xml", to: "/ukrainian/rss.xml", status: 301
   redirect "/urdu/front_page/rss.xml", to: "/urdu/rss.xml", status: 301
   redirect "/vietnamese/front_page/rss.xml", to: "/vietnamese/rss.xml", status: 301
   redirect "/yoruba/front_page/rss.xml", to: "/yoruba/rss.xml", status: 301
@@ -2023,13 +2029,11 @@ defroutefile "Main" do
   redirect "/portuguese/mobile/*any", to: "/portuguese", status: 301
   redirect "/portuguese/celular/*any", to: "/portuguese", status: 301
 
-  handle "/portuguese.amp", using: "WorldServicePortuguese"
-  handle "/portuguese.json", using: "WorldServicePortuguese"
+  handle "/portuguese.amp", using: "WorldServicePortugueseTipoHomePage"
   handle "/portuguese/manifest.json", using: "WorldServicePortugueseAssets"
   handle "/portuguese/sw.js", using: "WorldServicePortugueseAssets"
   handle "/portuguese/rss.xml", using: "WorldServicePortugueseHomePageRss"
 
-  handle "/portuguese/tipohome.amp", using: "WorldServicePortugueseTipoHomePage", only_on: "test"
 
   handle "/portuguese/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2063,7 +2067,7 @@ defroutefile "Main" do
   end
 
   handle "/portuguese/send/:id", using: "UploaderWorldService"
-  handle "/portuguese", using: "WorldServicePortugueseTipoHomePage", only_on: "test"
+  handle "/portuguese", using: "WorldServicePortugueseTipoHomePage"
   handle "/portuguese/*any", using: "WorldServicePortuguese"
 
   handle "/punjabi.amp", using: "WorldServicePunjabiTipoHomePage"
@@ -2538,13 +2542,10 @@ defroutefile "Main" do
   redirect "/turkce/mobile/*any", to: "/turkce", status: 301
   redirect "/turkce/cep/*any", to: "/turkce", status: 301
 
-  handle "/turkce.amp", using: "WorldServiceTurkce"
-  handle "/turkce.json", using: "WorldServiceTurkce"
+  handle "/turkce.amp", using: "WorldServiceTurkceTipoHomePage"
   handle "/turkce/manifest.json", using: "WorldServiceTurkceAssets"
   handle "/turkce/sw.js", using: "WorldServiceTurkceAssets"
   handle "/turkce/rss.xml", using: "WorldServiceTurkceHomePageRss"
-
-  handle "/turkce/tipohome.amp", using: "WorldServiceTurkceTipoHomePage", only_on: "test"
 
   handle "/turkce/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2578,7 +2579,7 @@ defroutefile "Main" do
   end
 
   handle "/turkce/send/:id", using: "UploaderWorldService"
-  handle "/turkce", using: "WorldServiceTurkceTipoHomePage", only_on: "test"
+  handle "/turkce", using: "WorldServiceTurkceTipoHomePage"
   handle "/turkce/*any", using: "WorldServiceTurkce"
 
   redirect "/ukchina/simp/mobile/*any", to: "/ukchina/simp", status: 301
@@ -2618,13 +2619,10 @@ defroutefile "Main" do
 
   redirect "/ukrainian/mobile/*any", to: "/ukrainian", status: 301
 
-  handle "/ukrainian.amp", using: "WorldServiceUkrainian"
-  handle "/ukrainian.json", using: "WorldServiceUkrainian"
+  handle "/ukrainian.amp", using: "WorldServiceUkrainianTipoHomePage"
   handle "/ukrainian/manifest.json", using: "WorldServiceUkrainianAssets"
   handle "/ukrainian/sw.js", using: "WorldServiceUkrainianAssets"
   handle "/ukrainian/rss.xml", using: "WorldServiceUkrainianHomePageRss"
-
-  handle "/ukrainian/tipohome.amp", using: "WorldServiceUkrainianTipoHomePage", only_on: "test"
 
   handle "/ukrainian/topics/:id/page/:page", using: "WorldServiceTopicsRedirect" do
     return_404 if: [
@@ -2658,7 +2656,7 @@ defroutefile "Main" do
   end
 
   handle "/ukrainian/send/:id", using: "UploaderWorldService"
-  handle "/ukrainian", using: "WorldServiceUkrainianTipoHomePage", only_on: "test"
+  handle "/ukrainian", using: "WorldServiceUkrainianTipoHomePage"
   handle "/ukrainian/*any", using: "WorldServiceUkrainian"
 
   redirect "/urdu/mobile/image/*any", to: "/urdu/*any", status: 302

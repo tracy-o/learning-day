@@ -4,7 +4,7 @@ defmodule Routes.Specs.WorldServiceTurkce do
       specs: %{
         platform: "MozartSimorgh",
         request_pipeline: pipeline(production_env),
-        examples: ["/turkce/popular/read", "/turkce.json", "/turkce.amp"]
+        examples: ["/turkce/popular/read"]
       }
     }
   end
