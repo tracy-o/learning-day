@@ -4,7 +4,31 @@ defmodule Belfrage.PreflightTransformers.BitesizeGuidesPlatformSelector do
 
   @exam_spec_ids [
     "z2synbk",
-    "zp49cwx"
+    "zp49cwx",
+    "zcq2j6f",
+    "z3dj82p",
+    "zsw7frd",
+    "zpgcbk7",
+    "zyqmv4j",
+    "z8xtmnb",
+    "zdycpg8",
+    "zy984j6",
+    "zxy3frd",
+    "z92x7hv",
+    "z6pvkmn",
+    "zw488mn",
+    "z8r997h",
+    "zrjj92p",
+    "zvdpywx",
+    "zqkww6f",
+    "zt7xxfr",
+    "z2dqqhv",
+    "zsc9rdm",
+    "znjwvk7",
+    "zqpshv4",
+    "zt3gv4j",
+    "zwtp6fr",
+    "z83k6fr"
   ]
 
   @scottish_level_ids [
