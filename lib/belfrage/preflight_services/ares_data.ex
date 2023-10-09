@@ -19,8 +19,8 @@ defmodule Belfrage.PreflightServices.AresData do
     }
   end
 
-  defp maybe_put_test_header("test", query_params), do: put_test_header(query_params)
-  defp maybe_put_test_header(_, _query_params), do: %{}
+  defp maybe_put_test_header("live", _query_params), do: %{}
+  defp maybe_put_test_header(_, query_params), do: put_test_header(query_params)
 
   defp put_test_header(%{"mode" => "testData"}), do: %{"ctx-service-env" => "test"}
   defp put_test_header(%{"mode" => "previewFABLWithTestData"}), do: %{"ctx-service-env" => "test"}
