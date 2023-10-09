@@ -120,7 +120,7 @@ defmodule Belfrage.PreflightServices.AresDataTest do
                PreflightService.call(envelope, @service)
     end
 
-    test "does add test headers on live" do
+    test "doesn't add test headers on live production environment" do
       envelope = %Belfrage.Envelope{
         request: %Envelope.Request{path: "/some/path"},
         private: %Envelope.Private{production_environment: "live"}
