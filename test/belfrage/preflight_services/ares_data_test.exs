@@ -76,5 +76,69 @@ defmodule Belfrage.PreflightServices.AresDataTest do
       assert log =~
                ~s("service":"AresData","response_status":"500","request_path":"/some/path","reason":"nil","preflight_error":"preflight_unacceptable_status_code")
     end
+
+    test "returns test asset type when query params are testData" do
+      envelope = %Belfrage.Envelope{
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "testData"}},
+        private: %Envelope.Private{production_environment: "test"}
+      }
+
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
+      headers = %{"ctx-service-env" => "test"}
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url, headers: ^headers}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"MAP\"}}"
+         }}
+      end)
+
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(envelope, @service)
+    end
+
+    test "returns test asset type when query_params are previewFABLWithTestData" do
+      envelope = %Belfrage.Envelope{
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "previewFABLWithTestData"}},
+        private: %Envelope.Private{production_environment: "test"}
+      }
+
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
+      headers = %{"ctx-service-env" => "test"}
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url, headers: ^headers}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           headers: %{"ctx-request-env" => "test"},
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"MAP\"}}"
+         }}
+      end)
+
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(envelope, @service)
+    end
+
+    test "doesn't add test headers on live production environment" do
+      envelope = %Belfrage.Envelope{
+        request: %Envelope.Request{path: "/some/path", query_params: %{"mode" => "testData"}},
+        private: %Envelope.Private{production_environment: "live"}
+      }
+
+      url = @fabl_endpoint <> "/module/ares-asset-identifier?path=%2Fsome%2Fpath"
+      headers = %{}
+
+      expect(HTTPMock, :execute, fn %HTTP.Request{url: ^url, headers: ^headers}, :Preflight ->
+        {:ok,
+         %HTTP.Response{
+           status_code: 200,
+           body: "{\"data\": {\"type\": \"MAP\"}}"
+         }}
+      end)
+
+      assert {:ok, %Envelope{private: %Private{preflight_metadata: %{@service => "MAP"}}}} =
+               PreflightService.call(envelope, @service)
+    end
   end
 end
