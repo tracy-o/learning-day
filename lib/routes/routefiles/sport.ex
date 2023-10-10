@@ -1103,6 +1103,23 @@ defroutefile "Sport" do
     return_404 if: !is_2020s_iso_date?(date) and !is_2020s_iso_month?(date)
   end
 
+  redirect "/sport/alpha/football/:tournament/top-scorers/assists", to: "/sport/alpha/football/:tournament/top-scorers#TopAssists", status: 301
+  redirect "/sport/alpha/football/:tournament/top-scorers/assists.app", to: "/sport/alpha/football/:tournament/top-scorers.app#TopAssists", status: 301
+  redirect "/sport/alpha/football/teams/:team/top-scorers/assists", to: "/sport/alpha/football/teams/:team/top-scorers#TopAssists", status: 301
+  redirect "/sport/alpha/football/teams/:team/top-scorers/assists.app", to: "/sport/alpha/football/teams/:team/top-scorers.app#TopAssists", status: 301
+  handle "/sport/alpha/football/:tournament/top-scorers", using: "SportDataFootballTopScorersWebcore" do
+    return_404 if: !is_slug?(tournament)
+  end
+  handle "/sport/alpha/football/:tournament/top-scorers.app", using: "SportDataFootballTopScorersWebcore" do
+    return_404 if: !is_slug?(tournament)
+  end
+  handle "/sport/alpha/football/teams/:team/top-scorers", using: "SportDataFootballTopScorersWebcore" do
+    return_404 if: !is_slug?(team)
+  end
+  handle "/sport/alpha/football/teams/:team/top-scorers.app", using: "SportDataFootballTopScorersWebcore" do
+    return_404 if: !is_slug?(team)
+  end
+
   ## Sport Embeds Alpha Trials
   handle "/sport/alpha/:sport/sport-embeds-previews/team-selector/:id", using: "SportEmbedsTeamSelector"
 

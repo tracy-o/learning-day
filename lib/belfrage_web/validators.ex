@@ -346,4 +346,44 @@ defmodule BelfrageWeb.Validators do
   def is_2020s_iso_month?(date) do
     String.match?(date, ~r/^202[0-9]/) and is_iso_month?(date)
   end
+
+  @doc """
+  Validate slugs in the format 'lower-kebab-case'
+  ## Examples
+    iex> is_slug?("england")
+    true
+
+    iex> is_slug?("indian-premier-league")
+    true
+
+    iex> is_slug?("a")
+    true
+
+    iex> is_slug?("12-34")
+    true
+
+    iex> is_slug?("")
+    false
+
+    iex> is_slug?("-")
+    false
+
+    iex> is_slug?("trailing-hyphen-")
+    false
+
+    iex> is_slug?("-leading-hyphen")
+    false
+
+    iex> is_slug?("repeated--hyphens")
+    false
+
+    iex> is_slug?("CapitalLetters")
+    false
+
+    iex> is_slug?("special-chars-/*&%$")
+    false
+  """
+  def is_slug?(slug) do
+    String.match?(slug, ~r/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+  end
 end
