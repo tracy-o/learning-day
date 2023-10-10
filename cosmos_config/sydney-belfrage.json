@@ -161,6 +161,13 @@
         "name": "DOTCOM_WORKLIFE_ENDPOINT"
     },
     {
+      "values": {
+        "test": "https://ugas-cdn.gnl-test.bbcverticals.com",
+        "live": "https://ugas-cdn.gnl-live.bbcverticals.com"
+      },
+      "name": "DOTCOM_NEWSLETTERS_ENDPOINT"
+    },
+    {
         "values": {
             "test": "https://web.test.bbcx-internal.com",
             "live": "https://web.live.bbcx-internal.com"

@@ -2950,6 +2950,7 @@ defroutefile "Main" do
   handle "/bbcthree/*any", using: "Three"
 
   # Newsletters
+  handle "/newsletters", using: "DotComNewslettersIndex", only_on: "test"
 
   handle "/newsletters/:id", using: "Newsletter", only_on: "test" do
     return_404 if: !is_zid?(id)

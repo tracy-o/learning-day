@@ -22,6 +22,7 @@ use Mix.Config
   {"DOTCOM_REEL_ENDPOINT", :default},
   {"DOTCOM_TRAVEL_ENDPOINT", :default},
   {"DOTCOM_WORKLIFE_ENDPOINT", :default},
+  {"DOTCOM_NEWSLETTERS_ENDPOINT", :default},
   {"BBCX_ENDPOINT", :default},
   {"ELECTORAL_COMMISSION_ENDPOINT", :default},
   {"CHILDRENS_RESPONSIVE_ENDPOINT", :default},
