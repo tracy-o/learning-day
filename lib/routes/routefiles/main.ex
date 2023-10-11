@@ -3683,6 +3683,7 @@ defroutefile "Main" do
 
   handle "/bitesize", using: "BitesizeHomePage"
 
+  handle "/bitesize/primary", using: "BitesizePrimary"
   handle "/bitesize/preview/primary", using: "Bitesize", only_on: "test"
 
   handle "/bitesize/preview/secondary", using: "Bitesize", only_on: "test"
