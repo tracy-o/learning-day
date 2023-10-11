@@ -886,7 +886,8 @@ defmodule Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelector do
     "zmt2nk7",
     "zxhms82",
     "znfng2p",
-    "zpffcxs"
+    "zpffcxs",
+    "z2r9239"
   ]
 
   @webcore_live_ids [
@@ -1762,7 +1763,8 @@ defmodule Belfrage.PreflightTransformers.BitesizeTopicsPlatformSelector do
     "zmt2nk7",
     "zxhms82",
     "znfng2p",
-    "zpffcxs"
+    "zpffcxs",
+    "z2r9239"
   ]
 
   @impl Transformer
