@@ -25,6 +25,6 @@ defmodule Belfrage.RequestTransformers.NewsAppsHardcodedResponse do
   end
 
   defp dial_active? do
-    @dial.state(:news_apps_hardcoded_response) == "enabled"
+    @dial.state(:news_apps_hardcoded_response)
   end
 end
