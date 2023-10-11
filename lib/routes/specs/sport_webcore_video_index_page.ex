@@ -6,7 +6,7 @@ defmodule Routes.Specs.SportWebcoreVideoIndexPage do
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
         platform: "Webcore",
         query_params_allowlist: ["page"],
-        examples: ["/sport/cricket/video"]
+        examples: ["/sport/cricket/video", "/sport/football/fa-cup/video"]
       }
     }
   end
