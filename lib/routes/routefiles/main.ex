@@ -1346,7 +1346,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/burmese/new_live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test" do
+  handle "/burmese/live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
@@ -1733,7 +1733,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/kyrgyz/new_live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test" do
+  handle "/kyrgyz/live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
@@ -1834,7 +1834,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/mundo/new_live/:id", using: "WorldServiceMundoLivePage", only_on: "test" do
+  handle "/mundo/live/:id", using: "WorldServiceMundoLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
@@ -2015,7 +2015,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/pidgin/new_live/:id", using: "WorldServicePidginLivePage", only_on: "test" do
+  handle "/pidgin/live/:id", using: "WorldServicePidginLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
@@ -2229,14 +2229,14 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/serbian/new_live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test" do
+  handle "/serbian/live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
-  handle "/serbian/new_live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test" do
+  handle "/serbian/live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
@@ -2698,7 +2698,7 @@ defroutefile "Main" do
     return_404 if: !String.match?(id, ~r/^c[a-zA-Z0-9]{10}o$/)
   end
 
-  handle "/urdu/new_live/:id", using: "WorldServiceUrduLivePage", only_on: "test" do
+  handle "/urdu/live/:id", using: "WorldServiceUrduLivePage", only_on: "test" do
     return_404 if: [
       !is_ws_tipo_page_id?(id),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
