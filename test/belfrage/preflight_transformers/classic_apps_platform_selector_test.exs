@@ -1,7 +1,6 @@
 defmodule Belfrage.PreflightTransformers.ClassicAppsPlatformSelectorTest do
   use ExUnit.Case
 
-  alias Routes.Platforms.ClassicApps
   alias Belfrage.PreflightTransformers.ClassicAppsPlatformSelector
   alias Belfrage.{Envelope, Envelope.Request}
 
