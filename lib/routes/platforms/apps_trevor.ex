@@ -7,7 +7,14 @@ defmodule Routes.Platforms.AppsTrevor do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
       circuit_breaker_error_threshold: 15_000,
-      fallback_write_sample: 0.0
+      fallback_write_sample: 0.0,
+      query_params_allowlist: ["subjectId", "language", "createdBy"],
+      etag: true,
+      examples: %{
+        request_headers: %{
+          "host" => "news-app-classic.api.bbci.co.uk"
+        }
+      }
     }
   end
 
