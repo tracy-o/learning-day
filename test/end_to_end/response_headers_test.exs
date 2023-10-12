@@ -5,7 +5,7 @@ defmodule EndToEnd.ResponseHeadersTest do
   import Belfrage.Test.CachingHelper
 
   alias BelfrageWeb.Router
-  alias Belfrage.{Clients.LambdaMock, Envelope}
+  alias Belfrage.Clients.LambdaMock
 
   @moduletag :end_to_end
 
@@ -60,11 +60,9 @@ defmodule EndToEnd.ResponseHeadersTest do
     end
 
     test "405 response" do
-      envelope = %Envelope{request: %Envelope.Request{req_svc_chain: "GTM"}}
-
       conn =
         conn(:post, "/search")
-        |> assign(:envelope, envelope)
+        |> put_req_header("req-svc-chain", "GTM")
         |> Router.call(routefile: Routes.Routefiles.Main.Live)
 
       assert conn.status == 405
