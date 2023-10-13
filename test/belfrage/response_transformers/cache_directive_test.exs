@@ -4,20 +4,19 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
 
   alias Belfrage.ResponseTransformers.CacheDirective
   alias Belfrage.Envelope
-  alias Belfrage.Test.StubHelper
 
   defp set_non_webcore_ttl_multiplier(value) do
-    StubHelper.stub_dial(:non_webcore_ttl_multiplier, value)
+    stub_dial(:non_webcore_ttl_multiplier, value)
   end
 
   defp set_webcore_ttl_multiplier(value) do
-    StubHelper.stub_dial(:webcore_ttl_multiplier, value)
+    stub_dial(:webcore_ttl_multiplier, value)
   end
 
   describe "call/2 with varying Webcore multipliers" do
     for webcore_value <- ["very-short", "short", "default", "long", "very-long", "longest"] do
       @webcore_value webcore_value
-      @webcore_multiplier Belfrage.Dials.WebcoreTtlMultiplier.transform(@webcore_value)
+      @webcore_multiplier elem(Belfrage.Dials.Config.decode({"webcore_ttl_multiplier", webcore_value}), 1)
 
       test "Given a max-age of 5 and a #{@webcore_value} webcore_ttl_multiplier, the correct value is returned" do
         set_webcore_ttl_multiplier(@webcore_value)
@@ -43,7 +42,7 @@ defmodule Belfrage.ResponseTransformers.CacheDirectiveTest do
   describe "call/2 with varying non-Webcore multipliers" do
     for non_webcore_value <- ["very-short", "short", "default", "long", "very-long", "longest"] do
       @non_webcore_value non_webcore_value
-      @non_webcore_multiplier Belfrage.Dials.NonWebcoreTtlMultiplier.transform(@non_webcore_value)
+      @non_webcore_multiplier elem(Belfrage.Dials.Config.decode({"non_webcore_ttl_multiplier", non_webcore_value}), 1)
 
       test "Given a max-age and a #{@non_webcore_value} non_webcore_ttl_multiplier, #{@non_webcore_multiplier} times the original max-age is returned" do
         set_non_webcore_ttl_multiplier(@non_webcore_value)

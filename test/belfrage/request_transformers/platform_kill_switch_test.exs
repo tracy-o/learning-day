@@ -11,17 +11,9 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitchTest do
     }
   end
 
-  defp activate_webcore_kill_switch() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
-      Belfrage.Dials.WebcoreKillSwitch.transform("active")
-    end)
-  end
+  defp activate_webcore_kill_switch(), do: stub_dial(:webcore_kill_switch, "active")
 
-  defp disable_webcore_kill_switch() do
-    stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
-      Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
-    end)
-  end
+  defp disable_webcore_kill_switch(), do: stub_dial(:webcore_kill_switch, "inactive")
 
   describe "when the Webcore kill switch is active" do
     test "and the platform is Webcore, the pipeline is stopped and a 500 response is added to the Envelope" do

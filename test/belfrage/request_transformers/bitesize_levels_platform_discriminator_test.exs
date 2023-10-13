@@ -60,10 +60,7 @@ defmodule Belfrage.RequestTransformers.BitesizeLevelsPlatformDiscriminatorTest d
   }
 
   setup do
-    stub(Belfrage.Dials.ServerMock, :state, fn :webcore_kill_switch ->
-      Belfrage.Dials.WebcoreKillSwitch.transform("inactive")
-    end)
-
+    stub_dial(:webcore_kill_switch, "inactive")
     :ok
   end
 

@@ -420,7 +420,7 @@ defmodule Belfrage.RouteStateTest do
     pid = start_supervised!({RouteState, {@route_state_id, @route_state_args}})
 
     # Allow the route state process to share the mock
-    Mox.allow(Belfrage.Dials.ServerMock, self(), pid)
+    Mox.allow(Belfrage.Dials.StateMock, self(), pid)
     {:ok, pid: pid}
   end
 

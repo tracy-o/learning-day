@@ -4,6 +4,9 @@ defmodule Belfrage.Dials.State do
 
   alias Belfrage.Dials.Config
 
+  # This callback is added for Mox usage only :/
+  @callback get_dial(atom()) :: term()
+
   @dials_state_table :dial_state_table
   @default_poll_interval_ms 5_000
 
