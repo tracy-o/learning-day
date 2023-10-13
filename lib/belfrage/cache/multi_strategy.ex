@@ -36,7 +36,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   def store(envelope) do
-    if @dial.state(:ccp_enabled) do
+    if @dial.get_dial(:ccp_enabled) do
       Local.store(envelope)
       Distributed.store(envelope)
     else
@@ -55,7 +55,7 @@ defmodule Belfrage.Cache.MultiStrategy do
   end
 
   defp should_use_distributed?(accepted_freshness, envelope) do
-    :stale in accepted_freshness and envelope.private.fallback_write_sample > 0 and @dial.state(:ccp_enabled)
+    :stale in accepted_freshness and envelope.private.fallback_write_sample > 0 and @dial.get_dial(:ccp_enabled)
   end
 
   defp execute_fetch(cache, envelope, accepted_freshness) do

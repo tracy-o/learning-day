@@ -9,7 +9,7 @@ defmodule Belfrage.PreflightTransformers.SportFootballScoresFixturesPointer do
   end
 
   defp points_to_webcore? do
-    @dial.state(:football_scores_fixtures) == "webcore"
+    @dial.get_dial(:football_scores_fixtures) == "webcore"
   end
 
   defp get_platform() do

@@ -9,7 +9,7 @@ defmodule Belfrage.RequestTransformers.ObitMode do
       Envelope.add(envelope, :request, %{
         raw_headers:
           Map.merge(raw_headers, %{
-            "obit-mode" => @dial.state(:obit_mode)
+            "obit-mode" => @dial.get_dial(:obit_mode)
           })
       })
 

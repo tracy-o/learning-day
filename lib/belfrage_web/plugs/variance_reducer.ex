@@ -36,6 +36,6 @@ defmodule BelfrageWeb.Plugs.VarianceReducer do
   end
 
   defp news_apps_variance_reducer_dial_enabled? do
-    @dial.state(:news_apps_variance_reducer)
+    @dial.get_dial(:news_apps_variance_reducer)
   end
 end

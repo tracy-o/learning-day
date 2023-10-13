@@ -9,7 +9,7 @@ defmodule Belfrage.RequestTransformers.ElectionBannerCouncilStory do
       Envelope.add(envelope, :request, %{
         raw_headers:
           Map.merge(raw_headers, %{
-            "election-banner-council-story" => @dial.state(:election_banner_council_story)
+            "election-banner-council-story" => @dial.get_dial(:election_banner_council_story)
           })
       })
 
