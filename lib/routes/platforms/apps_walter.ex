@@ -7,7 +7,14 @@ defmodule Routes.Platforms.AppsWalter do
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],
       circuit_breaker_error_threshold: 8_000,
-      fallback_write_sample: 0.0
+      fallback_write_sample: 0.0,
+      query_params_allowlist: ["subjectId", "language", "createdBy"],
+      etag: true,
+      examples: %{
+        request_headers: %{
+          "host" => "news-app-global-classic.api.bbci.co.uk"
+        }
+      }
     }
   end
 

@@ -33,12 +33,14 @@ defmodule EndToEnd.NotModifiedResponseTest do
 
       assert added_header_keys(headers, response_stub.headers) == [
                "belfrage-cache-status",
+               "belfrage-preflight-pipeline-trail",
                "belfrage-request-pipeline-trail",
                "belfrage-response-pipeline-trail",
                "bid",
                "brequestid",
                "bsig",
                "cache-control",
+               "etag",
                "req-svc-chain",
                "routespec",
                "server",
