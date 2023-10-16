@@ -23,20 +23,7 @@ defmodule Routes.Specs.NewsWebcoreIndex do
           "/news/election/2015/wales",
           "/news/election/2015/northern_ireland",
           "/news/election/2015/england",
-          "/news/election/2015",
-          "/news/england/cornwall",
-          "/news/england/devon",
-          "/news/world/europe/guernsey",
-          "/news/world/europe/jersey",
-          "/news/wales/south_east_wales",
-          "/news/wales/south_west_wales",
-          "/news/wales/mid_wales",
-          "/news/wales/north_west_wales",
-          "/news/wales/north_east_wales",
-          "/news/england/bristol",
-          "/news/england/gloucestershire",
-          "/news/england/somerset",
-          "/news/england/wiltshire"
+          "/news/election/2015"
         ]
       }
     }

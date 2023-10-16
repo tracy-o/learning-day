@@ -387,14 +387,6 @@ defroutefile "Main" do
   redirect "/news/topics/c44dg7xd5j0t/*any", to: "/cymrufyw/canolbarth", status: 301
   redirect "/news/topics/cr0p1mgq088t/*any", to: "/cymrufyw/de-orllewin", status: 301
   redirect "/news/topics/c7p2x560jqqt/*any", to: "/cymrufyw/de-ddwyrain", status: 301
-  redirect "/news/topics/cmlx13g8vkvt/*any", to: "/news/world/europe/jersey", status: 301
-  redirect "/news/topics/c30gv89epevt/*any", to: "/news/wales/south_east_wales", status: 301
-  redirect "/news/topics/cpvn4p9gv9nt/*any", to: "/news/wales/south_west_wales", status: 301
-  redirect "/news/topics/cj1g5vpnkx6t/*any", to: "/news/wales/mid_wales ", status: 301
-  redirect "/news/topics/cqepv27v61dt/*any", to: "/news/wales/north_west_wales", status: 301
-  redirect "/news/topics/c9mn0730k23t/*any", to: "/news/wales/north_east_wales", status: 301
-  redirect "/news/topics/cq0zpjy11vyt/*any", to: "/news/england/somerset", status: 301
-  redirect "/news/topics/cz43vwmy967t/*any", to: "/news/england/wiltshire", status: 301
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
@@ -596,19 +588,6 @@ defroutefile "Main" do
   handle "/news/war-in-ukraine", using: "BBCXIndex"
   handle "/news/world", using: "NewsWorld"
   handle "/news/world_radio_and_tv", using: "NewsIndex"
-  handle "/news/england/cornwall", using: "NewsWebcoreIndex"
-  handle "/news/england/devon", using: "NewsWebcoreIndex"
-  handle "/news/world/europe/guernsey", using: "NewsWebcoreIndex"
-  handle "/news/world/europe/jersey", using: "NewsWebcoreIndex"
-  handle "/news/wales/south_east_wales", using: "NewsWebcoreIndex"
-  handle "/news/wales/south_west_wales", using: "NewsWebcoreIndex"
-  handle "/news/wales/mid_wales", using: "NewsWebcoreIndex"
-  handle "/news/wales/north_west_wales", using: "NewsWebcoreIndex"
-  handle "/news/wales/north_east_wales", using: "NewsWebcoreIndex"
-  handle "/news/england/bristol", using: "NewsWebcoreIndex"
-  handle "/news/england/gloucestershire", using: "NewsWebcoreIndex"
-  handle "/news/england/somerset", using: "NewsWebcoreIndex"
-  handle "/news/england/wiltshire", using: "NewsWebcoreIndex"
 
   # News feature indexes (FIX assets)
 
