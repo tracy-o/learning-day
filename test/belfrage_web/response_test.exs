@@ -137,13 +137,11 @@ defmodule BelfrageWeb.ResponseTest do
     assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
   end
 
-  describe "unsupported_method/1" do
-    test "returns appropriate status, body, and cache-control" do
-      conn = build_conn() |> BelfrageWeb.Response.unsupported_method()
-      assert conn.status == 405
-      assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
-      assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
-    end
+  test "unsupported_method/1" do
+    conn = build_conn() |> BelfrageWeb.Response.unsupported_method()
+    assert conn.status == 405
+    assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
+    assert get_resp_header(conn, "cache-control") == ["public, stale-while-revalidate=15, max-age=5"]
   end
 
   test "keep envelope data on error" do
