@@ -154,7 +154,10 @@ defmodule BelfrageWeb.ResponseTest do
   end
 
   defp build_conn(envelope \\ nil) do
-    conn = conn(:get, "/_web_core")
+    conn =
+      conn(:get, "/_web_core")
+      |> put_private(:bbc_headers, %{req_svc_chain: "GTM"})
+
     if envelope, do: assign(conn, :envelope, envelope), else: conn
   end
 end

@@ -17,6 +17,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
       conn =
         conn(:get, "/news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
@@ -29,6 +30,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "logs an error if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
       conn =
         conn(:get, "/news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert capture_log([level: :error], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end) =~
@@ -41,6 +43,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "sends an event if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news" do
       conn =
         conn(:get, "/news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert_metric([:request, :infinite_loop], fn -> InfiniteLoopGuardian.call(conn, _opts = []) end)
@@ -58,6 +61,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
 
       :get
       |> conn("/news")
+      |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
       |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
       |> InfiniteLoopGuardian.call(_opts = [])
 
@@ -71,6 +75,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
       # This must include the hostname because with // it thinks the host is following
       conn =
         conn(:get, "http://www.example.com//news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
@@ -83,6 +88,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "returns a 404 if req-svc-chain contains 2 instances of 'BELFRAGE' and the route starts with /news%2F" do
       conn =
         conn(:get, "/news%2F")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART,BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
@@ -95,6 +101,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "continues if req-svc-chain contains 1 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
 
       assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
@@ -110,6 +117,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "returns a 404 if req-svc-chain contains 1 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,BELFRAGE,MOZART")
 
       assert %Plug.Conn{status: 404, halted: true, resp_headers: resp_headers} =
@@ -122,6 +130,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     test "continues if req-svc-chain contains 0 instances of 'BELFRAGE'" do
       conn =
         conn(:get, "/news")
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "GTM,MOZART")
 
       assert %Plug.Conn{status: nil, halted: false} = InfiniteLoopGuardian.call(conn, _opts = [])
@@ -139,6 +148,7 @@ defmodule BelfrageWeb.Plugs.InfiniteLoopGuardianTest do
     for route <- routes do
       conn =
         conn(:get, route)
+        |> put_private(:bbc_headers, %{req_svc_chain: "BELFRAGE"})
         |> Plug.Conn.put_req_header("req-svc-chain", "BELFRAGE")
 
       assert %Plug.Conn{status: 404, halted: true} = InfiniteLoopGuardian.call(conn, [])

@@ -85,7 +85,10 @@ defmodule BelfrageWeb.Response.InternalTest do
   end
 
   defp build_response(status, opts \\ []) do
-    conn = Keyword.get(opts, :request_headers, %{}) |> build_conn()
+    conn =
+      Keyword.get(opts, :request_headers, %{})
+      |> build_conn()
+      |> put_private(:bbc_headers, %{req_svc_chain: "GTM"})
 
     envelope = %Envelope{
       response: %Response{http_status: status},

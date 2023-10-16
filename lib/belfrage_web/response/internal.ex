@@ -33,21 +33,6 @@ defmodule BelfrageWeb.Response.Internal do
     end)
   end
 
-  def new(envelope = %Envelope{}, conn = %Conn{}) do
-    Metrics.latency_span(:generate_internal_response, fn ->
-      {content_type, body} = body(envelope.response, conn)
-
-      %Response{
-        envelope.response
-        | headers: %{
-            "content-type" => content_type
-          },
-          body: body,
-          cache_directive: cache_control(envelope)
-      }
-    end)
-  end
-
   defp body(%Response{http_status: status}, conn = %Conn{}) do
     accepted_content_type = Conn.get_req_header(conn, "accept") |> List.first()
 
