@@ -159,7 +159,8 @@ defmodule Belfrage.Supervisor do
               {:verify, :verify_peer}
             ]
           ]
-        ]
+        ],
+        Application.get_env(:belfrage, :bbcx_endpoint) => [size: 512, conn_max_idle_time: 60_000]
       }
     ]
   end
