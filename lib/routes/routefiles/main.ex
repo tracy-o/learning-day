@@ -929,6 +929,8 @@ defroutefile "Main" do
   ## World Service - Article Redirects
   redirect "/arabic/middleeast-65449088", to: "/arabic/articles/cv2310xx8n5o", status: 301
   redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
+  redirect "/mundo/noticias-america-latina-45714908", to: "/mundo/articles/c8745el6z5go", status: 301
+  redirect "/mundo/noticias-internacional-44125537", to: "/mundo/articles/cd1dk2079rgo", status: 301
   redirect "/mundo/noticias/2015/02/150210_salud_como_ganar_peso_si_estas_muy_delgado_bd", to: "/mundo/articles/c6p7ry76ryko", status: 301
   redirect "/mundo/noticias/2016/03/160317_semana_santa_causas_sangre_heces_cancer_ac", to: "/mundo/articles/c2qd71z6y3wo", status: 301
   redirect "/mundo/noticias/2016/04/160429_salud_cancer_10_sintomas_generales_il", to: "/mundo/articles/cevzx098d1ko", status: 301
@@ -978,6 +980,7 @@ defroutefile "Main" do
   redirect "/thai/topics/c2w0dk01g2kt", to: "/thai", status: 301
   redirect "/tigrinya/topics/cq01ke649v0t", to: "/tigrinya", status: 301
   redirect "/turkce/topics/c3eg5kgl56zt", to: "/turkce", status: 301
+  redirect "/ukrainian/55425840", to: "/ukrainian/topics/c44vmzqkzqqt", status: 301
   redirect "/ukrainian/topics/c3eg5kglplrt", to: "/ukrainian", status: 301
   redirect "/urdu/topics/c44d8kd7lgzt", to: "/urdu", status: 301
   redirect "/vietnamese/topics/c5q5105m81dt", to: "/vietnamese", status: 301
@@ -1787,8 +1790,8 @@ defroutefile "Main" do
   redirect "/mundo/deportes-57748229", to: "/mundo/deportes-57970068", status: 301
 
   ## World Service - Topcat to CPS Redirects
-  redirect "/mundo/noticias/2014/08/140801_israel_palestinos_conflicto_preguntas_basicas_jp", to: "/mundo/noticias-internacional-44125537", status: 301
-  redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/noticias-internacional-44125537", status: 301
+  redirect "/mundo/noticias/2014/08/140801_israel_palestinos_conflicto_preguntas_basicas_jp", to: "/mundo/articles/cd1dk2079rgo", status: 301
+  redirect "/mundo/noticias/2015/10/151014_israel_palestina_preguntas_basicas_actualizacion_aw", to: "/mundo/articles/cd1dk2079rgo", status: 301
 
   redirect "/mundo/mobile/*any", to: "/mundo", status: 301
   redirect "/mundo/movil/*any", to: "/mundo", status: 301
