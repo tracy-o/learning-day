@@ -40,7 +40,8 @@ defmodule BelfrageWeb.Response.Internal do
       %Response{
         envelope.response
         | headers: %{
-            "content-type" => content_type
+            "content-type" => content_type,
+            "req-svc-chain" => "BELFRAGE"
           },
           body: body,
           cache_directive: cache_control(envelope)
