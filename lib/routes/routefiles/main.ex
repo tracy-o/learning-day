@@ -927,7 +927,9 @@ defroutefile "Main" do
   redirect "/zhongwen/trad/institutional-38228429", to: "/zhongwen/trad/podcasts/p02pc9xp", status: 301
 
   ## World Service - Article Redirects
+  redirect "/afaanoromoo/oduu-57098175", to: "/afaanoromoo/articles/cw03re3p5lno", status: 301
   redirect "/arabic/middleeast-65449088", to: "/arabic/articles/cv2310xx8n5o", status: 301
+  redirect "/bengali/news-51295547", to: "/bengali/articles/cn4876p6z2po", status: 301
   redirect "/igbo/articles/c4nrw821j28o", to: "/igbo/afirika-66648485", status: 301
   redirect "/mundo/noticias-america-latina-45714908", to: "/mundo/articles/c8745el6z5go", status: 301
   redirect "/mundo/noticias-internacional-44125537", to: "/mundo/articles/cd1dk2079rgo", status: 301
