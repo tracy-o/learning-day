@@ -83,7 +83,6 @@ defmodule BelfrageWeb.Router do
 
   options _ do
     BelfrageWeb.Response.unsupported_method(conn)
-    |> send_resp(405, "")
   end
 
   match(_, to: BelfrageWeb.RoutefilePointer)

@@ -29,7 +29,7 @@ defmodule BelfrageWeb.RouterTest do
       conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 405
-      assert conn.resp_body == ""
+      assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
     end
   end
 
