@@ -3478,6 +3478,14 @@ defroutefile "Main" do
   handle "/music", using: "Music"
 
   # Bitesize
+  # Bitesize guides .app routes
+  handle "/bitesize/guides/:id/revision.app", using: "BitesizeGuides" do
+    return_404()
+  end
+  handle "/bitesize/preview/guides/:id/revision.app", using: "Bitesize", only_on: "test" do
+    return_404()
+  end
+
   # GCSE Eduqas Science deprecation - Study guide redirects
   redirect "/bitesize/guides/zcxmfcw/revision/1", to: "/bitesize/guides/zgmpgdm/revision/1", status: 301
   redirect "/bitesize/guides/z9m6v9q/revision/2", to: "/bitesize/guides/z8gx3k7/revision/2", status: 301
