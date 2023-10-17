@@ -27,6 +27,8 @@ defmodule Belfrage.RequestTransformers.BBCXRedirect do
     "/innovation/artificial-intelligence" => "/news/technology",
     "/innovation/future-now" => "/news/technology",
     "/live" => "/news",
+    "/live/news" => "/news",
+    "/live/sport" => "/sport",
     "/news/us-canada" => "/news/world/us_and_canada",
     "/news/war-in-ukraine" => "/news/world-60525350",
     "/travel/adventures" => "/travel/columns/adventure-experience",

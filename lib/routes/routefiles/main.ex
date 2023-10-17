@@ -3261,6 +3261,9 @@ defroutefile "Main" do
     return_404 if: !is_tipo_id?(id)
   end
 
+  handle "/live/news", using: "LiveNewsIndex"
+  handle "/live/sport", using: "LiveSportIndex"
+
   ## Live WebCore
   handle "/live/:asset_id", using: "Live", only_on: "test" do
     return_404 if: [
