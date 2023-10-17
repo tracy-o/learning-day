@@ -3784,6 +3784,7 @@ defroutefile "Main" do
   handle "/bitesize/study-support", using: "BitesizeTipoTopic"
   handle "/bitesize/learn", using: "BitesizeTipoTopic"
   handle "/bitesize/careers", using: "BitesizeTipoTopic"
+  handle "/bitesize/trending", using: "BitesizeTipoTopic", only_on: "test"
 
   handle "/bitesize/*any", using: "BitesizeLegacy"
 
