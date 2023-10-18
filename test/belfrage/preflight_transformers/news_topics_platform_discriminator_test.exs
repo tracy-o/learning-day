@@ -1,8 +1,8 @@
-defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
+defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
   use ExUnit.Case
   use Test.Support.Helper, :mox
 
-  alias Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator
+  alias Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator
   alias Belfrage.Envelope
 
   setup do
@@ -22,10 +22,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                    platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
-                   personalised_request: false
+                   personalised_request: false,
+                   request_pipeline: ["CircuitBreaker"]
                  }
-               },
-               {:replace, ["CircuitBreaker"]}
+               }
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
                  request: %Envelope.Request{path_params: %{"id" => "cdr8nnnw9ngt"}},
@@ -66,10 +66,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                    platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
-                   personalised_request: false
+                   personalised_request: false,
+                   request_pipeline: ["CircuitBreaker"]
                  }
-               },
-               {:replace, ["CircuitBreaker"]}
+               }
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
                  request: %Envelope.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
@@ -90,10 +90,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                    platform: "MozartNews",
                    origin: ^mozart_news_endpoint,
                    personalised_route: false,
-                   personalised_request: false
+                   personalised_request: false,
+                   request_pipeline: ["CircuitBreaker"]
                  }
-               },
-               {:replace, ["CircuitBreaker"]}
+               }
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
                  request: %Envelope.Request{path_params: %{"id" => "cdr8nnnw9ngt", "slug" => "some-slug"}},
@@ -134,10 +134,10 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminatorTest do
                  platform: "MozartNews",
                  origin: ^mozart_news_endpoint,
                  personalised_route: false,
-                 personalised_request: false
+                 personalised_request: false,
+                 request_pipeline: ["CircuitBreaker"]
                }
-             },
-             {:replace, ["CircuitBreaker"]}
+             }
            } =
              NewsTopicsPlatformDiscriminator.call(%Envelope{
                request: %Envelope.Request{

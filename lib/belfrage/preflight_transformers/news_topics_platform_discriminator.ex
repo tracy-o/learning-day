@@ -1,9 +1,9 @@
-defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
+defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator do
   @moduledoc """
   Alters the Platform for a subset of News Topics IDs that need to be served by Mozart.
   """
   use Belfrage.Behaviours.Transformer
-  alias Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
+  alias Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
 
   @impl Transformer
   def call(envelope) do
@@ -14,10 +14,11 @@ defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator do
             platform: "MozartNews",
             origin: Application.get_env(:belfrage, :mozart_news_endpoint),
             personalised_route: false,
-            personalised_request: false
+            personalised_request: false,
+            request_pipeline: ["CircuitBreaker"]
           })
 
-        {:ok, envelope, {:replace, ["CircuitBreaker"]}}
+        {:ok, envelope}
 
       not is_mozart_topic?(envelope) and has_slug?(envelope) ->
         {
