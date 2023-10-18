@@ -1,12 +1,21 @@
 defmodule Routes.Specs.WorldServiceJapaneseTopicPage do
   def specification(production_env) do
     %{
-      specs: %{
-        platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env),
-        examples: ["/japanese/topics/c340qrn7pp0t", "/japanese/topics/c340qrn7pp0t?page=2"]
-      }
+      preflight_pipeline: ["WorldServiceTopicsGuid"],
+      specs: [
+        %{
+          platform: "Simorgh",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: ["/japanese/topics/c340qrn7pp0t", "/japanese/topics/c340qrn7pp0t?page=2"]
+        },
+         %{
+          platform: "MozartNews",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: []
+        }
+      ]
     }
   end
 
