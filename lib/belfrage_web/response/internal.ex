@@ -17,7 +17,7 @@ defmodule BelfrageWeb.Response.Internal do
                  ]
              )
 
-  def new(envelope = %Envelope{}, conn = %Conn{private: %{bbc_headers: bbc_headers}}) do
+  def new(envelope = %Envelope{}, conn = %Conn{private: private}) do
     Metrics.latency_span(:generate_internal_response, fn ->
       {content_type, body} = body(envelope.response, conn)
 
@@ -25,7 +25,7 @@ defmodule BelfrageWeb.Response.Internal do
         envelope.response
         | headers: %{
             "content-type" => content_type,
-            "req-svc-chain" => get_svc_chain(bbc_headers)
+            "req-svc-chain" => get_svc_chain(private)
           },
           body: body,
           cache_directive: cache_control(envelope)
@@ -33,23 +33,8 @@ defmodule BelfrageWeb.Response.Internal do
     end)
   end
 
-  def new(envelope = %Envelope{}, conn = %Conn{}) do
-    Metrics.latency_span(:generate_internal_response, fn ->
-      {content_type, body} = body(envelope.response, conn)
-
-      %Response{
-        envelope.response
-        | headers: %{
-            "content-type" => content_type,
-            "req-svc-chain" => "BELFRAGE"
-          },
-          body: body,
-          cache_directive: cache_control(envelope)
-      }
-    end)
-  end
-
-  defp get_svc_chain(bbc_headers), do: Map.get(bbc_headers, :req_svc_chain, "BELFRAGE")
+  defp get_svc_chain(%{bbc_headers: bbc_headers}), do: Map.get(bbc_headers, :req_svc_chain, "BELFRAGE")
+  defp get_svc_chain(_), do: "BELFRAGE"
 
   defp body(%Response{http_status: status}, conn = %Conn{}) do
     accepted_content_type = Conn.get_req_header(conn, "accept") |> List.first()
