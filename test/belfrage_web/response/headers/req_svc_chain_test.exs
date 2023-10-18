@@ -3,30 +3,32 @@ defmodule BelfrageWeb.Response.Headers.ReqSvcChainTest do
   use Plug.Test
 
   alias BelfrageWeb.Response.Headers.ReqSvcChain
+  alias Belfrage.Envelope
 
-  @envelope %Belfrage.Envelope{}
+  test "when the response has 'req-svc-chain' then it is returned" do
+    input_conn = conn(:get, "/")
+    envelope = %Envelope{response: %Envelope.Response{headers: %{"req-svc-chain" => "BELFRAGE,ORIGIN"}}}
 
-  describe "when a service chain is already present in bbc_headers" do
-    test "adds the chain to the response" do
-      input_conn =
-        conn(:get, "/")
-        |> put_private(:bbc_headers, %{req_svc_chain: "GTM,BELFRAGE,ORIGIN"})
+    output_conn = ReqSvcChain.add_header(input_conn, envelope)
 
-      output_conn = ReqSvcChain.add_header(input_conn, @envelope)
-
-      assert ["GTM,BELFRAGE,ORIGIN"] == get_resp_header(output_conn, "req-svc-chain")
-    end
+    assert ["BELFRAGE,ORIGIN"] == get_resp_header(output_conn, "req-svc-chain")
   end
 
-  describe "when a service chain is NOT present in bbc_headers" do
-    test "it puts BELFRAGE as the response chain" do
-      input_conn =
-        conn(:get, "/")
-        |> put_private(:bbc_headers, %{country: "gb"})
+  test "when the response does not have 'req-svc-chain' the request envelope value is returned" do
+    input_conn = conn(:get, "/")
+    envelope = %Envelope{request: %Envelope.Request{req_svc_chain: "GTM,BELFRAGE"}}
 
-      output_conn = ReqSvcChain.add_header(input_conn, @envelope)
+    output_conn = ReqSvcChain.add_header(input_conn, envelope)
 
-      assert ["BELFRAGE"] == get_resp_header(output_conn, "req-svc-chain")
-    end
+    assert ["GTM,BELFRAGE"] == get_resp_header(output_conn, "req-svc-chain")
+  end
+
+  test "when the response and request don't have 'req-svc-chain' set, BELFRAGE is returned" do
+    input_conn = conn(:get, "/")
+    envelope = %Envelope{}
+
+    output_conn = ReqSvcChain.add_header(input_conn, envelope)
+
+    assert ["BELFRAGE"] == get_resp_header(output_conn, "req-svc-chain")
   end
 end
