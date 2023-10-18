@@ -3440,6 +3440,7 @@ defroutefile "Main" do
 
   # CBBC
   handle "/cbbc/findoutmore/help-me-out-exercise", using: "CBBCArticlePage"
+  handle "/cbbc/joinin/five-things-to-think-when-you-look-in-the-mirror", using: "CBBCArticlePage", only_on: "test"
   handle "/cbbc/*any", using: "CBBCLegacy"
 
   # Newsround
