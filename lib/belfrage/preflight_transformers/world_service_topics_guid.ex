@@ -12,7 +12,13 @@ defmodule Belfrage.PreflightTransformers.WorldServiceTopicsGuid do
         })
       }
     else
-      {:ok, envelope}
+      {
+        :ok,
+        Envelope.add(envelope, :private, %{
+          platform: "Simorgh",
+          origin: Application.get_env(:belfrage, :simorgh_endpoint)
+        })
+      }
     end
   end
 
