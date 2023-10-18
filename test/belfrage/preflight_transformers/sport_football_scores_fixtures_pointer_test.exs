@@ -1,16 +1,12 @@
-defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
+defmodule Belfrage.PreflightTransformers.SportFootballScoresFixturesPointerTest do
   use ExUnit.Case, async: true
   use Test.Support.Helper, :mox
 
-  alias Belfrage.RequestTransformers.SportFootballScoresFixturesPointer
+  alias Belfrage.PreflightTransformers.SportFootballScoresFixturesPointer
   alias Belfrage.Envelope
 
   defp envelope do
-    %Envelope{
-      private: %Envelope.Private{
-        platform: "MozartSport"
-      }
-    }
+    %Envelope{request: %Envelope.Request{path: "/sport/football/scores-fixtures"}}
   end
 
   describe "when the Dial is pointing to Mozart (default)" do
@@ -25,8 +21,7 @@ defmodule Belfrage.RequestTransformers.SportFootballScoresFixturesPointerTest do
     test "platform will point to Webcore" do
       stub_dials(football_scores_fixtures: "webcore")
 
-      assert {:ok, %Envelope{private: %{platform: "Webcore", origin: "pwa-lambda-function"}}} =
-               SportFootballScoresFixturesPointer.call(envelope())
+      assert {:ok, %Envelope{private: %{platform: "Webcore"}}} = SportFootballScoresFixturesPointer.call(envelope())
     end
   end
 end
