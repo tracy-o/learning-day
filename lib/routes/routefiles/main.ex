@@ -3641,8 +3641,8 @@ defroutefile "Main" do
   redirect "/bitesize/articles/zn8jwnb", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
   redirect "/bitesize/articles/zhc2jhv", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
   redirect "/bitesize/articles/z2rccmn", to: "/bitesize/groups/c306433371zt", status: 301                             # Study Support - Wellbeing
-  redirect "/bitesize/collections/life-and-wellbeing/1", to: "bitesize/groups/c306433371zt", status: 301              # Study Support - Wellbeing
-  redirect "/bitesize/tags/z7qg6v4/mental-health/1", to: "bitesize/groups/c306433371zt", status: 301                  # Study Support - Wellbeing
+  redirect "/bitesize/collections/life-and-wellbeing/1", to: "/bitesize/groups/c306433371zt", status: 301              # Study Support - Wellbeing
+  redirect "/bitesize/tags/z7qg6v4/mental-health/1", to: "/bitesize/groups/c306433371zt", status: 301                  # Study Support - Wellbeing
 
   redirect "/bitesize/articles/zv6yhbk", to: "/usingthebbc/privacy/privacy-notice-for-bbc-quizzes-and-polls", status: 301      # privacy-notice-for-bbc-quizzes-and-polls
 
