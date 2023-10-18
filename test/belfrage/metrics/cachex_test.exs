@@ -22,66 +22,35 @@ defmodule Belfrage.Metrics.CachexTest do
 
     test "stats measurement metrics from cachex", %{cache: cache, socket: socket} do
       Cachex.get(cache, "key1")
-
       Belfrage.Metrics.Cachex.track(cache)
-
-      assert_reported(
-        socket,
-        "cachex.size:0|g|#BBCEnvironment:live,cache_name:#{cache}"
-      )
+      assert_reported(socket, expected_metric_payload(cache, 0, 0, 10, 0))
 
       Cachex.put(cache, "key1", "value1", ttl: 50)
       Cachex.get(cache, "key1")
-
       Belfrage.Metrics.Cachex.track(cache)
+      assert_reported(socket, expected_metric_payload(cache, 6, 6, 10, 1))
 
-      assert_reported(
-        socket,
-        "cachex.size:1|g|#BBCEnvironment:live,cache_name:#{cache}"
-      )
+      Cachex.put(cache, "key2", "other-value2", ttl: 50)
+      Belfrage.Metrics.Cachex.track(cache)
+      assert_reported(socket, expected_metric_payload(cache, 18, 9, 10, 2))
 
       # wait for entry to expire and trigger a cleanup
       Process.sleep(100)
       Cachex.purge(cache)
-
       Belfrage.Metrics.Cachex.track(cache)
-
-      assert_reported(
-        socket,
-        "cachex.size:0|g|#BBCEnvironment:live,cache_name:#{cache}"
-      )
+      assert_reported(socket, expected_metric_payload(cache, 0, 0, 10, 0))
     end
+  end
 
-    test "cache memory metrics from cachex", %{cache: cache, socket: socket} do
-      Cachex.put(cache, "key1", "value1", ttl: 50)
-      Belfrage.Metrics.Cachex.track_cache_memory(cache)
-
-      assert_reported(
-        socket,
-        Enum.join(
-          [
-            "cachex.cache_memory:6|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.average_cache_entry_size:6|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.limit:10|g|#BBCEnvironment:live,cache_name:#{cache}"
-          ],
-          "\n"
-        )
-      )
-
-      Cachex.put(cache, "key2", "other-value2", ttl: 50)
-      Belfrage.Metrics.Cachex.track_cache_memory(cache)
-
-      assert_reported(
-        socket,
-        Enum.join(
-          [
-            "cachex.cache_memory:18|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.average_cache_entry_size:9|g|#BBCEnvironment:live,cache_name:#{cache}",
-            "cachex.limit:10|g|#BBCEnvironment:live,cache_name:#{cache}"
-          ],
-          "\n"
-        )
-      )
-    end
+  defp expected_metric_payload(cache, cache_memory, avg_entry_size, limit, size) do
+    Enum.join(
+      [
+        "cachex.cache_memory:#{cache_memory}|g|#BBCEnvironment:live,cache_name:#{cache}",
+        "cachex.average_cache_entry_size:#{avg_entry_size}|g|#BBCEnvironment:live,cache_name:#{cache}",
+        "cachex.limit:#{limit}|g|#BBCEnvironment:live,cache_name:#{cache}",
+        "cachex.size:#{size}|g|#BBCEnvironment:live,cache_name:#{cache}"
+      ],
+      "\n"
+    )
   end
 end
