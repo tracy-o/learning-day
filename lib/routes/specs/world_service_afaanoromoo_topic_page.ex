@@ -12,7 +12,6 @@ defmodule Routes.Specs.WorldServiceAfaanoromooTopicPage do
          %{
           platform: "MozartNews",
           request_pipeline: ["WorldServiceRedirect"],
-          r
           query_params_allowlist: query_params_allowlist(production_env),
           examples: []
         }
