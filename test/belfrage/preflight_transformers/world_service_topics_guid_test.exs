@@ -1,7 +1,7 @@
-defmodule Belfrage.RequestTransformers.WorldServiceTopicsGuidTest do
+defmodule Belfrage.PreflightTransformers.WorldServiceTopicsGuidTest do
   use ExUnit.Case
 
-  alias Belfrage.RequestTransformers.WorldServiceTopicsGuid
+  alias Belfrage.PreflightTransformers.WorldServiceTopicsGuid
   alias Belfrage.Envelope
   alias Belfrage.Envelope.{Request, Private}
 

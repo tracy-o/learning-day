@@ -1,12 +1,21 @@
 defmodule Routes.Specs.WorldServiceUrduTopicPage do
   def specification(production_env) do
     %{
-      specs: %{
-        platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env),
-        examples: ["/urdu/topics/c44pxlmy60mt", "/urdu/topics/c44pxlmy60mt?page=2"]
-      }
+      preflight_pipeline: ["WorldServiceTopicsGuid"],
+      specs: [
+        %{
+          platform: "Simorgh",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: ["/urdu/topics/c44pxlmy60mt", "/urdu/topics/c44pxlmy60mt?page=2"]
+        },
+         %{
+          platform: "MozartNews",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: []
+        }
+      ]
     }
   end
 

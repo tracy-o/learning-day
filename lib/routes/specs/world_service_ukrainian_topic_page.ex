@@ -1,12 +1,21 @@
 defmodule Routes.Specs.WorldServiceUkrainianTopicPage do
   def specification(production_env) do
     %{
-      specs: %{
-        platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect", "WorldServiceTopicsGuid"],
-        query_params_allowlist: query_params_allowlist(production_env),
-        examples: ["/ukrainian/topics/c340qxwr67yt", "/ukrainian/topics/c340qxwr67yt?page=2"]
-      }
+      preflight_pipeline: ["WorldServiceTopicsGuid"],
+      specs: [
+        %{
+          platform: "Simorgh",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: ["/ukrainian/topics/c340qxwr67yt", "/ukrainian/topics/c340qxwr67yt?page=2"]
+        },
+         %{
+          platform: "MozartNews",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: []
+        }
+      ]
     }
   end
 
