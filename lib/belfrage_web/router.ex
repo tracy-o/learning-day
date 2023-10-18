@@ -82,7 +82,7 @@ defmodule BelfrageWeb.Router do
   end
 
   options _ do
-    send_resp(conn, 405, "")
+    BelfrageWeb.Response.unsupported_method(conn)
   end
 
   match(_, to: BelfrageWeb.RoutefilePointer)

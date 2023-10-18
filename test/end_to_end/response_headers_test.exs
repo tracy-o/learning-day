@@ -50,11 +50,32 @@ defmodule EndToEnd.ResponseHeadersTest do
       assert conn.resp_headers == [
                {"cache-control", "public, stale-if-error=90, stale-while-revalidate=60, max-age=30"},
                {"content-type", "text/html; charset=utf-8"},
+               {"req-svc-chain", "BELFRAGE"},
                {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
                {"server", "Belfrage"},
                {"bid", "local"},
                {"via", "1.1 Belfrage"},
-               {"req-svc-chain", "BELFRAGE"},
+               {"belfrage-cache-status", "MISS"}
+             ]
+    end
+
+    test "405 response" do
+      conn =
+        conn(:post, "/search")
+        |> put_req_header("req-svc-chain", "GTM")
+        |> Router.call(routefile: Routes.Routefiles.Main.Live)
+
+      assert conn.status == 405
+      assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
+
+      assert conn.resp_headers == [
+               {"cache-control", "public, stale-while-revalidate=15, max-age=5"},
+               {"content-type", "text/html; charset=utf-8"},
+               {"req-svc-chain", "GTM,BELFRAGE"},
+               {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"},
+               {"server", "Belfrage"},
+               {"bid", "local"},
+               {"via", "1.1 Belfrage"},
                {"belfrage-cache-status", "MISS"}
              ]
     end

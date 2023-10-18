@@ -29,7 +29,7 @@ defmodule BelfrageWeb.RouterTest do
       conn = Router.call(conn, routefile: Routes.Routefiles.Mock)
 
       assert conn.status == 405
-      assert conn.resp_body == ""
+      assert conn.resp_body == "<h1>405 Not Supported</h1>\n<!-- Belfrage -->"
     end
   end
 
@@ -46,7 +46,11 @@ defmodule BelfrageWeb.RouterTest do
   describe "handle_errors" do
     test "will set the status as 404 when the plug status code is 400" do
       reason = %{message: "Some error", plug_status: 400}
-      conn = conn(:get, "/%")
+
+      conn =
+        conn(:get, "/%")
+        |> put_private(:bbc_headers, %{req_svc_chain: "GTM"})
+
       conn = Router.handle_errors(conn, %{kind: "err", reason: reason, stack: %{}})
 
       assert conn.status == 404
@@ -54,7 +58,11 @@ defmodule BelfrageWeb.RouterTest do
 
     test "will set the status as 500 when the plug status code is not a 400" do
       reason = %{message: "Some error", plug_status: 500}
-      conn = conn(:get, "/")
+
+      conn =
+        conn(:get, "/")
+        |> put_private(:bbc_headers, %{req_svc_chain: "GTM"})
+
       conn = Router.handle_errors(conn, %{kind: "err", reason: reason, stack: %{}})
 
       assert conn.status == 500

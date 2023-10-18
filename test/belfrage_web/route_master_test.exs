@@ -638,6 +638,7 @@ defmodule BelfrageWeb.RouteMasterTest do
     test "defines a catch-all 405 route for all other HTTP methods" do
       conn =
         conn(:post, "/a_route_that_will_not_match")
+        |> put_bbc_headers()
         |> RouteFileWithNoMatch.call([])
 
       assert conn.status == 405
@@ -657,31 +658,31 @@ defmodule BelfrageWeb.RouteMasterTest do
 
   describe "return_404/1" do
     test "given a list of true and false values, returns 404 if any element in list is true" do
-      conn = conn(:get, "/some_route")
+      conn = conn(:get, "/some_route") |> put_bbc_headers()
       assert %Plug.Conn{status: 404} = return_404(if: [false, false, true])
     end
 
     test "returns 404 if all elements in list are true" do
-      conn = conn(:get, "/some_route")
+      conn = conn(:get, "/some_route") |> put_bbc_headers()
       assert %Plug.Conn{status: 404} = return_404(if: [true, true, true])
       assert %Plug.Conn{status: 404} = return_404(if: [true])
     end
 
     test "returns nil if all elements in list are false" do
-      conn = conn(:get, "/some_route")
+      conn = conn(:get, "/some_route") |> put_bbc_headers()
       assert nil == return_404(if: [false, false, false])
       assert nil == return_404(if: [false])
     end
 
     test "returns nil if list is empty" do
-      conn = conn(:get, "/some_route")
+      conn = conn(:get, "/some_route") |> put_bbc_headers()
       assert nil == return_404(if: [])
     end
   end
 
   describe "return_404/0" do
     test "returns 404" do
-      conn = conn(:get, "/some_route")
+      conn = conn(:get, "/some_route") |> put_bbc_headers()
       assert %Plug.Conn{status: 404} = return_404()
     end
   end
