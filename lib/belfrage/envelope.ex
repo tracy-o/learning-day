@@ -141,6 +141,7 @@ defmodule Belfrage.Envelope do
       nil -> nil
       _value -> "REDACTED"
     end)
+    |> update_in([Access.key(:user_session), Access.key(:user_attributes)], fn _value -> "REMOVED" end)
   end
 
   def put_status(envelope, code) when is_number(code) do

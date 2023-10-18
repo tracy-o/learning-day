@@ -46,6 +46,20 @@ defmodule Belfrage.EnvelopeTest do
 
       assert %Envelope{request: %Envelope.Request{cookies: "REMOVED"}} = Envelope.loggable(envelope)
     end
+
+    test "removes user_attributes" do
+      envelope = %Envelope{
+        user_session: %Envelope.UserSession{
+          user_attributes: %{
+            "pseudonym" => "LzQfAmR2kar",
+            "allow_personalisation" => true,
+            "age_bracket" => "o18"
+          }
+        }
+      }
+
+      assert %Envelope{user_session: %Envelope.UserSession{:user_attributes => "REMOVED"}} = Envelope.loggable(envelope)
+    end
   end
 
   describe "when amending the private section of an envelope" do
