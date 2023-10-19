@@ -20,7 +20,6 @@ defmodule Routes.Specs.NewsTopics do
           runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
           platform: "MozartNews",
           query_params_allowlist: query_params_allowlist(production_env),
-          request_pipeline: [],
           personalisation: "test_only",
           examples: [
             %{expected_status: 301, path: "/news/topics/66535a45-8563-4598-be75-851e8e3cb9a9"},

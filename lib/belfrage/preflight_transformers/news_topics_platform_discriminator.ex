@@ -11,11 +11,7 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator do
       is_mozart_topic?(envelope) or is_id_guid?(envelope) ->
         envelope =
           Envelope.add(envelope, :private, %{
-            platform: "MozartNews",
-            origin: Application.get_env(:belfrage, :mozart_news_endpoint),
-            personalised_route: false,
-            personalised_request: false,
-            request_pipeline: ["CircuitBreaker"]
+            platform: "MozartNews"
           })
 
         {:ok, envelope}

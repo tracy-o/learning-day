@@ -7,7 +7,6 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
 
   setup do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
-    %{mozart_news_endpoint: Application.get_env(:belfrage, :mozart_news_endpoint)}
   end
 
   describe "when the path does not contain a slug" do
@@ -19,11 +18,7 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
                :ok,
                %Envelope{
                  private: %Envelope.Private{
-                   platform: "MozartNews",
-                   origin: ^mozart_news_endpoint,
-                   personalised_route: false,
-                   personalised_request: false,
-                   request_pipeline: ["CircuitBreaker"]
+                   platform: "MozartNews"
                  }
                }
              } =
@@ -55,19 +50,12 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
                })
     end
 
-    test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
-         %{
-           mozart_news_endpoint: mozart_news_endpoint
-         } do
+    test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised" do
       assert {
                :ok,
                %Envelope{
                  private: %Envelope.Private{
-                   platform: "MozartNews",
-                   origin: ^mozart_news_endpoint,
-                   personalised_route: false,
-                   personalised_request: false,
-                   request_pipeline: ["CircuitBreaker"]
+                   platform: "MozartNews"
                  }
                }
              } =
@@ -79,19 +67,12 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
   end
 
   describe "when the path contains a slug" do
-    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
-         %{
-           mozart_news_endpoint: mozart_news_endpoint
-         } do
+    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised" do
       assert {
                :ok,
                %Envelope{
                  private: %Envelope.Private{
-                   platform: "MozartNews",
-                   origin: ^mozart_news_endpoint,
-                   personalised_route: false,
-                   personalised_request: false,
-                   request_pipeline: ["CircuitBreaker"]
+                   platform: "MozartNews"
                  }
                }
              } =
@@ -123,19 +104,12 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
     end
   end
 
-  test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised",
-       %{
-         mozart_news_endpoint: mozart_news_endpoint
-       } do
+  test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised" do
     assert {
              :ok,
              %Envelope{
                private: %Envelope.Private{
-                 platform: "MozartNews",
-                 origin: ^mozart_news_endpoint,
-                 personalised_route: false,
-                 personalised_request: false,
-                 request_pipeline: ["CircuitBreaker"]
+                 platform: "MozartNews"
                }
              }
            } =
