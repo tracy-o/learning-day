@@ -24,7 +24,7 @@ defmodule Belfrage.Cache.Local do
   """
   @impl CacheStrategy
   def fetch(%Envelope{request: %Request{request_hash: request_hash}}, caching_module \\ Cachex) do
-    if @dial.state(:cache_enabled) do
+    if @dial.get_dial(:cache_enabled) do
       try do
         caching_module.touch(:cache, request_hash)
 
@@ -56,7 +56,7 @@ defmodule Belfrage.Cache.Local do
         #   :make_stale - Whether or not to make the cache entry stale
         opts \\ []
       ) do
-    if cacheable?(max_age) && stale?(cache_last_updated, max_age) && @dial.state(:cache_enabled) do
+    if cacheable?(max_age) && stale?(cache_last_updated, max_age) && @dial.get_dial(:cache_enabled) do
       %{cache_name: cache, make_stale: make_stale} = Enum.into(opts, %{cache_name: :cache, make_stale: false})
 
       Cachex.put(

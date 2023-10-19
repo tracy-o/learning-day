@@ -114,7 +114,7 @@ defmodule Belfrage.RouteState do
     next_throughput =
       state
       |> CircuitBreaker.threshold_exceeded?()
-      |> CircuitBreaker.next_throughput(throughput, @dial.state(:circuit_breaker))
+      |> CircuitBreaker.next_throughput(throughput, @dial.get_dial(:circuit_breaker))
 
     circuit_breaker_open(next_throughput, state.route_state_id)
 

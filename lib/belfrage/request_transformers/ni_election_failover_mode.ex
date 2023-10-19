@@ -22,6 +22,6 @@ defmodule Belfrage.RequestTransformers.NiElectionFailoverMode do
   end
 
   defp failover_mode_active? do
-    @dial.state(:ni_election_failover) == "on"
+    @dial.get_dial(:ni_election_failover) == "on"
   end
 end

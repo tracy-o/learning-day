@@ -19,7 +19,7 @@ defmodule Belfrage.RequestTransformers.PlatformKillSwitch do
 
   defp killswitch_active?(platform) do
     if dial = @platform_map[platform] do
-      @dial.state(dial)
+      @dial.get_dial(dial)
     end
   end
 end

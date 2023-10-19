@@ -6,7 +6,7 @@ defmodule Belfrage.RequestTransformers.NaidheachdanObitRedirect do
 
   @impl Transformer
   def call(envelope) do
-    case @dial.state(:obit_mode) do
+    case @dial.get_dial(:obit_mode) do
       "on" -> redirect(envelope)
       "off" -> {:ok, envelope}
     end

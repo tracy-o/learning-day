@@ -32,7 +32,7 @@ config :belfrage,
   webcore_credentials_source: Belfrage.Services.Webcore.Credentials.STS,
   aws: Belfrage.AWS,
   ccp_client: Belfrage.Clients.CCP,
-  dial: Belfrage.Dials.LiveServer,
+  dial: Belfrage.Dials.State,
   authentication_client: Belfrage.Clients.Authentication,
   json_client: Belfrage.Clients.Json,
   expiry_validator: Belfrage.Authentication.Validator.Expiry,
@@ -113,5 +113,4 @@ config :os_mon,
   start_memsup: true,
   start_os_sup: false
 
-import_config "dials.exs"
 import_config "#{Mix.env()}.exs"

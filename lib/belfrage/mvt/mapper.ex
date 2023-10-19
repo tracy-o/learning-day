@@ -7,7 +7,7 @@ defmodule Belfrage.Mvt.Mapper do
   @max_slots 20
 
   def map(envelope = %Envelope{request: %Envelope.Request{raw_headers: raw_headers}}) do
-    if @dial.state(:mvt_enabled) do
+    if @dial.get_dial(:mvt_enabled) do
       project_slots =
         Mvt.Slots.available()
         |> Map.get(@platform_mapping[envelope.private.platform], %{})
