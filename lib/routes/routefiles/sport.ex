@@ -1316,12 +1316,6 @@ defroutefile "Sport" do
 
   handle "/sport.app", using: "SportMajorIndexPage"
   handle "/sport/africa.app", using: "SportIndexPage"
-  handle "/sport/athletics.app", using: "SportMajorIndexPage"
-  handle "/sport/commonwealth-games.app", using: "SportIndexPage"
-  handle "/sport/cricket.app", using: "SportCricketIndexPage"
-  handle "/sport/cricket/counties.app", using: "SportCricketIndexPage"
-  handle "/sport/cricket/womens.app", using: "SportCricketIndexPage"
-  handle "/sport/cycling.app", using: "SportMajorIndexPage"
   handle "/sport/england.app", using: "SportHomeNationIndexPage"
   handle "/sport/football.app", using: "SportFootballIndexPage"
   handle "/sport/football/championship.app", using: "SportFootballIndexPage"
@@ -1329,13 +1323,9 @@ defroutefile "Sport" do
   handle "/sport/formula1.app", using: "SportMajorIndexPage"
   handle "/sport/get-inspired.app", using: "SportIndexPage"
   handle "/sport/get-inspired/activity-guides.app", using: "SportIndexPage"
-  handle "/sport/horse-racing.app", using: "SportIndexPage"
-  handle "/sport/olympics.app", using: "SportIndexPage"
   handle "/sport/rugby-league.app", using: "SportRugbyIndexPage"
   handle "/sport/rugby-union.app", using: "SportRugbyIndexPage"
-  handle "/sport/swimming.app", using: "SportIndexPage"
   handle "/sport/tennis.app", using: "SportMajorIndexPage"
-  handle "/sport/winter-olympics.app", using: "SportIndexPage"
 
   ## Sport Calendars
   handle "/sport/formula1/calendar.app", using: "SportFormula1DataPage"
