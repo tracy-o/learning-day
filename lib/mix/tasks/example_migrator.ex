@@ -7,7 +7,6 @@ defmodule Mix.Tasks.ExampleMigrator do
     "BitesizeArticles",
     "BitesizeGuides",
     "BitesizeTopics",
-    "BitesizeTransition",
     "NewsArticleMvt",
     "NewsStorytellingPage"
   ]

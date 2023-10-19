@@ -3743,8 +3743,6 @@ defroutefile "Main" do
     return_404 if: !is_zid?(id)
   end
 
-  handle "/bitesize/courses/:id", using: "BitesizeTransition", only_on: "test"
-
   handle "/bitesize/articles/:id", using: "BitesizeArticles" do
     return_404 if: !is_zid?(id)
   end
