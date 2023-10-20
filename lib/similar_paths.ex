@@ -1,6 +1,15 @@
 defmodule SimilarPaths do
   alias Plug.Conn
 
+  #TODO
+  # endpoint hardcoded -> endpoint matches the original location ✔️
+  # list in near-empty body -> list in pre-defined front-end 404 page layout ✔️
+  # hard coded resp body -> inject in envelope resp body
+  # deal with repeated suggested routes due to *any ✔️
+  # some routes are hardcoded to 404 (e.g /news/av), maybe filter out routes that when pinged return a 404?
+  # not sure about what to do with some routes (difference between news/1 and news/2?) - need to figure out when to filter them
+  # clean up function args - too much passing
+
   def map_similar_routes(routes, %Conn{request_path: req_path}) do
     routes
     |> filter_routes(req_path)
@@ -20,6 +29,7 @@ defmodule SimilarPaths do
         !String.equivalent?(path, matcher) and
         Levenshtein.distance(String.downcase(path), matcher) <= 3
     end)
+    |> Enum.uniq()
   end
 
   defp generate_similar_resp(similar_routes) do
