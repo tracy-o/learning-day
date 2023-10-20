@@ -21,7 +21,8 @@ defmodule LearningDay.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:levenshtein, "~> 0.3.0"}
+      {:levenshtein, "~> 0.3.0"},
+      {:randex, "~> 0.4.0"}
     ]
   end
 end
