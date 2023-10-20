@@ -13,9 +13,10 @@ defmodule SimilarPaths do
 
   defp filter_routes(routes, path) do
     routes
+    |> Enum.map(fn {matcher, args} -> {String.replace(matcher, "/*any", ""), args} end)
     |> Enum.filter(fn {matcher, args} ->
       args[:only_on] != "test" and
-        !String.contains?(matcher, [":", "*"]) and
+        !String.contains?(matcher, ":") and
         !String.equivalent?(path, matcher) and
         Levenshtein.distance(String.downcase(path), matcher) <= 3
     end)
