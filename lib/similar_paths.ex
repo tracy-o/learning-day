@@ -29,7 +29,7 @@ defmodule SimilarPaths do
         !String.equivalent?(path, matcher) and
         Levenshtein.distance(String.downcase(path), matcher) <= 3
     end)
-    |> Enum.uniq()
+    |> Enum.uniq_by(fn {matcher, _args} -> matcher end)
   end
 
   defp generate_similar_resp(similar_routes) do
