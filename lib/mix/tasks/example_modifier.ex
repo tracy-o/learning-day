@@ -1,7 +1,10 @@
 defmodule ExampleModifier do
   use Mix.Task
 
-  @moduledoc "Filter and modify examples from routespecs based on a keyword found in the example"
+  @moduledoc """
+  Filter and modify examples from routespecs based on a keyword found in the example.
+  A script originally written for Artur, to speed up the process of updating the Belfrage examples
+  """
 
   def run([]) do
     for {spec_name, examples} <- filter_specs() do
