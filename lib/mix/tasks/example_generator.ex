@@ -38,9 +38,14 @@ defmodule Mix.Tasks.ExampleGenerator do
 
   defp parse_args(args) do
     case {args[:matcher], args[:pattern], args[:routefile]} do
-      {m, nil, nil} when not is_nil(m) -> raise(ArgumentError, "Matcher requires a pattern or routefile")
-      {_m, _p, r} when not is_nil(r) -> Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher])])
-      _ -> Keyword.merge(@default_args, args)
+      {m, nil, nil} when not is_nil(m) ->
+        raise(ArgumentError, "Matcher requires a pattern or routefile")
+
+      {_m, _p, r} when not is_nil(r) ->
+        Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher])])
+
+      _ ->
+        Keyword.merge(@default_args, args)
     end
   end
 
@@ -110,9 +115,11 @@ defmodule Mix.Tasks.ExampleGenerator do
     [{id, _, _}, {:sigil_r, _, [{_, _, [pattern]}, _]}] = data
     to_string(id) <> ": " <> pattern
   end
+
   defp validate_condition("Enum . :member?", data) do
     [list, {id, _, _}] = data
     to_string(id) <> ": ^(" <> Enum.join(list, "|") <> ")$"
   end
+
   defp validate_condition(_fun, _data), do: nil
 end

@@ -22,7 +22,8 @@ defmodule LearningDay.MixProject do
   defp deps do
     [
       {:levenshtein, "~> 0.3.0"},
-      {:randex, "~> 0.4.0"}
+      {:randex, "~> 0.4.0"},
+      {:plug_cowboy, "~> 2.6"}
     ]
   end
 end

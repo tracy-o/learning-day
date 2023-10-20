@@ -10,10 +10,10 @@ defmodule Mix.Tasks.ExampleMigrator do
     "NewsArticleMvt",
     "NewsStorytellingPage"
   ]
-  @routes Routes.Routefiles.Main.Test.routes() ++ Routes.Routefiles.Sport.Test.routes()
 
-  def run([]) do
-    @routes
+  # Routes.Routefiles.Main.Test.routes() ++ Routes.Routefiles.Sport.Test.routes()
+  def run([routes]) do
+    routes
     |> Enum.filter(fn {_path, route_map} ->
       route_map.using not in @multi_platform_specs and route_map.only_on != "test"
     end)

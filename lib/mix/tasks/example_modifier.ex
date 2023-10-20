@@ -6,8 +6,8 @@ defmodule ExampleModifier do
   A script originally written for Artur, to speed up the process of updating the Belfrage examples
   """
 
-  def run([]) do
-    for {spec_name, examples} <- filter_specs() do
+  def run([examples]) do
+    for {spec_name, examples} <- filter_specs(examples) do
       replace_examples(spec_name, examples)
     end
   end
@@ -31,7 +31,12 @@ defmodule ExampleModifier do
     {:ok, original} = File.read(spec_path)
     {:ok, io_device} = File.open(spec_path, [:write])
 
-    updated_spec = String.replace(original, ~r/examples: \[.+\]/, "examples: #{inspect(examples, limit: :infinity)}")
+    updated_spec =
+      String.replace(
+        original,
+        ~r/examples: \[.+\]/,
+        "examples: #{inspect(examples, limit: :infinity)}"
+      )
 
     IO.write(io_device, updated_spec)
     File.close(io_device)
@@ -46,7 +51,7 @@ defmodule ExampleModifier do
     Map.put(example, :headers, %{"host" => "feeds.bbci.co.uk"})
   end
 
-  defp update_header(example  = %{headers: headers}) do
+  defp update_header(example = %{headers: headers}) do
     Map.put(example, :headers, Map.put(headers, "host", "feeds.bbci.co.uk"))
   end
 
