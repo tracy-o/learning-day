@@ -25,8 +25,8 @@ defmodule SimilarPaths do
     unless Enum.empty?(similar_routes) do
       """
       <!-- Belfrage -->
-      <p>Did you mean...
-      <ul>#{for route <- similar_routes, do: "<li>" <> route <> "</li>"}</ul>
+      <p><b>Did you mean...</b>
+      <ul class"similar">#{for route <- similar_routes, do: "<li>" <> route <> "</li>"}</ul>
       </p>
       """
     else
@@ -77,6 +77,10 @@ defmodule SimilarPaths do
             -webkit-box-direction: normal;
             -ms-flex-direction  : column;
             flex-direction      : column;
+          }
+          ul.similar {
+            list-style-type     : none;
+            background          : #4945b6;
           }
           a {
             color               : #4945b6;
