@@ -9,11 +9,8 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
     stub_dials(webcore_kill_switch: "inactive", circuit_breaker: "false")
   end
 
-  describe "when the path does not contain a slug" do
-    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised",
-         %{
-           mozart_news_endpoint: mozart_news_endpoint
-         } do
+  describe "when the ID is a Topic and the ID is in the Mozart allowlist" do
+    test "it returns an envelope with MozartNews as the platform" do
       assert {
                :ok,
                %Envelope{
@@ -27,30 +24,31 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
                  private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
+  end
 
-    test "if the id is a Topic ID and is not in the Mozart allowlist the platform and origin are unchanged and the rest of the pipeline is preserved" do
+  describe "when the ID is a Topic ID but the ID is NOT in the Mozart allowlist" do
+    test "it doesn't change the platform" do
       assert {
                :ok,
                %Envelope{
                  private: %Envelope.Private{
-                   platform: "SomePlatform",
-                   origin: "https://some.example.origin"
+                   platform: "BBCX"
                  }
                }
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
                  private: %Envelope.Private{
-                   origin: "https://some.example.origin",
-                   platform: "SomePlatform",
-                   production_environment: "test"
+                   platform: "BBCX"
                  },
                  request: %Envelope.Request{
                    path_params: %{"id" => "some-id"}
                  }
                })
     end
+  end
 
-    test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised" do
+  describe "when the ID is a GUID" do
+    test "it returns MozartNews as the platform" do
       assert {
                :ok,
                %Envelope{
@@ -61,13 +59,13 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
              } =
                NewsTopicsPlatformDiscriminator.call(%Envelope{
                  request: %Envelope.Request{path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2"}},
-                 private: %Envelope.Private{personalised_route: true, personalised_request: true}
+                 private: %Envelope.Private{platform: "Webcore", personalised_route: true, personalised_request: true}
                })
     end
   end
 
-  describe "when the path contains a slug" do
-    test "if the id is a Topic ID and is in the Mozart allowlist the platform and origin is Mozart and the route and request will be set to not personalised" do
+  describe "when the path contains a slug, the ID is a TOPIC and is in the Mozart allowlist" do
+    test "it returns MozartNews as the platform" do
       assert {
                :ok,
                %Envelope{
@@ -81,8 +79,10 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
                  private: %Envelope.Private{personalised_route: true, personalised_request: true}
                })
     end
+  end
 
-    test "if the id is a Topic ID and is not in the Mozart allowlist, a redirect will be issued without the slug" do
+  describe "when the path has a slug, the ID is a Topic ID but is not in the Mozart allowlist" do
+    test "it issues a redirect without the slug" do
       assert {:stop,
               %Envelope{
                 response: %Envelope.Response{
@@ -104,20 +104,43 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
     end
   end
 
-  test "if the id is a Things GUID the platform and origin is Mozart and the route and request will be set to not personalised" do
-    assert {
-             :ok,
-             %Envelope{
-               private: %Envelope.Private{
-                 platform: "MozartNews"
+  describe "when the path has a slug and the ID is a GUID" do
+    test "it returns MozartNews as the platform" do
+      assert {
+               :ok,
+               %Envelope{
+                 private: %Envelope.Private{
+                   platform: "MozartNews"
+                 }
                }
-             }
-           } =
-             NewsTopicsPlatformDiscriminator.call(%Envelope{
-               request: %Envelope.Request{
-                 path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2", "slug" => "cybersecurity"}
-               },
-               private: %Envelope.Private{personalised_route: true, personalised_request: true}
-             })
+             } =
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{
+                   path_params: %{"id" => "62d838bb-2471-432c-b4db-f134f98157c2", "slug" => "cybersecurity"}
+                 },
+                 private: %Envelope.Private{personalised_route: true, personalised_request: true}
+               })
+    end
+  end
+
+  describe "when not a mozart topic, not a GUID, and does not have a slug" do
+    test "it returns the original envelope" do
+      assert {
+               :ok,
+               %Envelope{
+                 private: %Envelope.Private{
+                   platform: "Webcore",
+                   personalised_route: true,
+                   personalised_request: true
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{
+                   path_params: %{"id" => "62d838bb-2471"}
+                 },
+                 private: %Envelope.Private{platform: "Webcore", personalised_route: true, personalised_request: true}
+               })
+    end
   end
 end
