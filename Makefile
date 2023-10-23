@@ -50,10 +50,11 @@ release:
 		cosmos-release service $$component --release-version=v ${BUILDPATH}/RPMS/x86_64/*.x86_64.rpm; \
 	done; \
 
+deploy_to_www_live:
+	status_code="`curl -s -o /dev/null -w "%{http_code}" -H "content-type:application/json" -X POST --data '{"type": "install", "release_version": "'$$COSMOS_VERSION'"}' --cert ${COSMOS_CERT} --key ${COSMOS_CERT_KEY} https://cosmos.api.bbci.co.uk/v1/services/belfrage/live/deployments`"; \
+	[[ "$$status_code" -eq 201 ]] || exit 1;
+
 deploy:
 	for component in ${COMPONENTS}; do \
 		cosmos deploy $$component test --force --release ${COSMOS_VERSION}; \
-		if [ "$$component" = "belfrage" ] && [ "${FORCE}" != "true" ]; then \
-			cosmos deploy $$component live --force --release ${COSMOS_VERSION}; \
-		fi; \
 	done; \

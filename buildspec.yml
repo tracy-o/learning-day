@@ -48,6 +48,9 @@ phases:
         if [ "${RELEASABLE_BRANCH}" = "1" ] || [ "${FORCE}" = "true" ]; then
           make release;
           make deploy;
+          if [ "${FORCE}" != "true" ]; then
+            make deploy_to_www_live;
+          fi
         else
           echo "No release"
         fi
