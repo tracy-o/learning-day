@@ -143,4 +143,23 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminatorTest do
                })
     end
   end
+
+  describe "when not a mozart topic, not a GUID, does not have a slug, and the platform is nil" do
+    test "it puts Webcore as the platform if there isn't one" do
+      assert {
+               :ok,
+               %Envelope{
+                 private: %Envelope.Private{
+                   platform: "Webcore"
+                 }
+               }
+             } =
+               NewsTopicsPlatformDiscriminator.call(%Envelope{
+                 request: %Envelope.Request{
+                   path_params: %{"id" => "62d838bb-2471"}
+                 },
+                 private: %Envelope.Private{platform: nil}
+               })
+    end
+  end
 end

@@ -4,36 +4,48 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator do
   """
   use Belfrage.Behaviours.Transformer
   alias Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds
+  alias Belfrage.Envelope.Private
 
   @impl Transformer
   def call(envelope) do
     cond do
-      is_mozart_topic?(envelope) or is_id_guid?(envelope) ->
-        envelope =
-          Envelope.add(envelope, :private, %{
-            platform: "MozartNews"
-          })
+      is_mozart_topic?(envelope) ->
+        make_mozart_platform(envelope)
 
-        {:ok, envelope}
+      is_id_guid?(envelope) ->
+        make_mozart_platform(envelope)
 
-      not is_mozart_topic?(envelope) and has_slug?(envelope) ->
-        {
-          :stop,
-          Envelope.add(envelope, :response, %{
-            http_status: 301,
-            headers: %{
-              "location" => "/news/topics/#{envelope.request.path_params["id"]}",
-              "x-bbc-no-scheme-rewrite" => "1",
-              "cache-control" => "public, stale-while-revalidate=10, max-age=60"
-            },
-            body: "Redirecting"
-          })
-        }
+      has_slug?(envelope) ->
+        redirect(envelope)
 
       true ->
-        {:ok, envelope}
+        maybe_add_platform(envelope)
     end
   end
+
+  defp make_mozart_platform(envelope) do
+    {:ok, Envelope.add(envelope, :private, %{platform: "MozartNews"})}
+  end
+
+  defp redirect(envelope) do
+    {
+      :stop,
+      Envelope.add(envelope, :response, %{
+        http_status: 301,
+        headers: %{
+          "location" => "/news/topics/#{envelope.request.path_params["id"]}",
+          "x-bbc-no-scheme-rewrite" => "1",
+          "cache-control" => "public, stale-while-revalidate=10, max-age=60"
+        },
+        body: "Redirecting"
+      })
+    }
+  end
+
+  defp maybe_add_platform(envelope = %Envelope{private: %Private{platform: nil}}),
+    do: {:ok, Envelope.add(envelope, :private, %{platform: "Webcore"})}
+
+  defp maybe_add_platform(envelope = %Envelope{private: %Private{platform: _platform}}), do: {:ok, envelope}
 
   defp is_mozart_topic?(envelope) do
     envelope.request.path_params["id"] in NewsTopicIds.get()
