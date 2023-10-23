@@ -43,4 +43,7 @@ release:
 deploy:
 	for component in ${COMPONENTS}; do \
 		cosmos deploy $$component test --force --release ${COSMOS_VERSION}; \
+		if [ "$$component" = "belfrage" ] && [ "${FORCE}" != "true" ]; then \
+			cosmos deploy $$component live --force --release ${COSMOS_VERSION}; \
+		fi; \
 	done; \
