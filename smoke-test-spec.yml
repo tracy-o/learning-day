@@ -1,0 +1,11 @@
+version: 0.2
+phases:
+  build:
+    commands:
+    - make smoke_test
+  post_build:
+    commands:
+      - |
+        if $(grep -q smoke_test_output.txt -e 'failure') && [ "${SLACK_REPORT}" = "true" ]; then
+            mix report_smoke_test_results .smoke_test_output
+        fi

@@ -13,6 +13,16 @@ lint:
 test:
 	MIX_ENV=test mix test
 
+smoke_test:
+	MIX_ENV=dev mix deps.get
+	@echo Running smoke tests for ${TARGET}
+	
+	if [ "${TARGET}" = "all" ]; then \
+		set -o pipefail ; MIX_ENV=smoke_test mix smoke_test --raw-output .smoke_test_output --group-by spec | tee smoke_test_output.txt; \
+    else \
+		set -o pipefail ; MIX_ENV=smoke_test mix smoke_test --raw-output .smoke_test_output --group-by spec --only stack:${TARGET} | tee smoke_test_output.txt; \
+    fi
+
 fetch_jwk:
 	$(eval JWK_FETCH_OUTPUT:=$(shell python3 ./jwk-fetcher.py test,live))
 	@echo ${JWK_FETCH_OUTPUT} | grep -q 'success' || exit 1
