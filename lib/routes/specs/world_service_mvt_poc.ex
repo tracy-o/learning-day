@@ -1,5 +1,5 @@
 defmodule Routes.Specs.WorldServiceMvtPoc do
-  def specification(production_env) do
+  def specification do
     %{
       specs: %{
         owner: "DENewsFrameworksTeam@bbc.co.uk",

@@ -1,5 +1,5 @@
 defmodule Routes.Specs.WorldServiceHindi do
-  def specification(production_env) do
+  def specification do
     %{
       specs: %{
         platform: "MozartSimorgh",
