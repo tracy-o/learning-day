@@ -5,7 +5,7 @@ defmodule Routes.Platforms.MozartSimorgh do
       owner: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
       request_pipeline: pipeline(production_env),
-      response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
+      response_pipeline: [:_routespec_pipeline_placeholder, "CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],
       query_params_allowlist: query_params_allowlist(production_env),
       circuit_breaker_error_threshold: 200,
       signature_keys: %{add: [:is_advertise], skip: [:country]},
@@ -18,6 +18,6 @@ defmodule Routes.Platforms.MozartSimorgh do
   defp query_params_allowlist("live"), do: []
   defp query_params_allowlist(_production_env), do: ["component_env", "morph_env", "renderer_env"]
 
-  defp pipeline("live"), do: ["CircuitBreaker"]
+  defp pipeline("live"), do: [:_routespec_pipeline_placeholder, "CircuitBreaker"]
   defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end

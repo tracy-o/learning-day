@@ -3,13 +3,10 @@ defmodule Routes.Specs.WorldServiceSerbian do
     %{
       specs: %{
         platform: "MozartSimorgh",
-        request_pipeline: pipeline(production_env),
+        request_pipeline: ["WorldServiceRedirect"],
         headers_allowlist: ["cookie-ckps_serbian"],
         examples: ["/serbian/lat", "/serbian/lat.json", "/serbian/lat.amp"]
       }
     }
   end
-
-  defp pipeline("live"), do: ["WorldServiceRedirect", "CircuitBreaker"]
-  defp pipeline(_production_env), do: pipeline("live") ++ ["DevelopmentRequests"]
 end
