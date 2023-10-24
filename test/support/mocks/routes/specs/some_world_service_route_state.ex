@@ -2,7 +2,7 @@ defmodule Routes.Specs.SomeWorldServiceRouteState do
   def specification do
     %{
       specs: %{
-        owner: "Some guy",
+        email: "some@email.com",
         runbook: "Some runbook",
         platform: "MozartSimorgh",
         request_pipeline: ["WorldServiceRedirect"],

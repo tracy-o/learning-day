@@ -9,7 +9,7 @@ defmodule Belfrage.PersonalisationTest do
 
   describe "maybe_put_personalised_route/1" do
     @route_spec %RouteSpec{
-      owner: "An owner",
+      email: "some@email.com",
       runbook: "A run book",
       platform: "Webcore",
       request_pipeline: ["a", "really", "long", "pipeline"]

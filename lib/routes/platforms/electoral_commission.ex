@@ -2,7 +2,7 @@ defmodule Routes.Platforms.ElectoralCommission do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :electoral_commission_endpoint),
-      owner: "NewsSpecialsDevelopment2@bbc.co.uk@bbc.co.uk",
+      email: "NewsSpecialsDevelopment2@bbc.co.uk@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/connpol/Run+book+-+UK+2023",
       request_pipeline: request_pipeline(production_env),
       response_pipeline: ["CacheDirective", "ElectoralCommissionResponseHandler", "ResponseHeaderGuardian", "PreCacheCompression"],

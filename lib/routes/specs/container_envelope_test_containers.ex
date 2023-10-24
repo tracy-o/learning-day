@@ -2,7 +2,7 @@ defmodule Routes.Specs.ContainerEnvelopeTestContainers do
   def specification do
     %{
       specs: %{
-        owner: "d&ewebcorepresentationteam@bbc.co.uk",
+        email: "d&ewebcorepresentationteam@bbc.co.uk",
         platform: "Webcore",
         runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/Presentation+Layer+Run+Book#PresentationLayerRunBook-ContainerAPI",
         query_params_allowlist: ["q", "page", "static"],

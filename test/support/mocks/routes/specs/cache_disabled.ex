@@ -2,7 +2,7 @@ defmodule Routes.Specs.CacheDisabled do
   def specification do
     %{
       specs: %{
-        owner: "Some guy",
+        email: "some@email.com",
         runbook: "Some runbook",
         platform: "Webcore",
         query_params_allowlist: ["query"],

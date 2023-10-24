@@ -2,7 +2,7 @@ defmodule Routes.Platforms.DotComReel do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :dotcom_reel_endpoint),
-      owner: "GnlDevOps@bbc.com",
+      email: "GnlDevOps@bbc.com",
       runbook: "https://confluence.dev.bbc.co.uk/display/bbccom/BBC+Reel+Runbook",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],

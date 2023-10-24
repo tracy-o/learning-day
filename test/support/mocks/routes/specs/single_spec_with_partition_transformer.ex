@@ -4,7 +4,7 @@ defmodule Routes.Specs.SingleSpecWithPartitionTransformer do
       preflight_pipeline: ["TestPreflightPartitionTransformer"],
       specs: [
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "Webcore",
           headers_allowlist: ["webcore-header"],

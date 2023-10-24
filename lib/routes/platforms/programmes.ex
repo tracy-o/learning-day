@@ -2,7 +2,7 @@ defmodule Routes.Platforms.Programmes do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :programmes_endpoint),
-      owner: "homedatacap@bbc.co.uk",
+      email: "homedatacap@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=152098352",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],

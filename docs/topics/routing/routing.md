@@ -86,7 +86,7 @@ defmodule Routes.Specs.SportVideos do
   def specification(production_env) do
     %{
       specs: %{
-        owner: "sfv-team@bbc.co.uk",
+        email: "sfv-team@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
         platform: "Webcore",
         request_pipeline: ["HTTPredirect", "LambdaOriginAliasTransformer", "ReplayedTrafficTransformer"]
@@ -100,7 +100,9 @@ end
 
 where:
 
-- `owner` is the email of the owning team
+- `email` is the email of the owning team
+- `slack_channel` is the slack channel of the owning team
+- `team` is the name of the owning team
 - `runbook` is the link of the tenant page
 - `platform` is the platform used
 - `request_pipeline` is a list of zero or more pipeline transformers, which decorate the request or add some business logic to take further decisions for the request (i.e. think a migration business logic process)
@@ -127,7 +129,7 @@ defmodule Routes.Specs.HomePagePersonalised do
   def specification do
     %{
       specs: %{
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/BBCHOME/Homepage%20&%20Nations%20-%20WebCore%20-%20Runbook",
         platform: "Webcore",
         personalisation: "on",

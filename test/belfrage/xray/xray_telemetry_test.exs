@@ -8,7 +8,7 @@ defmodule Belfrage.Xray.TelemetryTest do
 
   @test_envelope %Envelope{
     private: %Private{
-      owner: "me!",
+      email: "some@email.com",
       route_state_id: {"some_spec", "some_platform"},
       preview_mode: "off",
       production_environment: "test",

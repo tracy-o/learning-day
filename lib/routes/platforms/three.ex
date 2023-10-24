@@ -2,7 +2,7 @@ defmodule Routes.Platforms.Three do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :three_endpoint),
-      owner: "#help-topics",
+      slack_channel: "#help-topics",
       runbook: "https://confluence.dev.bbc.co.uk/display/bbc3web/BBC3+Digital+Run+book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],

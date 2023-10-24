@@ -2,7 +2,7 @@ defmodule Routes.Platforms.AppsTrevor do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :trevor_endpoint),
-      owner: "#data-systems",
+      slack_channel: "#data-systems",
       runbook: "https://confluence.dev.bbc.co.uk/display/TREVOR/Trevor+V3+%28News+Apps+Data+Service%29+Runbook",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "PreCacheCompression", "Etag"],

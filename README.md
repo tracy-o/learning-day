@@ -131,7 +131,7 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
       def specification do
         %{
           specs: %{
-            owner: "D+ESearchAndNavigationDev@bbc.co.uk",
+            email: "D+ESearchAndNavigationDev@bbc.co.uk",
             runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
             request_pipeline: ["ComToUKRedirect"],
             platform: "Webcore"
@@ -140,7 +140,9 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
       end
     end
     ```
-    - `owner` is the email of the team that owns the routes tied to this routespec
+    - `email` is the email of the team that owns the routes tied to this routespec
+    - `slack_channel` is the slack channel of the team that owns the routes tied to this routespec
+    - `team` is the name of the team that owns the routes tied to this routespec
     - `runbook` is the relevant runbook
     - `platform` is the platform which the routes tied to this routespec will be routes to
     - a full list of spec keys that can be used can be found in the [route_spec file](lib/belfrage/route_spec.ex)
@@ -154,7 +156,7 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
           pre_flight_pipeline: ["BitesizeTopicsPlatformSelector"],
           specs: [
             %{
-              owner: "bitesize-production@lists.forge.bbc.co.uk",
+              email: "bitesize-production@lists.forge.bbc.co.uk",
               platform: "MorphRouter",
               language_from_cookie: true,
               request_pipeline: ["ComToUKRedirect", "Language"],
@@ -166,7 +168,7 @@ If the tests all pass then the [Multi Stack job](https://ci.news.tools.bbc.co.uk
               ]
             },
             %{
-              owner: "bitesize-production@lists.forge.bbc.co.uk",
+              email: "bitesize-production@lists.forge.bbc.co.uk",
               platform: "Webcore",
               language_from_cookie: true,
               request_pipeline: ["ComToUKRedirect"],

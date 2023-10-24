@@ -2,7 +2,7 @@ defmodule Routes.Specs.NoEtagSupport do
   def specification do
     %{
       specs: %{
-        owner: "Some owner",
+        email: "some@email.com",
         runbook: "Some runbook",
         platform: "MozartNews",
         etag: false

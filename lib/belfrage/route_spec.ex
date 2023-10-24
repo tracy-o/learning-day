@@ -9,7 +9,8 @@ defmodule Belfrage.RouteSpec do
   @type platform :: String.t()
 
   defstruct platform: nil,
-            owner: nil,
+            team: nil,
+            email: nil,
             slack_channel: nil,
             request_pipeline: [],
             response_pipeline: [],

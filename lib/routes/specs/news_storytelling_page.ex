@@ -4,7 +4,7 @@ defmodule Routes.Specs.NewsStorytellingPage do
       preflight_pipeline: ["BBCXWebcorePlatformSelector"],
       specs: [
         %{
-          owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
+          email: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
           runbook: "https://confluence.dev.bbc.co.uk/display/NEWSART/Optimo+Articles+Runbook",
           platform: "Webcore",
           request_pipeline: ["ObitMode"],

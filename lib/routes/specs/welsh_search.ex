@@ -2,7 +2,7 @@ defmodule Routes.Specs.WelshSearch do
   def specification(production_env) do
     %{
       specs: %{
-        owner: "D+ESearchAndNavigationDev@bbc.co.uk",
+        email: "D+ESearchAndNavigationDev@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/x/xo2KD",
         request_pipeline: ["ComToUKRedirect"],
         platform: "Webcore",

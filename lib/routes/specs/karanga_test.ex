@@ -3,7 +3,6 @@ defmodule Routes.Specs.KarangaTest do
     %{
       specs: %{
         platform: "Karanga",
-        owner: "",
         runbook: "https://confluence.dev.bbc.co.uk/display/wsresponsive/News+RSS+Feeds+Run+Book",
       }
     }

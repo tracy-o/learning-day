@@ -2,7 +2,6 @@ defmodule Routes.Platforms.Karanga do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :karanga_endpoint),
-      owner: "",
       runbook: "https://confluence.dev.bbc.co.uk/display/wsresponsive/News+RSS+Feeds+Run+Book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ClassicAppCacheControl", "ResponseHeaderGuardian", "CustomRssErrorResponse", "PreCacheCompression"],

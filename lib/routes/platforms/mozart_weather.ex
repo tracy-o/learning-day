@@ -2,7 +2,7 @@ defmodule Routes.Platforms.MozartWeather do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :mozart_weather_endpoint),
-      owner: "DEWeather@bbc.co.uk",
+      email: "DEWeather@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=140399154",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],

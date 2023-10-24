@@ -2,7 +2,7 @@ defmodule Routes.Specs.NewsletterLegacy do
   def specification do
     %{
       specs: %{
-        owner: "#help-topics",
+        slack_channel: "#help-topics",
         runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Newsletters+Runbook",
         platform: "MorphRouter",
         request_pipeline: ["ComToUKRedirect"],

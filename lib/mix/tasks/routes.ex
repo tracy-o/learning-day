@@ -29,7 +29,9 @@ defmodule Mix.Tasks.Routes do
       "RouteSpec" => spec_name,
       "Platform" => spec.platform,
       "Runbook" => spec.runbook,
-      "Owner" => spec.owner,
+      "Email" => spec.email,
+      "Slack" => spec.slack_channel,
+      "Team" => spec.team,
       "env" => only_on || "live"
     }
   end

@@ -2,7 +2,7 @@ defmodule Routes.Specs.SportDataScoresFixturesWebcore do
   def specification do
     %{
       specs: %{
-        owner: "#help-sport",
+        slack_channel: "#help-sport",
         runbook: "TODO SWDSOFT-440: add link to Sport Data Scores Fixtures Runbook",
         platform: "Webcore",
         query_params_allowlist: ["filter", "q"],

@@ -2,7 +2,7 @@ defmodule Routes.Platforms.DotComTravel do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :dotcom_travel_endpoint),
-      owner: "GnlDevOps@bbc.com",
+      email: "GnlDevOps@bbc.com",
       runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=276265727",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],

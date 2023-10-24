@@ -57,7 +57,9 @@ defmodule Belfrage.ProcessorTest do
                  partition: nil,
                  request_pipeline: @webcore_request_pipeline,
                  response_pipeline: @webcore_response_pipeline,
-                 owner: "Some guy",
+                 email: "some@email.com",
+                 slack_channel: nil,
+                 team: nil,
                  runbook: "Some runbook"
                }
              } = Processor.get_route_spec(envelope)
@@ -76,7 +78,9 @@ defmodule Belfrage.ProcessorTest do
                  partition: ^partition,
                  request_pipeline: @webcore_request_pipeline,
                  response_pipeline: @webcore_response_pipeline,
-                 owner: "Some guy",
+                 email: "some@email.com",
+                 slack_channel: nil,
+                 team: nil,
                  runbook: "Some runbook"
                }
              } = Processor.get_route_spec(envelope)

@@ -60,7 +60,9 @@ defmodule Mix.Tasks.UnattachedSpecs do
       route: route_matcher,
       spec: spec_name,
       platform: spec.platform,
-      owner: spec.owner,
+      email: spec.email,
+      slack_channel: spec.slack_channel,
+      team: spec.team,
       env: only_on || "live"}
   end
 

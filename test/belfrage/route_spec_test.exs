@@ -13,11 +13,22 @@ defmodule Belfrage.RouteSpecTest do
 
     test "merges route attributes into platform attributes" do
       define_platform("MergePlatform", %{caching_enabled: false, default_language: "foo"})
-      define_route("MergeRoute", %{specs: %{platform: "MergePlatform", default_language: "bar", owner: "baz"}})
+
+      define_route("MergeRoute", %{
+        specs: %{
+          platform: "MergePlatform",
+          default_language: "bar",
+          email: "baz@email.com",
+          slack_channel: "#baz-channel",
+          team: "baz"
+        }
+      })
 
       %{specs: [spec]} = RouteSpec.get_route_spec("MergeRoute")
       assert spec.platform == "MergePlatform"
-      assert spec.owner == "baz"
+      assert spec.email == "baz@email.com"
+      assert spec.slack_channel == "#baz-channel"
+      assert spec.team == "baz"
       assert spec.default_language == "bar"
       assert spec.caching_enabled == false
     end

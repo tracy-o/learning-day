@@ -4,66 +4,66 @@ defmodule Mix.Tasks.UnattachedSpecsTest do
 
   test "find_unattached_specs/2 returns spec modules that are unused by a route spec" do
     route_specs = [
-      %{env: "live", owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk", platform: "Webcore", route: "/", spec: "HomePage"},
+      %{env: "live", email: "DEHomepageTopicsOnCallTeam@bbc.co.uk", platform: "Webcore", route: "/", spec: "HomePage"},
       %{
         env: "live",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/scotland",
         spec: "ScotlandHomePage"
       },
       %{
         env: "test",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/homepage/test",
         spec: "TestHomePage"
       },
       %{
         env: "test",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/homepage/automation",
         spec: "AutomationHomePage"
       },
       %{
         env: "live",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/northernireland",
         spec: "NorthernIrelandHomePage"
       },
       %{
         env: "live",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/wales",
         spec: "WalesHomePage"
       },
       %{
         env: "live",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/cymru",
         spec: "CymruHomePage"
       },
       %{
         env: "live",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/alba",
         spec: "AlbaHomePage"
       },
       %{
         env: "test",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/newstipo",
         spec: "NewsTipoHomePage"
       },
       %{
         env: "test",
-        owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+        email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
         platform: "Webcore",
         route: "/homepage/news/preview",
         spec: "NewsHomePagePreview"

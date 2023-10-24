@@ -210,7 +210,10 @@ defmodule Belfrage.Xray do
 
   defp envelope_annotations(envelope) do
     %{
-      "owner" => envelope.private.owner,
+      "owner" => envelope.private.email || envelope.private.slack_channel || envelope.private.team,
+      "email" => envelope.private.email,
+      "slack_channel" => envelope.private.slack_channel,
+      "team" => envelope.private.team,
       "route_state_id" => RouteState.format_id(envelope.private.route_state_id),
       "preview_mode" => envelope.private.preview_mode,
       "production_environment" => envelope.private.production_environment,

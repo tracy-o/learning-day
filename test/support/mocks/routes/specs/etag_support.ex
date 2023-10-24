@@ -2,7 +2,7 @@ defmodule Routes.Specs.EtagSupport do
   def specification do
     %{
       specs: %{
-        owner: "Some owner",
+        email: "some@email.com",
         runbook: "Some runbook",
         platform: "MozartNews",
         headers_allowlist: ["if-none-match"],

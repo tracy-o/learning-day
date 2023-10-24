@@ -2,7 +2,7 @@ defmodule Routes.Specs.CymrufywVideos do
   def specification(production_env) do
     %{
       specs: %{
-        owner: "sfv-team@bbc.co.uk",
+        email: "sfv-team@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/SFV/Short+Form+Video+Run+Book",
         platform: "Webcore",
         default_language: "cy",

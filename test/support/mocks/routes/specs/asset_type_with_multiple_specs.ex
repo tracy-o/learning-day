@@ -4,14 +4,14 @@ defmodule Routes.Specs.AssetTypeWithMultipleSpecs do
       preflight_pipeline: ["AssetTypePlatformSelector"],
       specs: [
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "Webcore",
           headers_allowlist: ["webcore-header"],
           query_params_allowlist: ["webcore_qparam"]
         },
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "MozartNews",
           headers_allowlist: ["mozartnews-header"],

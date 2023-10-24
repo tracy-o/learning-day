@@ -2,7 +2,7 @@ defmodule Routes.Platforms.BBCX do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :bbcx_endpoint),
-      owner: "GnlDevOps@bbc.com",
+      email: "GnlDevOps@bbc.com",
       runbook: "https://confluence.dev.bbc.co.uk/display/BBCX/BBCX+Product+and+Technology+Run+book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", "ResponseHeaderGuardian", "PreCacheCompression"],

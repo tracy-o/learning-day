@@ -2,7 +2,7 @@ defmodule Routes.Specs.ClassicAppFablLdp do
   def specification do
     %{
       specs: %{
-        owner: "D&EMorphCoreEngineering@bbc.co.uk",
+        email: "D&EMorphCoreEngineering@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/display/WebCore/FABL+Run+Book",
         platform: "Fabl",
         request_pipeline: ["ClassicAppFablLdp"],

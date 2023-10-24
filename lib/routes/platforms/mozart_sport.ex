@@ -2,7 +2,7 @@ defmodule Routes.Platforms.MozartSport do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :mozart_sport_endpoint),
-      owner: "DENewsFrameworksTeam@bbc.co.uk",
+      email: "DENewsFrameworksTeam@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/MOZART/Mozart+Run+Book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],

@@ -9,7 +9,7 @@ defmodule Routes.Platforms.MorphRouter do
   def specification(production_env) do
     %{
       origin: Application.get_env(:belfrage, :morph_router_endpoint),
-      owner: "D&EMorphCoreEngineering@bbc.co.uk",
+      email: "D&EMorphCoreEngineering@bbc.co.uk",
       runbook: "https://confluence.dev.bbc.co.uk/display/morph/Morph+Router+Run+Book",
       request_pipeline: pipeline(production_env),
       response_pipeline: ["CacheDirective", :_routespec_pipeline_placeholder, "ResponseHeaderGuardian", "PreCacheCompression"],

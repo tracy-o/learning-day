@@ -5,12 +5,12 @@ defmodule Routes.Specs.BBCXMozartNewsPlatformSelector do
       specs: [
         %{
           platform: "MozartNews",
-          owner: "Some person",
+          email: "some@email.com",
           runbook: "Some runbook"
         },
         %{
           platform: "BBCX",
-          owner: "Some person",
+          email: "some@email.com",
           runbook: "Some runbook"
         }
       ]

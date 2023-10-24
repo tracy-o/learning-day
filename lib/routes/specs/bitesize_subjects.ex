@@ -4,7 +4,7 @@ defmodule Routes.Specs.BitesizeSubjects do
       preflight_pipeline: ["BitesizeSubjectsPlatformSelector"],
       specs: [
         %{
-          owner: "bitesize-production@lists.forge.bbc.co.uk",
+          email: "bitesize-production@lists.forge.bbc.co.uk",
           platform: "MorphRouter",
           language_from_cookie: true,
           request_pipeline: [
@@ -15,7 +15,7 @@ defmodule Routes.Specs.BitesizeSubjects do
           examples: []
         },
         %{
-          owner: "bitesize-production@lists.forge.bbc.co.uk",
+          email: "bitesize-production@lists.forge.bbc.co.uk",
           platform: "Webcore",
           language_from_cookie: true,
           request_pipeline: ["ComToUKRedirect"],

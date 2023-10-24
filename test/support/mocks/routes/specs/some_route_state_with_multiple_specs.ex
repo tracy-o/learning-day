@@ -4,14 +4,14 @@ defmodule Routes.Specs.SomeRouteStateWithMultipleSpecs do
       preflight_pipeline: ["TestPreflightTransformer"],
       specs: [
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "Webcore",
           query_params_allowlist: ["webcore_qparam"],
           headers_allowlist: ["webcore-header"]
         },
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "MozartNews",
           query_params_allowlist: "*",

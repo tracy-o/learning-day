@@ -4,7 +4,7 @@ defmodule Routes.Specs.NewsLive do
       preflight_pipeline: ["NewsLivePlatformSelector"],
       specs: [
         %{
-          owner: "#help-live",
+          slack_channel: "#help-live",
           runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Run+Book",
           platform: "MozartNews",
           examples: [
@@ -13,7 +13,7 @@ defmodule Routes.Specs.NewsLive do
           ]
         },
         %{
-          owner: "#help-live",
+          slack_channel: "#help-live",
           runbook: "https://confluence.dev.bbc.co.uk/display/LIVEXP/BBC+Live+Experience+on+Webcore+Run+Book",
           platform: "Webcore",
           query_params_allowlist: ["page", "post"],

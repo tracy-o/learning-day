@@ -4,14 +4,14 @@ defmodule Routes.Specs.NewsArticlePage do
       preflight_pipeline: ["AssetTypePlatformSelector", "BBCXCPSPlatformSelector"],
       specs: [
         %{
-          owner: "DENewsFrameworksTeam@bbc.co.uk",
+          email: "DENewsFrameworksTeam@bbc.co.uk",
           runbook: "https://confluence.dev.bbc.co.uk/display/BELFRAGE/Belfrage+Run+Book",
           platform: "MozartNews",
           circuit_breaker_error_threshold: 1_000,
           examples: []
         },
         %{
-          owner: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
+          email: "DEWebcoreArticlesCapabilityTeams@bbc.co.uk",
           runbook: "https://confluence.dev.bbc.co.uk/display/NEWSCPSSTOR/News+CPS+Stories+Run+Book",
           platform: "Webcore",
           circuit_breaker_error_threshold: 1_000,

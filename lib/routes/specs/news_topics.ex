@@ -4,7 +4,7 @@ defmodule Routes.Specs.NewsTopics do
       preflight_pipeline: ["BBCXTopicsWebcorePlatformSelector"],
       specs: [
         %{
-          owner: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
+          email: "DEHomepageTopicsOnCallTeam@bbc.co.uk",
           runbook: "https://confluence.dev.bbc.co.uk/display/DPTOPICS/Topics+Runbook",
           platform: "Webcore",
           query_params_allowlist: query_params_allowlist(production_env),

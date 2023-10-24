@@ -4,12 +4,12 @@ defmodule Routes.Specs.MultipleSpecsNoPlatformReturned do
       preflight_pipeline: ["TestPreflightPartitionTransformer"],
       specs: [
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "Simorgh"
         },
         %{
-          owner: "Some guy",
+          email: "some@email.com",
           runbook: "Some runbook",
           platform: "MozartNews"
         }

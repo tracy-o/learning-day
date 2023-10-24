@@ -2,7 +2,7 @@ defmodule Routes.Specs.MyTopicsPage do
   def specification(env) do
     %{
       specs: %{
-        owner: "newsappsabl@bbc.co.uk",
+        email: "newsappsabl@bbc.co.uk",
         runbook: "https://confluence.dev.bbc.co.uk/pages/viewpage.action?pageId=342561568",
         platform: "Fabl",
         personalisation: "on",

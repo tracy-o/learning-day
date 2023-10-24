@@ -13,7 +13,9 @@ defmodule Belfrage.XrayTest do
 
   @test_envelope %Envelope{
     private: %Private{
-      owner: "me!",
+      email: "some@email.com",
+      slack_channel: "#some-channel",
+      team: "Some Team",
       route_state_id: {"some_spec", "some_platform"},
       preview_mode: "off",
       production_environment: "test",
@@ -64,12 +66,31 @@ defmodule Belfrage.XrayTest do
       segment = Xray.add_envelope_annotations(segment, @test_envelope)
 
       assert segment.annotation == %{
-               "owner" => "me!",
+               "owner" => "some@email.com",
+               "email" => "some@email.com",
+               "slack_channel" => "#some-channel",
+               "team" => "Some Team",
                "route_state_id" => "some_spec.some_platform",
                "preview_mode" => "off",
                "production_environment" => "test",
                "runbook" => "https://some.runbook/url"
              }
+    end
+
+    test "sets 'owner' annotation using slack_channel when provided and email is absent", %{segment: segment} do
+      private = %{@test_envelope.private | email: nil, slack_channel: "#some-channel"}
+      envelope = Map.put(@test_envelope, :private, private)
+      segment = Xray.add_envelope_annotations(segment, envelope)
+
+      assert segment.annotation["owner"] == "#some-channel"
+    end
+
+    test "sets 'owner' annotation using team when email and slack_channel are absent", %{segment: segment} do
+      private = %{@test_envelope.private | email: nil, slack_channel: nil, team: "Some Team"}
+      envelope = Map.put(@test_envelope, :private, private)
+      segment = Xray.add_envelope_annotations(segment, envelope)
+
+      assert segment.annotation["owner"] == "Some Team"
     end
 
     test "can have metadata added", %{segment: segment} do
@@ -197,7 +218,10 @@ defmodule Belfrage.XrayTest do
       subsegment = Xray.add_envelope_annotations(subsegment, @test_envelope)
 
       assert subsegment.segment.annotation == %{
-               "owner" => "me!",
+               "owner" => "some@email.com",
+               "email" => "some@email.com",
+               "slack_channel" => "#some-channel",
+               "team" => "Some Team",
                "route_state_id" => "some_spec.some_platform",
                "preview_mode" => "off",
                "production_environment" => "test",

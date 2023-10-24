@@ -2,7 +2,7 @@ defmodule Routes.Specs.SportEmbedsTeamSelector do
   def specification do
     %{
       specs: %{
-        owner: "#help-news-and-sport-web",
+        slack_channel: "#help-news-and-sport-web",
         runbook: "https://confluence.dev.bbc.co.uk/display/sport/BBC+Sport+Team+Selector+%28Webcore%29+Runbook",
         platform: "Webcore",
         query_params_allowlist: ["image"],
