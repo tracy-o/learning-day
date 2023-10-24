@@ -1,4 +1,4 @@
-defmodule Belfrage.RequestTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds do
+defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator.NewsTopicIds do
   @moduledoc """
   News Topics IDs that need to be served by Mozart.
   """
