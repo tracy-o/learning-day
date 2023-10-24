@@ -390,16 +390,22 @@ defroutefile "Main" do
   redirect "/news/topics/cmlx13g8vkvt/*any", to: "/news/world/europe/jersey", status: 301
   redirect "/news/topics/c30gv89epevt/*any", to: "/news/wales/south_east_wales", status: 301
   redirect "/news/topics/cpvn4p9gv9nt/*any", to: "/news/wales/south_west_wales", status: 301
-  redirect "/news/topics/cj1g5vpnkx6t/*any", to: "/news/wales/mid_wales ", status: 301
+  redirect "/news/topics/cj1g5vpnkx6t/*any", to: "/news/wales/mid_wales", status: 301
   redirect "/news/topics/cqepv27v61dt/*any", to: "/news/wales/north_west_wales", status: 301
   redirect "/news/topics/c9mn0730k23t/*any", to: "/news/wales/north_east_wales", status: 301
   redirect "/news/topics/cq0zpjy11vyt/*any", to: "/news/england/somerset", status: 301
   redirect "/news/topics/cz43vwmy967t/*any", to: "/news/england/wiltshire", status: 301
+  redirect "/news/topics/ce802jvzevqt/*any", to: "/news/scotland/south_scotland", status: 301
+  redirect "/news/topics/c0r51g9rj7kt/*any", to: "/news/scotland/tayside_and_central", status: 301
+  redirect "/news/topics/c0r51g930zkt/*any", to: "/news/scotland/north_east_orkney_and_shetland", status: 301
+  redirect "/news/topics/c0r51g97341t/*any", to: "/news/scotland/highlands_and_islands", status: 301
+  redirect "/news/topics/c1v8em9k7qet/*any", to: "/news/scotland/glasgow_and_west", status: 301
+  redirect "/news/topics/cjx58zqekd5t/*any", to: "/news/england/oxford", status: 301
+  redirect "/news/topics/c2e7x59neg6t/*any", to: "/news/scotland/edinburgh_east_and_fife", status: 301
 
   # News Topics
   redirect "/news/topics/c1vw6q14rzqt/*any", to: "/news/world-60525350", status: 302
   redirect "/news/topics/crr7mlg0d21t/*any", to: "/news/world-60525350", status: 302
-  redirect "/news/topics/cmj34zmwm1zt/*any", to: "/news/science-environment-56837908", status: 302
   redirect "/news/topics/cwlw3xz0lvvt/*any", to: "/news/politics/uk_leaves_the_eu", status: 302
   redirect "/news/topics/ck7edpjq0d5t/*any", to: "/news/topics/cvp28kxz49xt", status: 301
   redirect "/news/topics/cp7r8vgl2rgt/*any", to: "/news/reality_check", status: 302
@@ -579,13 +585,13 @@ defroutefile "Main" do
   handle "/news/front-page-service-worker.js", using: "NewsIndex"
   handle "/news/have_your_say", using: "NewsWebcoreIndex"
   handle "/news/health", using: "NewsIndex"
-  handle "/news/in_pictures", using: "NewsInPicturesIndex"
+  handle "/news/in_pictures", using: "NewsWebcoreInPicturesIndex"
   handle "/news/newsbeat", using: "NewsIndex"
   handle "/news/northern_ireland", using: "NewsIndex"
   handle "/news/paradisepapers", using: "NewsIndex"
   handle "/news/politics", using: "NewsIndex"
   handle "/news/reality_check", using: "NewsRealityCheckIndex"
-  handle "/news/science_and_environment", using: "NewsIndex"
+  handle "/news/science_and_environment", using: "NewsWebcoreIndex"
   handle "/news/scotland", using: "NewsIndex"
   handle "/news/stories", using: "NewsWebcoreIndex"
   handle "/news/technology", using: "NewsTechnologyIndex"
@@ -609,6 +615,16 @@ defroutefile "Main" do
   handle "/news/england/gloucestershire", using: "NewsWebcoreIndex"
   handle "/news/england/somerset", using: "NewsWebcoreIndex"
   handle "/news/england/wiltshire", using: "NewsWebcoreIndex"
+  handle "/news/scotland/south_scotland", using: "NewsWebcoreIndex"
+  handle "/news/scotland/tayside_and_central", using: "NewsWebcoreIndex"
+  handle "/news/scotland/north_east_orkney_and_shetland", using: "NewsWebcoreIndex"
+  handle "/news/scotland/highlands_and_islands", using: "NewsWebcoreIndex"
+  handle "/news/scotland/glasgow_and_west", using: "NewsWebcoreIndex"
+  handle "/news/england/berkshire", using: "NewsWebcoreIndex"
+  handle "/news/england/dorset", using: "NewsWebcoreIndex"
+  handle "/news/england/hampshire", using: "NewsWebcoreIndex"
+  handle "/news/england/oxford", using: "NewsWebcoreIndex"
+  handle "/news/scotland/edinburgh_east_and_fife", using: "NewsWebcoreIndex"
 
   # News feature indexes (FIX assets)
 
@@ -639,9 +655,9 @@ defroutefile "Main" do
   redirect "/news/business-38507481", to: "/news/topics/ckrkrw3yjx1t", status: 301
   redirect "/news/business-33712313", to: "/news/topics/cj8k8ngevpgt", status: 301
   redirect "/news/business-11428889", to: "/news/topics/cw9l5jelpl1t", status: 301
+  redirect "/news/science-environment-56837908", to: "/news/topics/cmj34zmwm1zt", status: 301
 
   handle "/news/uk-england-47486169", using: "NewsUk"
-  handle "/news/science-environment-56837908", using: "NewsScienceAndTechnology"
   handle "/news/world-us-canada-15949569", using: "News"
 
   # News archive assets

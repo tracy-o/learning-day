@@ -36,7 +36,18 @@ defmodule Routes.Specs.NewsWebcoreIndex do
           "/news/england/bristol",
           "/news/england/gloucestershire",
           "/news/england/somerset",
-          "/news/england/wiltshire"
+          "/news/england/wiltshire",
+          "/news/science_and_environment",
+          "/news/scotland/south_scotland",
+          "/news/scotland/tayside_and_central",
+          "/news/scotland/north_east_orkney_and_shetland",
+          "/news/scotland/highlands_and_islands",
+          "/news/scotland/glasgow_and_west",
+          "/news/england/berkshire",
+          "/news/england/dorset",
+          "/news/england/hampshire",
+          "/news/england/oxford",
+          "/news/scotland/edinburgh_east_and_fife"
         ]
       }
     }
