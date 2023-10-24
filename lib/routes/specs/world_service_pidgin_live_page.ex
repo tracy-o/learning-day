@@ -1,11 +1,20 @@
 defmodule Routes.Specs.WorldServicePidginLivePage do
   def specification(production_env) do
     %{
-      specs: %{
-        platform: "Simorgh",
-        request_pipeline: ["WorldServiceRedirect"],
-        query_params_allowlist: query_params_allowlist(production_env)
-      }
+      preflight_pipeline: ["WorldServiceLivePlatformSelector"],
+      specs: [
+        %{
+          platform: "MozartSimorgh",
+          request_pipeline: ["WorldServiceRedirect"],
+          examples: [] # we currently have no production env assets for this route
+        },
+        %{
+          platform: "Simorgh",
+          request_pipeline: ["WorldServiceRedirect"],
+          query_params_allowlist: query_params_allowlist(production_env),
+          examples: [] # we currently have no production env assets for this route
+        }
+      ]
     }
   end
 

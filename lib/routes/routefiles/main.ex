@@ -1390,7 +1390,7 @@ defroutefile "Main" do
 
   handle "/burmese/live/:id", using: "WorldServiceBurmeseLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
@@ -1777,7 +1777,7 @@ defroutefile "Main" do
 
   handle "/kyrgyz/live/:id", using: "WorldServiceKyrgyzLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
@@ -1878,7 +1878,7 @@ defroutefile "Main" do
 
   handle "/mundo/live/:id", using: "WorldServiceMundoLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
@@ -2059,7 +2059,7 @@ defroutefile "Main" do
 
   handle "/pidgin/live/:id", using: "WorldServicePidginLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
@@ -2273,14 +2273,14 @@ defroutefile "Main" do
 
   handle "/serbian/live/:id/cyr", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
 
   handle "/serbian/live/:id/lat", using: "WorldServiceSerbianLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
@@ -2742,7 +2742,7 @@ defroutefile "Main" do
 
   handle "/urdu/live/:id", using: "WorldServiceUrduLivePage", only_on: "test" do
     return_404 if: [
-      !is_ws_tipo_page_id?(id),
+      !(is_ws_tipo_page_id?(id) or is_cps_id?(id)),
       !is_valid_ws_live_page_parameter?(conn.query_params["page"] || "1")
     ]
   end
