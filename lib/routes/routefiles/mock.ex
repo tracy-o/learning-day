@@ -110,6 +110,8 @@ defroutefile "Mock", "test" do
 
   handle("/platform-selection-with-mozart-news-platform", using: "SomeRouteStateWithMultipleSpecs")
 
+  handle("/some-newsletters-page", using: "SomeDotComNewslettersRouteState")
+
   # Remove these when the preflight transformers are used in production
   handle "/bbcx-platform-selector-mozart-news", using: "BBCXMozartNewsPlatformSelector"
   handle "/bbcx-platform-selector-mozart-sport", using: "BBCXMozartSportPlatformSelector"

@@ -150,6 +150,49 @@ defmodule IsCommercialTest do
     end
   end
 
+  describe "when the platform is DotComNewsletters" do
+    test "sends the is_commercial header if request is for bbcx" do
+      set_environment("test")
+
+      HTTPMock
+      |> expect(:execute, fn %Request{headers: headers}, :DotComNewsletters ->
+        assert Map.has_key?(headers, "is_commercial")
+        assert String.contains?(headers["is_commercial"], "true")
+
+        @successful_http_response
+      end)
+
+      conn =
+        conn(:get, "/some-newsletters-page")
+        |> put_req_header("cookie-ckns_bbccom_beta", "1")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.com")
+        |> put_req_header("x-country", "us")
+        |> Router.call(routefile: Routes.Routefiles.Mock)
+
+      assert {200, _headers, _response_body} = sent_resp(conn)
+    end
+
+    test "does not send the is_commercial header if its not a bbcx request" do
+      set_environment("test")
+
+      HTTPMock
+      |> expect(:execute, fn %Request{headers: headers}, :DotComNewsletters ->
+        refute Map.has_key?(headers, "is_commercial")
+
+        @successful_http_response
+      end)
+
+      conn =
+        conn(:get, "/some-newsletters-page")
+        |> put_req_header("cookie-ckns_bbccom_beta", "0")
+        |> put_req_header("x-bbc-edge-host", "www.bbc.com")
+        |> put_req_header("x-country", "br")
+        |> Router.call(routefile: Routes.Routefiles.Mock)
+
+      assert {200, _headers, _response_body} = sent_resp(conn)
+    end
+  end
+
   describe "when the bbcx_enabled dial is Disabled" do
     test "Does NOT send the is_commercial header if potential bbcx content" do
       set_environment("test")

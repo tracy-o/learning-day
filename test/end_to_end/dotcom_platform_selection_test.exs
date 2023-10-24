@@ -25,7 +25,7 @@ defmodule EndToEnd.DotcomPlatformSelectionTest do
       |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
            ]
   end
 
@@ -37,7 +37,9 @@ defmodule EndToEnd.DotcomPlatformSelectionTest do
 
     assert {302, headers, ""} = sent_resp(conn)
     assert {"location", "/"} in headers
-    assert {"vary", "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"} in headers
+
+    assert {"vary",
+            "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"} in headers
   end
 
   test "a request missing the x-ip_is_uk_combined header for /newsletters is routed to the DotCom Newsletters page and the expected vary headers are in the response" do
@@ -50,7 +52,7 @@ defmodule EndToEnd.DotcomPlatformSelectionTest do
       |> Router.call(routefile: Routes.Routefiles.Main.Test)
 
     assert get_resp_header(conn, "vary") == [
-             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme"
+             "Accept-Encoding,X-BBC-Edge-Cache,X-Country,X-IP_Is_UK_Combined,X-BBC-Edge-Scheme,cookie-ckns_bbccom_beta"
            ]
   end
 end
