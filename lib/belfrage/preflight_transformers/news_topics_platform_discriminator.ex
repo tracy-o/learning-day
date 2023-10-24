@@ -10,20 +10,20 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator do
   def call(envelope) do
     cond do
       is_mozart_topic?(envelope) ->
-        make_mozart_platform(envelope)
+        set_platform(envelope)
 
       is_id_guid?(envelope) ->
-        make_mozart_platform(envelope)
+        set_platform(envelope)
 
       has_slug?(envelope) ->
         redirect(envelope)
 
       true ->
-        maybe_add_platform(envelope)
+        maybe_set_platform(envelope)
     end
   end
 
-  defp make_mozart_platform(envelope) do
+  defp set_platform(envelope) do
     {:ok, Envelope.add(envelope, :private, %{platform: "MozartNews"})}
   end
 
@@ -42,10 +42,10 @@ defmodule Belfrage.PreflightTransformers.NewsTopicsPlatformDiscriminator do
     }
   end
 
-  defp maybe_add_platform(envelope = %Envelope{private: %Private{platform: nil}}),
+  defp maybe_set_platform(envelope = %Envelope{private: %Private{platform: nil}}),
     do: {:ok, Envelope.add(envelope, :private, %{platform: "Webcore"})}
 
-  defp maybe_add_platform(envelope = %Envelope{private: %Private{platform: _platform}}), do: {:ok, envelope}
+  defp maybe_set_platform(envelope = %Envelope{private: %Private{platform: _platform}}), do: {:ok, envelope}
 
   defp is_mozart_topic?(envelope) do
     envelope.request.path_params["id"] in NewsTopicIds.get()
