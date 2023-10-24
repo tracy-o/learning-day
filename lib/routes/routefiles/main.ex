@@ -3285,6 +3285,9 @@ defroutefile "Main" do
   handle "/live/news", using: "LiveNewsIndex"
   handle "/live/sport", using: "LiveSportIndex"
 
+  ## Live Hub WebCore
+  handle "/live/hub", using: "LiveHub", only_on: "test"
+
   ## Live WebCore
   handle "/live/:asset_id", using: "Live", only_on: "test" do
     return_404 if: [
