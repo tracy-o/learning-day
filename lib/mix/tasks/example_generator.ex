@@ -22,13 +22,18 @@ defmodule Mix.Tasks.ExampleGenerator do
   #   ^ Fix repeats 🟢
   # - Ability to search from a routefile. 🟢
   #   ^ Grab the patterns from the handles in routefile 🟢
-  #   ^ Ability to take from funs with multiple conditions
+  #   ^ Identify BelfrageWeb.Validators funcs
+  #   ^ Ability to take from funcs with multiple conditions
   # - Work with routes ending in .<extension> 🟢
 
-  @rf %{"main" => "../belfrage/lib/routes/routefiles/main.ex"}
   @default_args [number: 2, add_q_str: false]
   @strict_args [matcher: :string, pattern: :keep, number: :integer, add_q_str: :boolean, routefile: :string]
   @aliases [m: :matcher, p: :pattern, n: :number, q: :add_q_str, r: :routefile]
+  @routefiles %{
+    "main" => "lib/routes/routefiles/main.ex",
+    "sport" => "lib/routes/routefiles/sport.ex",
+    "mock" => "lib/routes/routefiles/mock.ex"
+  }
 
   def run(args) do
     {valid_args, _, _} = OptionParser.parse(args, aliases: @aliases, strict: @strict_args)
@@ -38,14 +43,9 @@ defmodule Mix.Tasks.ExampleGenerator do
 
   defp parse_args(args) do
     case {args[:matcher], args[:pattern], args[:routefile]} do
-      {m, nil, nil} when not is_nil(m) ->
-        raise(ArgumentError, "Matcher requires a pattern or routefile")
-
-      {_m, _p, r} when not is_nil(r) ->
-        Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher])])
-
-      _ ->
-        Keyword.merge(@default_args, args)
+      {m, nil, nil} when not is_nil(m) -> raise(ArgumentError, "Matcher requires a pattern or routefile")
+      {_m, _p, r} when not is_nil(r) -> Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher], args[:routefile])])
+      _ -> Keyword.merge(@default_args, args)
     end
   end
 
@@ -94,8 +94,8 @@ defmodule Mix.Tasks.ExampleGenerator do
     regex_to_string(~r/\?(page|search|q)=[a-zA-Z0-9]{8}/) |> List.first()
   end
 
-  defp search_routefile(matcher, path \\ @rf["main"]) do
-    {:ok, src} = File.read(path)
+  defp search_routefile(matcher, routefile) do
+    {:ok, src} = File.read(@routefiles[routefile])
     {:ok, {_, _, [_, {_, _, [_, [do: {:__block__, _, routes}]]}]}} = Code.string_to_quoted(src)
 
     routes
@@ -109,8 +109,6 @@ defmodule Mix.Tasks.ExampleGenerator do
     validate_condition(Macro.to_string(match_fun), data)
   end
 
-  defp pattern_from_code(_), do: raise("Cannot locate conditions from matcher")
-
   defp validate_condition("String . :match?", data) do
     [{id, _, _}, {:sigil_r, _, [{_, _, [pattern]}, _]}] = data
     to_string(id) <> ": " <> pattern
@@ -121,5 +119,5 @@ defmodule Mix.Tasks.ExampleGenerator do
     to_string(id) <> ": ^(" <> Enum.join(list, "|") <> ")$"
   end
 
-  defp validate_condition(_fun, _data), do: nil
+  defp validate_condition(_, _), do: raise("Cannot locate conditions from matcher")
 end
