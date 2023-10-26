@@ -7,7 +7,9 @@ defmodule Mix.Tasks.SearchDocs do
 
   def get_confluence(my_query) do
     endpoint = "confluence.dev.bbc.co.uk"
-    req_path = "/dosearchsite.action?cql=siteSearch+~+\"#{my_query}\"+and+space+%3D+\"BELFRAGE\"&queryString=#{my_query}"
+
+    req_path =
+      "/dosearchsite.action?cql=siteSearch+~+\"#{my_query}\"+and+space+%3D+\"BELFRAGE\"&queryString=#{my_query}"
 
     request_route(endpoint, req_path)
   end
@@ -20,7 +22,7 @@ defmodule Mix.Tasks.SearchDocs do
       {:ok, %{status_code: 404}} ->
         "returned 404"
 
-      {:error, %{reason: reason}} ->
+      {:error, %{reason: _reason}} ->
         "could not get route"
     end
   end

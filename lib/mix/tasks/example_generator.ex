@@ -43,9 +43,14 @@ defmodule Mix.Tasks.ExampleGenerator do
 
   defp parse_args(args) do
     case {args[:matcher], args[:pattern], args[:routefile]} do
-      {m, nil, nil} when not is_nil(m) -> raise(ArgumentError, "Matcher requires a pattern or routefile")
-      {_m, _p, r} when not is_nil(r) -> Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher], args[:routefile])])
-      _ -> Keyword.merge(@default_args, args)
+      {m, nil, nil} when not is_nil(m) ->
+        raise(ArgumentError, "Matcher requires a pattern or routefile")
+
+      {_m, _p, r} when not is_nil(r) ->
+        Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher], args[:routefile])])
+
+      _ ->
+        Keyword.merge(@default_args, args)
     end
   end
 
