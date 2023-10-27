@@ -3,13 +3,12 @@ defmodule Routes.SpecExamplesTest do
   use Plug.Test
 
   test "both preflight platforms match existing platforms" do
-    preflight_transformers
-    |> Enum.reject(fn x -> Kernel.length(x.specs) == 1 end)
+    preflight_module_names
     |> IO.inspect()
     |> validate(&validate_platforms/1)
   end
 
-  defp preflight_transformers do
+  defp preflight_module_names do
     {:ok, modules} = :application.get_key(:belfrage, :modules)
 
     modules
@@ -19,8 +18,23 @@ defmodule Routes.SpecExamplesTest do
     |> Enum.uniq()
   end
 
-  defp spec_src(spec_name) do
-    module = Module.concat([Routes, Specs, spec_name])
+  defp validate_platforms(transformer_name) do
+    platform_names = get_platform_names()
+
+    path = trans_src(transformer_name)
+    {:ok, original} = File.read(path)
+
+    for spec <- specs_specs do
+      if Enum.member?(platform_names, spec.platform) do
+        :ok
+      else
+        {:error, "Platform #{spec.platform} for is not spelled correctly"}
+      end
+    end
+  end
+
+  defp trans_src(transformer_name) do
+    module = Module.concat([Routes, Specs, transformer_name])
     module.__info__(:compile)[:source]
   end
 
@@ -48,21 +62,6 @@ defmodule Routes.SpecExamplesTest do
       |> flunk()
     end
   end
-
-  defp validate_platforms(route_spec) do
-    platform_names = get_platform_names()
-
-    specs_specs = route_spec.specs
-
-    for spec <- specs_specs do
-      if Enum.member?(platform_names, spec.platform) do
-        :ok
-      else
-        {:error, "Platform #{spec.platform} for is not spelled correctly"}
-      end
-    end
-  end
-
   defp handle_error(platform_names, platform) do
     # calculate jaro distance
     # add a suggestion
