@@ -1,12 +1,13 @@
 defmodule SimilarPaths do
   alias Plug.Conn
 
-  #TODO
+  # TODO
   # endpoint hardcoded -> endpoint matches the original location ✔️
   # list in near-empty body -> list in pre-defined front-end 404 page layout ✔️
   # hard coded resp body -> inject in envelope resp body
   # deal with repeated suggested routes due to *any ✔️
   # some routes are hardcoded to 404 (e.g /news/av), maybe filter out routes that when pinged return a 404?
+  # ^ https://stackoverflow.com/questions/46633620/make-http-request-with-elixir-and-phoenix
   # not sure about what to do with some routes (difference between news/1 and news/2?) - need to figure out when to filter them
   # clean up function args - too much passing
 
