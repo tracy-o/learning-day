@@ -25,7 +25,8 @@ defmodule LearningDay.MixProject do
       {:randex, "~> 0.4.0"},
       {:plug_cowboy, "~> 2.6"},
       {:httpoison, "~> 2.0"},
-      {:poison, "~> 5.0"}
+      {:poison, "~> 5.0"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 end
