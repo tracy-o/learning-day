@@ -8,7 +8,9 @@
         excluded: []
       },
       checks: [
-        {Credo.Checks.CustomCheckExample, []}
+        {Credo.Check.Readability.ModuleDoc, false},
+        {Credo.Checks.CustomCheckExample, []},
+        {Credo.Checks.PreflightPlatforms, files: %{included: ["lib/belfrage/preflight_transformers/**/*.ex"]}}
       ]
     }
   ]
