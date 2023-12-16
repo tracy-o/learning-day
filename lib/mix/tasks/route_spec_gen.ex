@@ -5,7 +5,10 @@ defmodule Mix.Tasks.RouteSpecGen do
   defmodule Routes.Specs.{{ route_spec.name }} do
     def specification do
       %{
-        specs: {{ route_spec.specs }}    }
+        specs: [
+          {{ route_spec.specs }}
+        ]
+      }
     end
   end
   """
@@ -14,9 +17,10 @@ defmodule Mix.Tasks.RouteSpecGen do
   defmodule Routes.Specs.{{ route_spec.name }} do
     def specification do
       %{
-        preflight_pipeline: {{ route_spec.preflight_pipeline }}
+        preflight_pipeline: [],
         specs: [
-          {{ route_spec.specs }}]
+          {{ route_spec.specs }}
+        ]
       }
     end
   end
@@ -24,8 +28,9 @@ defmodule Mix.Tasks.RouteSpecGen do
 
   @platform_template """
   %{
-    email: "example-email@bbc.co.uk",
-    runbook: "https://confluence.dev.bbc.co.uk/%Example%20-%20Runbook",
+    email: "Please type your team's EMAIL here",
+    slack_channel: "Please type your team's SLACK CHANNEL here",
+    runbook: "Please link the relevant RUNBOOK here",
     platform: "{{ platform.name }}",
     examples: []
   }
