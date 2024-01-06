@@ -13,20 +13,39 @@ defmodule Mix.Tasks.RouteSpecGen do
   use Mix.Task
 
   def run(args) do
-    parsed_args = parse_args(args)
-    {module_name, content} = fill_template(parsed_args[:name], parsed_args[:platforms], parsed_args[:template_type])
+    {valid_args, _, _} = OptionParser.parse(args, aliases: @aliases, strict: @strict_args)
 
+    parsed_args =
+      unless valid_args[:name] do
+        interactive_mode()
+      else
+        parse_args(valid_args)
+      end
+
+    {module_name, content} = fill_template(parsed_args[:name], parsed_args[:platforms], parsed_args[:template_type])
     generate_file(module_name, content, parsed_args[:file_type])
   end
 
-  defp parse_args(args) do
-    {opts, _, _} = OptionParser.parse(args, aliases: @aliases, strict: @strict_args)
-
+  defp parse_args(opts) do
     %{
       name: opts[:name],
-      platforms: String.split(opts[:platforms], ",", trim: true),
+      platforms: String.split(opts[:platforms], [",", " "], trim: true),
       template_type: template_type(opts[:personalised]),
       file_type: file_type(opts[:mock])
+    }
+  end
+
+  defp interactive_mode() do
+    name = user_input("Name (e.g NewRouteSpec): ")
+    personalised = user_input("Is this a personalised route spec? (Y/n): ", [:verbose])
+    platforms = user_input("List the route spec's platforms: ")
+    type = user_input("Is this a mock route spec? (Y/n): ", [:verbose])
+
+    %{
+      name: Macro.camelize(name),
+      platforms: String.split(platforms, [",", " "], trim: true),
+      template_type: template_type(personalised),
+      file_type: file_type(type)
     }
   end
 
@@ -59,6 +78,14 @@ defmodule Mix.Tasks.RouteSpecGen do
 
     File.write!(path_to_file, Code.format_string!(content))
   end
+
+  defp parse_i(i) when i in ["y", "Y", "yes", "Yes", "YES"], do: true
+  defp parse_i(i) when i not in ["n", "N", "no", "No", "NO"], do: true
+  defp parse_i(_), do: nil
+
+  defp user_input(prompt, opts \\ [])
+  defp user_input(prompt, [:verbose]), do: user_input(prompt) |> parse_i()
+  defp user_input(prompt, _opts), do: prompt |> IO.gets() |> String.trim()
 
   defp template_type(true), do: @personalised_route_spec_template
   defp template_type(_), do: @route_spec_template
