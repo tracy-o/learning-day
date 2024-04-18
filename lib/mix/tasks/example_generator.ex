@@ -2,18 +2,28 @@ defmodule Mix.Tasks.ExampleGenerator do
   use Mix.Task
 
   @moduledoc """
-  Example commands:
+  Generate random example routes based on patterns and matchers.
+  """
 
+  @doc """
+  Args:
+  [-p, --pattern]     specify the regex pattern for the key in the matcher. i.e "id: c[a-zA-Z0-9]{10}o" for matcher "/some/path/:id"
+  [-m, --matcher]     the structure of the path to be used as the matcher i.e -m "/some/path/:id"
+  [-n, --number]      the number of results to return
+  [-q, --with-query]  append a random query string to each result
+
+  Example commands:
   passing:
   mix example_generator --pattern "id: c[a-zA-Z0-9]{10}o" --matcher "/afaanoromoo/articles/:id" -n 4
   mix example_generator -m "/programmes/a-z/by/:search/:slice" -p "search: ^[a-zA-Z@]$" -p "slice: ^(all|player)$" -q
+
+  expected fail:
   mix example_generator -m "/programmes/a-z/by/:search.json"
   mix example_generator -m "/newsround/av/:id"
+  mix example_generator --matcher "/newsround"
+  mix example_generator --pattern "id: ^c[a-zA-Z0-9]{10}o$"
 
   failing:
-  mix example_generator --pattern "id: ^c[a-zA-Z0-9]{10}o$"
-  mix example_generator --matcher "/newsround/:fake_id"
-  mix example_generator --matcher "/newsround"
   """
 
   # TODO
@@ -26,32 +36,43 @@ defmodule Mix.Tasks.ExampleGenerator do
   #   ^ Ability to take from funcs with multiple conditions
   # - Work with routes ending in .<extension> 🟢
 
-  @default_args [number: 2, add_q_str: false]
-  @strict_args [matcher: :string, pattern: :keep, number: :integer, add_q_str: :boolean, routefile: :string]
-  @aliases [m: :matcher, p: :pattern, n: :number, q: :add_q_str, r: :routefile]
+  @default_args [number: 2, with_query: false]
+  @strict_args [matcher: :string, pattern: :keep, number: :integer, with_query: :boolean, routefile: :string]
+  @aliases [m: :matcher, p: :pattern, n: :number, q: :with_query, r: :routefile]
   @routefiles %{
     "main" => "lib/routes/routefiles/main.ex",
     "sport" => "lib/routes/routefiles/sport.ex",
-    "mock" => "lib/routes/routefiles/mock.ex"
+    "mock" => "lib/routes/routefiles/mock.ex",
+    "world service" => "lib/routes/routefiles/world_service.ex",
+    "news" => "lib/routes/routefiles/news.ex"
   }
 
   def run(args) do
     {valid_args, _, _} = OptionParser.parse(args, aliases: @aliases, strict: @strict_args)
-    opts = parse_args(valid_args)
-    generate_examples(opts, opts[:number]) |> inspect() |> IO.puts()
+    parse_args(valid_args)
   end
 
   defp parse_args(args) do
-    case {args[:matcher], args[:pattern], args[:routefile]} do
-      {m, nil, nil} when not is_nil(m) ->
-        raise(ArgumentError, "Matcher requires a pattern or routefile")
+    case validate_args(args[:matcher], args[:pattern], args[:routefile]) do
+      {:error, "Invalid"} ->
+        IO.puts("some help message")
 
-      {_m, _p, r} when not is_nil(r) ->
-        Keyword.merge(@default_args, args ++ [pattern: search_routefile(args[:matcher], args[:routefile])])
+      {:error, reason} ->
+        raise reason
 
-      _ ->
-        Keyword.merge(@default_args, args)
+      {:ok, new_args} ->
+        opts = Keyword.merge(@default_args, args ++ new_args) |> IO.inspect(label: "parsed args")
+        generate_examples(opts, opts[:number]) |> inspect() |> IO.puts()
     end
+  end
+
+  defp validate_args(nil, nil, nil), do: {:error, "Invalid"}
+  defp validate_args(_matcher, nil, nil), do: {:error, "Matcher requires a pattern or routefile"}
+  defp validate_args(nil, _pattern, _routefile), do: {:error, "No matcher for pattern"}
+  defp validate_args(_matcher, pattern, _routefile) when is_binary(pattern), do: {:ok, []}
+
+  defp validate_args(matcher, _pattern, routefile) when is_binary(routefile) do
+    {:ok, [pattern: search_routefile(matcher, routefile)]}
   end
 
   defp generate_examples(opts, max, result \\ [])
@@ -80,7 +101,7 @@ defmodule Mix.Tasks.ExampleGenerator do
         end
       end)
 
-    if opts[:add_q_str], do: example <> generate_query_string(), else: example
+    if opts[:with_query], do: example <> generate_query_string(), else: example
   end
 
   defp generate_random_id(patterns) do
