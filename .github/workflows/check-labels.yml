@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fail if PR is labeled DO NOT MERGE
-        env: 
-          LABELS: ${{ ('DO NOT MERGE' 'invalid') }}
         if: |
+          labels=('DO NOT MERGE' 'invalid')
           pr_label=github.event.pull_request.labels.*.name
+          echo $pr_label
 
           for label in "${LABELS[@]}"; do
               contains($pr_label, *"$label"* ]];
