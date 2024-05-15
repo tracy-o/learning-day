@@ -1,0 +1,17 @@
+name: Check Labels
+on:
+  pull_request:
+    branches: [ "dev" ]
+    types: [ opened, labeled, unlabeled, synchronize, reopened ]
+jobs:
+  fail-for-labels:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fail on specific labels
+        if: contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') ||
+          contains(github.event.pull_request.labels.*.name, 'invalid')
+        run: |
+          echo "One or more of the labels for this PR suggest that it should not be merged to master. The labels for the PR are listed as: \
+            ${{ toJSON(github.event.pull_request.labels.*.name) }}"
+          exit 1

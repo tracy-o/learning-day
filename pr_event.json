@@ -1,0 +1,18 @@
+{
+  "pull_request": {
+    "head": {
+      "ref": "test_label_workflows"
+    },
+    "base": {
+      "ref": "dev"
+    },
+    "labels": [
+      {
+        "id": "LA_kwDOKi2Bzs8AAAABnnc_Yw",
+        "name": "DO NOT MERGE",
+        "description": "Not ready to be merged",
+        "color": "B60205"
+      }
+    ]
+  }
+}
