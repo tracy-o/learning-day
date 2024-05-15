@@ -9,11 +9,14 @@ on:
 jobs:
   fail-for-labels:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        label: ['DO NOT MERGE', 'invalid']
     steps:
-      - name: Fail if PR is labeled DO NOT MERGE
-        if: |
-          contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') ||
-          contains(github.event.pull_request.labels.*.name, 'invalid')
+      - name: Fail if PR label indicates it should not be merged
+        timeout-minutes: 1
+        if: contains(github.event.pull_request.labels.*.name, ${{ matrix.label }})
         run: |
-          echo "This PR is currently labeled to not be merged."
+          echo "The label for this PR indicates that it should not be merged."
           exit 1
