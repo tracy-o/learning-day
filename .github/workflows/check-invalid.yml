@@ -1,0 +1,18 @@
+name: Check Invalid
+on:
+  pull_request:
+   branches:
+     - dev
+    types:
+      - opened
+      - labeled
+      - unlabeled
+jobs:
+  fail-for-invalid:
+    if: contains(github.event.pull_request.labels.*.name, 'invalid')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail if PR is labeled invalid
+        run: |
+          echo "This PR is currently invalid."
+          exit 1
