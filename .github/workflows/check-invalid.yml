@@ -1,8 +1,7 @@
 name: Check Invalid
 on:
   pull_request:
-   branches:
-     - dev
+    branches: [ "dev" ]
     types:
       - opened
       - labeled
