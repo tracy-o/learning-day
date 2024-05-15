@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Fail if PR is labeled DO NOT MERGE
-        env:
-          PR_LABEL_NAMES: ${{ github.event.pull_request.labels.*.name }}
-        if: contains(${{ env.PR_LABEL_NAMES }}, 'DO NOT MERGE')
+        if: |
+          contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') ||
+          contains(github.event.pull_request.labels.*.name, 'invalid')
         run: |
           echo "This PR is currently labeled to not be merged."
           exit 1
