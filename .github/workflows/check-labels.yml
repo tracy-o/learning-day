@@ -1,4 +1,4 @@
-run-name: "Labels contain 'DO NOT MERGE': ${{ toJSON(github.event.pull_request.labels.*.name) }}" 
+name: "'DO NOT MERGE' label is active on this PR"
 on:
   pull_request:
     branches: [ "dev" ]
