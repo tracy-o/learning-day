@@ -5,7 +5,7 @@ defmodule LearningDay.MixProject do
     [
       app: :learning_day,
       version: "0.1.0",
-      elixir: "~> 1.15.1",
+      elixir: "~> 1.16.2",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -25,7 +25,8 @@ defmodule LearningDay.MixProject do
       {:randex, "~> 0.4.0"},
       {:plug_cowboy, "~> 2.6"},
       {:httpoison, "~> 2.0"},
-      {:poison, "~> 5.0"}
+      {:poison, "~> 5.0"},
+      {:git_cli, "~> 0.3"}
     ]
   end
 end

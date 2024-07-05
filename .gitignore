@@ -24,3 +24,6 @@ learning_day-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# asdf versions
+.tool-versions
