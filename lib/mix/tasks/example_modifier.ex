@@ -1,4 +1,4 @@
-defmodule ExampleModifier do
+defmodule Mix.Tasks.ExampleModifier do
   use Mix.Task
 
   @moduledoc """
