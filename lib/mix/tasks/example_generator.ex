@@ -4,16 +4,14 @@ defmodule Mix.Tasks.ExampleGenerator do
   @moduledoc """
   Example commands:
 
-  passing:
+  valid:
   mix example_generator --pattern "id: c[a-zA-Z0-9]{10}o" --matcher "/afaanoromoo/articles/:id" -n 4
   mix example_generator -m "/programmes/a-z/by/:search/:slice" -p "search: ^[a-zA-Z@]$" -p "slice: ^(all|player)$" -q
-  mix example_generator -m "/programmes/a-z/by/:search.json"
-  mix example_generator -m "/newsround/av/:id"
 
-  failing:
+  invalid:
   mix example_generator --pattern "id: ^c[a-zA-Z0-9]{10}o$"
   mix example_generator --matcher "/newsround/:fake_id"
-  mix example_generator --matcher "/newsround"
+  mix example_generator -m "/newsround"
   """
 
   # TODO
