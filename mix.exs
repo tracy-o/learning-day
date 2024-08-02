@@ -26,7 +26,8 @@ defmodule LearningDay.MixProject do
       {:plug_cowboy, "~> 2.6"},
       {:httpoison, "~> 2.0"},
       {:poison, "~> 5.0"},
-      {:git_cli, "~> 0.3"}
+      {:git_cli, "~> 0.3"},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
     ]
   end
 end
