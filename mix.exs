@@ -28,6 +28,7 @@ defmodule LearningDay.MixProject do
       {:poison, "~> 5.0"},
       {:git_cli, "~> 0.3"},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ecsx, "~> 0.5"}
     ]
   end
 end
