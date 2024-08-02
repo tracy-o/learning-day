@@ -19,14 +19,16 @@ defmodule LearningDay.Manager do
   # Declare all valid Component types
   def components do
     [
-      # MyApp.Components.SampleComponent
+      LearningDay.Components.Envelope.Private.Partition,
+      LearningDay.Components.Envelope.Private.Spec,
+      LearningDay.Components.Envelope.Private.Platform
     ]
   end
 
   # Declare all Systems to run
   def systems do
     [
-      # MyApp.Systems.SampleSystem
+      LearningDay.Systems.Marshall
     ]
   end
 end
